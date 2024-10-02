@@ -1,101 +1,326 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Church Data Dashboard</title>
+    <title>Church Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: #333;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar .toggle-btn {
+            font-size: 20px;
+            background-color: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Side panel */
+        .side-panel {
+            height: 100vh;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: -250px;
+            background-color: #333;
+            overflow-x: hidden;
+            padding-top: 60px;
+            transition: 0.5s;
+            z-index: 1;
+        }
+
+        .side-panel a {
+            padding: 10px 20px;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
+            display: block;
+            transition: 0.3s;
+            font-weight: 600;
+        }
+
+        .side-panel a:hover {
+            background-color: #575757;
+        }
+
+        .side-panel .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 24px;
+            color: white;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Login and Logout buttons */
+        .auth-btn {
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: white;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+            font-size: 18px;
+        }
+
+        /* Content Area */
+        .content {
+            padding: 20px;
+            margin-left: 250px;
+            transition: margin-left 0.5s;
+        }
+
+        .dashboard {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
             margin-top: 20px;
         }
 
-        table, th, td {
-            border: 1px solid black;
+        .dashboard-item {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 10px;
+            width: calc(50% - 40px);
+            min-width: 300px;
+            text-align: center;
         }
 
-        th, td {
-            padding: 8px;
-            text-align: left;
+        .dashboard-item h2 {
+            margin: 0 0 10px;
         }
 
-        th {
-            background-color: #f2f2f2;
+        /* Widgets Styling */
+        .scripture {
+            font-size: 16px;
+            font-style: italic;
+        }
+
+        .progress-bar {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .progress-bar-inner {
+            height: 20px;
+            background-color: #4caf50;
+            width: 50%; /* Example donation progress */
+        }
+
+        /* Announcements */
+        .announcement {
+            background-color: #ffeb3b;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        /* Login form */
+        #login-form {
+            display: none;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            margin: 50px auto;
+            border-radius: 8px;
+        }
+
+        #login-form input {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        #login-form button {
+            padding: 10px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        #login-form button:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
+
 <body>
-    <h1>Church Data Dashboard</h1>
 
-    <!-- Dropdown to select the sheet -->
-    <label for="sheetSelect">Select Sheet:</label>
-    <select id="sheetSelect">
-        <option value="Members">Members</option>
-        <option value="Event Calendar">Event Calendar</option>
-        <option value="G12 Leaders">G12 Leaders</option>
-        <option value="Care Takers">Care Takers</option>
-        <option value="New Members">New Members</option>
-        <option value="Sunday School Children">Sunday School Children</option>
-        <option value="Attendance & Participation">Attendance & Participation</option>
-        <option value="Ministry and Department">Ministry and Department</option>
-        <option value="Nutrition Programs">Nutrition Programs</option>
-    </select>
-    <button onclick="fetchSheetData()">Load Data</button>
-
-    <!-- This div will display the data from Google Sheets -->
-    <div id="sheetData">Please select a sheet and click "Load Data".</div>
-
-    <!-- Link to the JavaScript file -->
+    <!-- Side Panel -->
+    <div class="side-panel" id="sidePanel">
+        <button class="close-btn" onclick="closePanel()">&times;</button>
+    
+    <!-- Buttons for each Google Sheets document -->
+    <a href="https://docs.google.com/spreadsheets/d/12e7UUe3us1NjZbPOoHMR1CZDb2cqyd7Yr_wpxZtVOSA/edit?usp=sharing&rm=minimal" target="_blank" class="panel-btn">Members</a>
+    <a href="https://docs.google.com/spreadsheets/d/12e7UUe3us1NjZbPOoHMR1CZDb2cqyd7Yr_wpxZtVOSA/edit?usp=sharing&rm=minimal" target="_blank" class="panel-btn">Event Calendar</a>
+    <a href="https://docs.google.com/spreadsheets/d/12e7UUe3us1NjZbPOoHMR1CZDb2cqyd7Yr_wpxZtVOSA/edit?usp=sharing&rm=minimal" target="_blank" class="panel-btn">G12 Leaders</a>
+    <a href="https://docs.google.com/spreadsheets/d/12e7UUe3us1NjZbPOoHMR1CZDb2cqyd7Yr_wpxZtVOSA/edit?usp=sharing&rm=minimal" target="_blank" class="panel-btn">Care Takers</a>
+    <a href="https://docs.google.com/spreadsheets/d/12e7UUe3us1NjZbPOoHMR1CZDb2cqyd7Yr_wpxZtVOSA/edit?usp=sharing&rm=minimal" target="_blank" class="panel-btn">New Members</a>
+    <a href="https://docs.google.com/spreadsheets/d/12e7UUe3us1NjZbPOoHMR1CZDb2cqyd7Yr_wpxZtVOSA/edit?usp=sharing&rm=minimal" target="_blank" class="panel-btn">Sunday School</a>
+    <a href="https://docs.google.com/spreadsheets/d/12e7UUe3us1NjZbPOoHMR1CZDb2cqyd7Yr_wpxZtVOSA/edit?usp=sharing&rm=minimal" target="_blank" class="panel-btn">Attendance & Participation</a>
+    <a href="https://docs.google.com/spreadsheets/d/12e7UUe3us1NjZbPOoHMR1CZDb2cqyd7Yr_wpxZtVOSA/edit?usp=sharing&rm=minimal" target="_blank" class="panel-btn">Ministry Department</a>
+    <a href="https://docs.google.com/spreadsheets/d/12e7UUe3us1NjZbPOoHMR1CZDb2cqyd7Yr_wpxZtVOSA/edit?usp=sharing&rm=minimal" target="_blank" class="panel-btn">Nutrition Programme</a>
+    <a href="login_page.html" class="auth-btn" id="loginBtn" style="display: block; margin: 10px 0; text-align: center; padding: 10px; background-color: #4caf50; color: white; text-decoration: none; border-radius: 5px;">Login</a>
+    <button class="auth-btn" id="logoutBtn" onclick="logout()" style="display:none;">Logout</button>
+    </div>
     <script>
-        async function fetchSheetData() {
-            const sheetName = document.getElementById('sheetSelect').value;
-            const url = `https://script.google.com/macros/s/AKfycbx4KNCENhcYFDb_EwszI5gIlmoQkV5ozu0Zm_Q0AsvjKU6eSj55mOh6m7jHmopEkDVEBw/exec?sheetName=${encodeURIComponent(sheetName)}`;
-            
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
-                
-                // Clear previous data
-                const sheetDataDiv = document.getElementById('sheetData');
-                sheetDataDiv.innerHTML = "";
+        function loadSheet(sheetId) {
+            // Hide all iframes
+            const iframes = document.querySelectorAll('iframe');
+            iframes.forEach(iframe => {
+                iframe.classList.remove('active-iframe'); // Remove active class
+            });
 
-                if (data.error) {
-                    sheetDataDiv.innerHTML = `<p>Error: ${data.error}</p>`;
-                    return;
-                }
-
-                // Create a table to display the data
-                const table = document.createElement('table');
-                const headerRow = document.createElement('tr');
-
-                // Add table headers (Column1, Column2, etc.)
-                const headers = Object.keys(data[0]);
-                headers.forEach(header => {
-                    const th = document.createElement('th');
-                    th.textContent = header;
-                    headerRow.appendChild(th);
-                });
-                table.appendChild(headerRow);
-
-                // Add data rows
-                data.forEach(row => {
-                    const tr = document.createElement('tr');
-                    headers.forEach(header => {
-                        const td = document.createElement('td');
-                        td.textContent = row[header];
-                        tr.appendChild(td);
-                    });
-                    table.appendChild(tr);
-                });
-
-                // Append the table to the sheetData div
-                sheetDataDiv.appendChild(table);
-
-            } catch (error) {
-                document.getElementById('sheetData').innerHTML = `<p>Error fetching data: ${error.message}</p>`;
+            // Show the selected iframe
+            const activeIframe = document.getElementById(sheetId);
+            if (activeIframe) {
+                activeIframe.classList.add('active-iframe'); // Add active class to show
             }
         }
     </script>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <button class="toggle-btn" onclick="openPanel()">☰ Menu</button>
+        <span>Church Dashboard</span>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content">
+        <h1>Welcome to the Church Dashboard</h1>
+        <div class="dashboard">
+            <!-- Daily Scripture -->
+            <div class="dashboard-item">
+                <h2>Daily Scripture</h2>
+                <p class="scripture">"For I know the plans I have for you," declares the Lord, "plans to prosper you and not to harm you, plans to give you hope and a future." - Jeremiah 29:11</p>
+            </div>
+
+            <!-- Prayer Requests -->
+            <div class="dashboard-item">
+                <h2>Prayer Requests</h2>
+                <ul>
+                    <li>Pray for the community outreach event.</li>
+                    <li>Pray for the youth group trip next week.</li>
+                    <li>Pray for the church's financial needs.</li>
+                </ul>
+            </div>
+
+            <!-- Upcoming Events -->
+            <div class="dashboard-item">
+                <h2>Upcoming Church Events</h2>
+                <ul>
+                    <li>Sunday Service - Oct 3rd, 10 AM</li>
+                    <li>Bible Study - Oct 5th, 7 PM</li>
+                    <li>Youth Group Meeting - Oct 7th, 6 PM</li>
+                </ul>
+            </div>
+
+            <!-- Donation Tracker -->
+            <div class="dashboard-item">
+                <h2>Donation Tracker</h2>
+                <p>Goal: $5,000</p>
+                <div class="progress-bar">
+                    <div class="progress-bar-inner" style="width: 65%;"></div>
+                </div>
+                <p>Current Donations: $3,250</p>
+            </div>
+
+            <!-- Announcements -->
+            <div class="dashboard-item">
+                <h2>Announcements</h2>
+                <div class="announcement">
+                    Reminder: Volunteers are needed for the upcoming church outreach.
+                </div>
+                <div class="announcement">
+                    The new Bible study series will begin next week.
+                </div>
+            </div>
+        </div>
+
+    <script>
+        // Function to show side panel
+        function openPanel() {
+            document.getElementById("sidePanel").style.left = "0";
+        }
+
+        // Function to close side panel
+        function closePanel() {
+            document.getElementById("sidePanel").style.left = "-250px";
+        }
+
+        // Function to load a sheet
+        function loadSheet(sheetName) {
+            alert("Loading sheet: " + sheetName);
+        }
+
+        // Function to show the login form
+        function showLoginForm() {
+            document.getElementById("login-form").style.display = "block";
+        }
+
+        // Function to log in
+        function login() {
+            var fullName = document.getElementById("full-name").value;
+            var leaderStatus = document.getElementById("leader-status").value;
+            var gender = document.getElementById("gender").value;
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirm-password").value;
+
+            if (password !== confirmPassword) {
+                alert("Passwords do not match!");
+                return;
+            }
+
+            alert("Login successful! Welcome " + fullName);
+            document.getElementById("login-form").style.display = "none";
+            document.getElementById("loginBtn").style.display = "none";
+            document.getElementById("logoutBtn").style.display = "inline-block";
+        }
+
+        // Function to log out
+        function logout() {
+            alert("Logged out successfully!");
+            document.getElementById("logoutBtn").style.display = "none";
+            document.getElementById("loginBtn").style.display = "inline-block";
+        }
+    </script>
 </body>
+
 </html>
