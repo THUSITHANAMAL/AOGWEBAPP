@@ -9,13 +9,13 @@
     <style>
         * {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #f0f2f5;
-            margin: 0;
-            padding: 0;
         }
 
         /* Navbar */
@@ -34,12 +34,11 @@
             border: none;
             color: white;
             cursor: pointer;
-            font-weight: 600;
         }
 
         /* Side panel */
         .side-panel {
-            height: 100vh;
+            height: 100%;
             width: 250px;
             position: fixed;
             top: 0;
@@ -57,8 +56,6 @@
             font-size: 18px;
             color: white;
             display: block;
-            transition: 0.3s;
-            font-weight: 600;
         }
 
         .side-panel a:hover {
@@ -108,21 +105,16 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 20px;
             margin: 10px;
-            width: calc(50% - 40px);
+            flex: 1 1 calc(50% - 40px);
             min-width: 300px;
             text-align: center;
         }
 
         .dashboard-item h2 {
-            margin: 0 0 10px;
+            margin-bottom: 10px;
         }
 
-        /* Widgets Styling */
-        .scripture {
-            font-size: 16px;
-            font-style: italic;
-        }
-
+        /* Progress Bar */
         .progress-bar {
             width: 100%;
             background-color: #e0e0e0;
@@ -133,50 +125,51 @@
         .progress-bar-inner {
             height: 20px;
             background-color: #4caf50;
-            width: 50%; /* Example donation progress */
+            width: 65%; /* Example donation progress */
         }
 
-        /* Announcements */
-        .announcement {
-            background-color: #ffeb3b;
-            padding: 10px;
-            border-radius: 8px;
-            margin: 10px 0;
-            font-weight: bold;
+        /* Responsive Design */
+        @media screen and (max-width: 768px) {
+            .content {
+                margin-left: 0;
+            }
+
+            .dashboard-item {
+                flex: 1 1 100%;
+            }
+
+            .side-panel {
+                width: 100%;
+                left: -100%;
+            }
         }
 
-        /* Login form */
-        #login-form {
-            display: none;
-            background-color: white;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 300px;
-            margin: 50px auto;
-            border-radius: 8px;
+        @media screen and (max-width: 480px) {
+            .navbar {
+                font-size: 14px;
+            }
+
+            .navbar .toggle-btn {
+                font-size: 18px;
+            }
+
+            .dashboard-item {
+                padding: 15px;
+                margin: 5px;
+            }
+
+            .dashboard-item h2 {
+                font-size: 18px;
+            }
+
+            .side-panel a {
+                font-size: 16px;
+            }
         }
 
-        #login-form input {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        #login-form button {
-            padding: 10px;
-            background-color: #4caf50;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        #login-form button:hover {
-            background-color: #45a049;
+        /* Hide/show side panel on small screens */
+        .open {
+            left: 0;
         }
     </style>
 </head>
@@ -186,35 +179,18 @@
     <!-- Side Panel -->
     <div class="side-panel" id="sidePanel">
         <button class="close-btn" onclick="closePanel()">&times;</button>
-    
-    <!-- Buttons for each Google Sheets document -->
-    <a href="https://docs.google.com/spreadsheets/d/12e7UUe3us1NjZbPOoHMR1CZDb2cqyd7Yr_wpxZtVOSA/edit?usp=sharing&rm=minimal" target="_blank" class="panel-btn">Members</a>
-    <a href="https://docs.google.com/spreadsheets/d/12e7UUe3us1NjZbPOoHMR1CZDb2cqyd7Yr_wpxZtVOSA/edit?usp=sharing&rm=minimal" target="_blank" class="panel-btn">Event Calendar</a>
-    <a href="https://docs.google.com/spreadsheets/d/12e7UUe3us1NjZbPOoHMR1CZDb2cqyd7Yr_wpxZtVOSA/edit?usp=sharing&rm=minimal" target="_blank" class="panel-btn">G12 Leaders</a>
-    <a href="https://docs.google.com/spreadsheets/d/12e7UUe3us1NjZbPOoHMR1CZDb2cqyd7Yr_wpxZtVOSA/edit?usp=sharing&rm=minimal" target="_blank" class="panel-btn">Care Takers</a>
-    <a href="https://docs.google.com/spreadsheets/d/12e7UUe3us1NjZbPOoHMR1CZDb2cqyd7Yr_wpxZtVOSA/edit?usp=sharing&rm=minimal" target="_blank" class="panel-btn">New Members</a>
-    <a href="https://docs.google.com/spreadsheets/d/12e7UUe3us1NjZbPOoHMR1CZDb2cqyd7Yr_wpxZtVOSA/edit?usp=sharing&rm=minimal" target="_blank" class="panel-btn">Sunday School</a>
-    <a href="https://docs.google.com/spreadsheets/d/12e7UUe3us1NjZbPOoHMR1CZDb2cqyd7Yr_wpxZtVOSA/edit?usp=sharing&rm=minimal" target="_blank" class="panel-btn">Attendance & Participation</a>
-    <a href="https://docs.google.com/spreadsheets/d/12e7UUe3us1NjZbPOoHMR1CZDb2cqyd7Yr_wpxZtVOSA/edit?usp=sharing&rm=minimal" target="_blank" class="panel-btn">Ministry Department</a>
-    <a href="https://docs.google.com/spreadsheets/d/12e7UUe3us1NjZbPOoHMR1CZDb2cqyd7Yr_wpxZtVOSA/edit?usp=sharing&rm=minimal" target="_blank" class="panel-btn">Nutrition Programme</a>
-    <a href="login_page.html" class="auth-btn" id="loginBtn" style="display: block; margin: 10px 0; text-align: center; padding: 10px; background-color: #4caf50; color: white; text-decoration: none; border-radius: 5px;">Login</a>
-    <button class="auth-btn" id="logoutBtn" onclick="logout()" style="display:none;">Logout</button>
-    </div>
-    <script>
-        function loadSheet(sheetId) {
-            // Hide all iframes
-            const iframes = document.querySelectorAll('iframe');
-            iframes.forEach(iframe => {
-                iframe.classList.remove('active-iframe'); // Remove active class
-            });
 
-            // Show the selected iframe
-            const activeIframe = document.getElementById(sheetId);
-            if (activeIframe) {
-                activeIframe.classList.add('active-iframe'); // Add active class to show
-            }
-        }
-    </script>
+        <a href="#">Members</a>
+        <a href="#">Event Calendar</a>
+        <a href="#">G12 Leaders</a>
+        <a href="#">Care Takers</a>
+        <a href="#">New Members</a>
+        <a href="#">Sunday School</a>
+        <a href="#">Attendance & Participation</a>
+        <a href="#">Ministry Department</a>
+        <a href="#">Nutrition Programme</a>
+        <a href="login_page.html" class="auth-btn">Login</a>
+    </div>
 
     <!-- Navbar -->
     <div class="navbar">
@@ -246,79 +222,30 @@
             <div class="dashboard-item">
                 <h2>Upcoming Church Events</h2>
                 <ul>
-                    <li>Sunday Service - Oct 3rd, 10 AM</li>
-                    <li>Bible Study - Oct 5th, 7 PM</li>
-                    <li>Youth Group Meeting - Oct 7th, 6 PM</li>
+                    <li>Sunday Service - Oct 3, 2024</li>
+                    <li>Youth Group Meeting - Oct 5, 2024</li>
+                    <li>Bible Study - Oct 6, 2024</li>
                 </ul>
             </div>
 
-            <!-- Donation Tracker -->
+            <!-- Donation Progress -->
             <div class="dashboard-item">
-                <h2>Donation Tracker</h2>
-                <p>Goal: $5,000</p>
+                <h2>Donation Progress</h2>
                 <div class="progress-bar">
-                    <div class="progress-bar-inner" style="width: 65%;"></div>
+                    <div class="progress-bar-inner"></div>
                 </div>
-                <p>Current Donations: $3,250</p>
-            </div>
-
-            <!-- Announcements -->
-            <div class="dashboard-item">
-                <h2>Announcements</h2>
-                <div class="announcement">
-                    Reminder: Volunteers are needed for the upcoming church outreach.
-                </div>
-                <div class="announcement">
-                    The new Bible study series will begin next week.
-                </div>
+                <p>75% of $5000 goal</p>
             </div>
         </div>
+    </div>
 
     <script>
-        // Function to show side panel
         function openPanel() {
-            document.getElementById("sidePanel").style.left = "0";
+            document.getElementById("sidePanel").classList.add("open");
         }
 
-        // Function to close side panel
         function closePanel() {
-            document.getElementById("sidePanel").style.left = "-250px";
-        }
-
-        // Function to load a sheet
-        function loadSheet(sheetName) {
-            alert("Loading sheet: " + sheetName);
-        }
-
-        // Function to show the login form
-        function showLoginForm() {
-            document.getElementById("login-form").style.display = "block";
-        }
-
-        // Function to log in
-        function login() {
-            var fullName = document.getElementById("full-name").value;
-            var leaderStatus = document.getElementById("leader-status").value;
-            var gender = document.getElementById("gender").value;
-            var password = document.getElementById("password").value;
-            var confirmPassword = document.getElementById("confirm-password").value;
-
-            if (password !== confirmPassword) {
-                alert("Passwords do not match!");
-                return;
-            }
-
-            alert("Login successful! Welcome " + fullName);
-            document.getElementById("login-form").style.display = "none";
-            document.getElementById("loginBtn").style.display = "none";
-            document.getElementById("logoutBtn").style.display = "inline-block";
-        }
-
-        // Function to log out
-        function logout() {
-            alert("Logged out successfully!");
-            document.getElementById("logoutBtn").style.display = "none";
-            document.getElementById("loginBtn").style.display = "inline-block";
+            document.getElementById("sidePanel").classList.remove("open");
         }
     </script>
 </body>
