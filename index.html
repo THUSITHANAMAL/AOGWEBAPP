@@ -1,253 +1,300 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Church Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Church Database Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f0f2f5;
-        }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
 
-        /* Navbar */
-        .navbar {
-            background-color: #333;
-            color: white;
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    .sidebar {
+      width: 250px;
+      background-color: #2c3e50;
+      color: #fff;
+      padding: 20px;
+      position: fixed;
+      height: 100%;
+      top: 0;
+      left: 0;
+      transform: translateX(0);
+      transition: transform 0.3s ease;
+      z-index: 100;
+    }
 
-        .navbar .toggle-btn {
-            font-size: 20px;
-            background-color: transparent;
-            border: none;
-            color: white;
-            cursor: pointer;
-        }
+    .sidebar.closed {
+      transform: translateX(-250px);
+    }
 
-        /* Side panel */
-        .side-panel {
-            height: 100%;
-            width: 250px;
-            position: fixed;
-            top: 0;
-            left: -250px;
-            background-color: #333;
-            overflow-x: hidden;
-            padding-top: 60px;
-            transition: 0.5s;
-            z-index: 1;
-        }
+    .sidebar img {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
 
-        .side-panel a {
-            padding: 10px 20px;
-            text-decoration: none;
-            font-size: 18px;
-            color: white;
-            display: block;
-        }
+    .sidebar h2 {
+      font-weight: 500;
+      margin-bottom: 20px;
+    }
 
-        .side-panel a:hover {
-            background-color: #575757;
-        }
+    .sidebar a {
+      display: block;
+      color: #fff;
+      padding: 10px 15px;
+      margin: 10px 0;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
 
-        .side-panel .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 24px;
-            color: white;
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-        }
+    .sidebar a:hover {
+      background-color: #16a085;
+    }
 
-        /* Login and Logout buttons */
-        .auth-btn {
-            padding: 10px 20px;
-            background-color: #4caf50;
-            color: white;
-            text-align: center;
-            border: none;
-            cursor: pointer;
-            margin: 10px;
-            font-size: 18px;
-        }
+    .sidebar .close-sidebar {
+      font-size: 24px;
+      color: #fff;
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      cursor: pointer;
+    }
 
-        /* Content Area */
-        .content {
-            padding: 20px;
-            margin-left: 250px;
-            transition: margin-left 0.5s;
-        }
+    .main-content {
+      flex-grow: 1;
+      margin-left: 250px;
+      padding: 20px;
+      transition: margin-left 0.3s ease;
+      width: calc(100% - 250px);
+      overflow-y: auto; /* Allow vertical scrolling if necessary */
+    }
 
-        .dashboard {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            margin-top: 20px;
-        }
+    .main-content.expanded {
+      margin-left: 0;
+      width: 100%;
+    }
 
-        .dashboard-item {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            margin: 10px;
-            flex: 1 1 calc(50% - 40px);
-            min-width: 300px;
-            text-align: center;
-        }
+    .open-sidebar-icon {
+      font-size: 24px;
+      color: #2c3e50;
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      cursor: pointer;
+      z-index: 150;
+      display: none;
+    }
 
-        .dashboard-item h2 {
-            margin-bottom: 10px;
-        }
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 100%;
+        height: 100%;
+        transform: translateX(-100%);
+      }
 
-        /* Progress Bar */
-        .progress-bar {
-            width: 100%;
-            background-color: #e0e0e0;
-            border-radius: 8px;
-            overflow: hidden;
-        }
+      .sidebar.closed {
+        transform: translateX(-100%);
+      }
 
-        .progress-bar-inner {
-            height: 20px;
-            background-color: #4caf50;
-            width: 65%; /* Example donation progress */
-        }
+      .main-content {
+        margin-left: 0;
+        width: 100%;
+      }
 
-        /* Responsive Design */
-        @media screen and (max-width: 768px) {
-            .content {
-                margin-left: 0;
-            }
+      .open-sidebar-icon {
+        display: block;
+      }
+    }
 
-            .dashboard-item {
-                flex: 1 1 100%;
-            }
+    h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
 
-            .side-panel {
-                width: 100%;
-                left: -100%;
-            }
-        }
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
 
-        @media screen and (max-width: 480px) {
-            .navbar {
-                font-size: 14px;
-            }
+    .dashboard-item {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: transform 0.2s ease;
+    }
 
-            .navbar .toggle-btn {
-                font-size: 18px;
-            }
+    .dashboard-item:hover {
+      transform: translateY(-5px);
+    }
 
-            .dashboard-item {
-                padding: 15px;
-                margin: 5px;
-            }
+    .dashboard-item h2 {
+      font-size: 22px;
+      margin-bottom: 10px;
+      color: #34495e;
+    }
 
-            .dashboard-item h2 {
-                font-size: 18px;
-            }
+    /* Scrollable iframe */
+    #iframeContainer {
+      width: 100%;
+      overflow-x: auto; /* Enable horizontal scrolling */
+      overflow-y: hidden; /* Disable vertical scrolling if not needed */
+    }
 
-            .side-panel a {
-                font-size: 16px;
-            }
-        }
+    iframe {
+      min-width: 100%; /* Ensures iframe takes full width of container */
+      height: 90vh; /* Ensure iframe height fits within the viewport */
+      border: none;
+    }
 
-        /* Hide/show side panel on small screens */
-        .open {
-            left: 0;
-        }
-    </style>
+    .form-button {
+      display: inline-block;
+      margin: 10px 0;
+      padding: 10px 20px;
+      background-color: #1abc9c;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .form-button:hover {
+      background-color: #16a085;
+      transform: scale(1.02);
+    }
+  </style>
 </head>
-
 <body>
 
-    <!-- Side Panel -->
-    <div class="side-panel" id="sidePanel">
-        <button class="close-btn" onclick="closePanel()">&times;</button>
+  <!-- Sidebar Toggle Button -->
+  <div class="open-sidebar-icon" id="openSidebarIcon" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+  </div>
 
-        <a href="https://docs.google.com/spreadsheets/d/12e7UUe3us1NjZbPOoHMR1CZDb2cqyd7Yr_wpxZtVOSA/edit?usp=sharing&rm=minimal" target="_blank">Members</a>
-        <a href="https://docs.google.com/spreadsheets/d/12e7UUe3us1NjZbPOoHMR1CZDb2cqyd7Yr_wpxZtVOSA/edit?usp=sharing&rm=minimal" target="_blank">Event Calendar</a>
-        <a href="https://docs.google.com/spreadsheets/d/12e7UUe3us1NjZbPOoHMR1CZDb2cqyd7Yr_wpxZtVOSA/edit?usp=sharing&rm=minimal" target="_blank">G12 Leaders</a>
-        <a href="https://docs.google.com/spreadsheets/d/12e7UUe3us1NjZbPOoHMR1CZDb2cqyd7Yr_wpxZtVOSA/edit?usp=sharing&rm=minimal" target="_blank">Care Takers</a>
-        <a href="https://docs.google.com/spreadsheets/d/12e7UUe3us1NjZbPOoHMR1CZDb2cqyd7Yr_wpxZtVOSA/edit?usp=sharing&rm=minimal" target="_blank">New Members</a>
-        <a href="https://docs.google.com/spreadsheets/d/12e7UUe3us1NjZbPOoHMR1CZDb2cqyd7Yr_wpxZtVOSA/edit?usp=sharing&rm=minimal" target="_blank">Sunday School</a>
-        <a href="https://docs.google.com/spreadsheets/d/12e7UUe3us1NjZbPOoHMR1CZDb2cqyd7Yr_wpxZtVOSA/edit?usp=sharing&rm=minimal" target="_blank">Attendance & Participation</a>
-        <a href="https://docs.google.com/spreadsheets/d/12e7UUe3us1NjZbPOoHMR1CZDb2cqyd7Yr_wpxZtVOSA/edit?usp=sharing&rm=minimal" target="_blank">Ministry Department</a>
-        <a href="https://docs.google.com/spreadsheets/d/12e7UUe3us1NjZbPOoHMR1CZDb2cqyd7Yr_wpxZtVOSA/edit?usp=sharing&rm=minimal" target="_blank">Nutrition Programme</a>
-        <a href="login_page.html" class="auth-btn">Login</a>
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <img src="Images/PHAG.png" width="200px" height="200px" alt="Church Logo">
+    <h2>Church Database</h2>
+    <!-- Close sidebar icon -->
+    <i class="fas fa-times close-sidebar" onclick="toggleSidebar()"></i>
+    <a href="#" onclick="loadSheet('https://docs.google.com/spreadsheets/d/e/2PACX-1vQxCzz0w50KA348Q0bSBElMplDGN7rj4l6-6KGzul4OF0mAyEpE2tp8z1a5ml2cEsEDf-0paKipauJN/pubhtml', 'member')">Member Sheet</a>
+    <a href="#" onclick="loadSheet('https://docs.google.com/spreadsheets/d/e/2PACX-1vRXEZ7eXV_8bK4RhnRltIHpAgQctuYasyf4GVcw4euCCZjYVQwMLMaUXA0bKg7juuBcYTI2TrMalKCc/pubhtml', 'caretaker')">Care Taker Sheet</a>
+    <a href="#" onclick="loadSheet('https://docs.google.com/spreadsheets/d/1qmNa3xSgbd1bda1TPIBR6bLpM2vEKUdG354t6eNjwn8/edit?gid=726525910#gid=726525910', 'g12')">G12 Leader Sheet</a>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content" id="mainContent">
+    <h1>Church Dashboard</h1>
+    <div class="dashboard">
+      <div class="dashboard-item">
+        <h2>Total Members</h2>
+        <p id="totalMembers">0</p>
+      </div>
+      <div class="dashboard-item">
+        <h2>Active G12 Members</h2>
+        <p id="activeG12">0</p>
+      </div>
+      <div class="dashboard-item">
+        <h2>New Members This Year</h2>
+        <p id="newMembers">0</p>
+      </div>
+      <div class="dashboard-item">
+        <h2>Sunday School Children</h2>
+        <p id="sundaySchoolChildren">0</p>
+      </div>
+      <div class="dashboard-item">
+        <h2>Care Takers</h2>
+        <p id="careTakers">0</p>
+      </div>
+      <div class="dashboard-item">
+        <h2>G12 Leaders</h2>
+        <p id="g12Leaders">0</p>
+      </div>
     </div>
 
-    <!-- Navbar -->
-    <div class="navbar">
-        <button class="toggle-btn" onclick="openPanel()">☰ Menu</button>
-        <span>Church Dashboard</span>
+    <!-- Form Button for Members -->
+    <div id="formContainer" style="display: none;">
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSftq99yQ9lZ2xc78cCChwcPnOKpF8b150vGKdjunsSK2PAfdg/viewform?usp=sf_link" class="form-button" onclick="return showForm()">Click to add New Members</a>
     </div>
 
-    <!-- Content Area -->
-    <div class="content">
-        <h1>Welcome to the Church Dashboard</h1>
-        <div class="dashboard">
-            <!-- Daily Scripture -->
-            <div class="dashboard-item">
-                <h2>Daily Scripture</h2>
-                <p class="scripture">"For I know the plans I have for you," declares the Lord, "plans to prosper you and not to harm you, plans to give you hope and a future." - Jeremiah 29:11</p>
-            </div>
+    <!-- Form Button for Care Takers (Care Taker Sheet) -->
+    <div id="careTakersFormContainer" style="display: none;">
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSfQy2X28Tl9a1lisaKB_s16ZIJEbfsQYZx1YyM4XQS2wo-1Lg/viewform?usp=sf_link" class="form-button" onclick="return showCareTakersForm()">Click to add Care Takers</a>
+   </div>
 
-            <!-- Prayer Requests -->
-            <div class="dashboard-item">
-                <h2>Prayer Requests</h2>
-                <ul>
-                    <li>Pray for the community outreach event.</li>
-                    <li>Pray for the youth group trip next week.</li>
-                    <li>Pray for the church's financial needs.</li>
-                </ul>
-            </div>
+   <!-- Form Button for G12 Leaders (G12 Leader Sheet) -->
+   <div id="g12FormContainer" style="display: none;">
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSe2ArNUik_Yz6JBEKa6cxu0MfomUnxDIo90B1odJx1aIzXG6Q/viewform?usp=sf_link" class="form-button" onclick="return showG12Form()">Click to add G12 Leaders</a>
+   </div>
 
-            <!-- Upcoming Events -->
-            <div class="dashboard-item">
-                <h2>Upcoming Church Events</h2>
-                <ul>
-                    <li>Sunday Service - Oct 3, 2024</li>
-                    <li>Youth Group Meeting - Oct 5, 2024</li>
-                    <li>Bible Study - Oct 6, 2024</li>
-                </ul>
-            </div>
-
-            <!-- Donation Progress -->
-            <div class="dashboard-item">
-                <h2>Donation Progress</h2>
-                <div class="progress-bar">
-                    <div class="progress-bar-inner"></div>
-                </div>
-                <p>75% of $5000 goal</p>
-            </div>
-        </div>
+    <!-- Iframe for Google Sheets -->
+    <div id="iframeContainer">
+      <iframe id="sheetIframe" src="" frameborder="0"></iframe>
     </div>
 
-    <script>
-        function openPanel() {
-            document.getElementById("sidePanel").classList.add("open");
-        }
+  </div>
 
-        function closePanel() {
-            document.getElementById("sidePanel").classList.remove("open");
-        }
-    </script>
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.getElementById('mainContent');
+      sidebar.classList.toggle('closed');
+      mainContent.classList.toggle('expanded');
+    }
+
+    function loadSheet(url, type) {
+      const iframe = document.getElementById('sheetIframe');
+      iframe.src = url;
+
+      const formContainer = document.getElementById('formContainer');
+      const careTakersFormContainer = document.getElementById('careTakersFormContainer');
+      const g12FormContainer = document.getElementById('g12FormContainer');
+
+      // Hide all forms initially
+      formContainer.style.display = "none";
+      careTakersFormContainer.style.display = "none";
+      g12FormContainer.style.display = "none";
+
+      // Show relevant form based on type
+      if (type === 'member') {
+        formContainer.style.display = "block";
+      } else if (type === 'caretaker') {
+        careTakersFormContainer.style.display = "block";
+      } else if (type === 'g12') {
+        g12FormContainer.style.display = "block";
+      }
+    }
+
+    function showForm() {
+      return true; // Allow the member form link to proceed
+    }
+
+    function showCareTakersForm() {
+      return true; // Allow the caretaker form link to proceed
+    }
+
+    function showG12Form() {
+      return true; // Allow the G12 leader form link to proceed
+    }
+  </script>
+
 </body>
-
 </html>
