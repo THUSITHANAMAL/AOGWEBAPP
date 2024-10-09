@@ -1,239 +1,239 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Church Database Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Church Database Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    body {
-      font-family: 'Montserrat', sans-serif;
-      background-color: #f0f2f5;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      overflow: hidden;
-    }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
 
-    /* Sidebar */
-    .sidebar {
-      width: 250px;
-      background-color: #2c3e50;
-      color: #fff;
-      padding: 20px;
-      position: fixed;
-      height: 100%;
-      top: 0;
-      left: 0;
-      transition: transform 0.3s ease;
-      z-index: 100;
-    }
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: #2c3e50;
+            color: #fff;
+            padding: 20px;
+            position: fixed;
+            height: 100%;
+            top: 0;
+            left: 0;
+            transition: transform 0.3s ease;
+            z-index: 100;
+            overflow-y: auto; /* Allow vertical scrolling if necessary */
+        }
 
-    .sidebar.closed {
-      transform: translateX(-250px);
-    }
+        .sidebar.closed {
+            transform: translateX(-100%); /* Hide the sidebar offscreen */
+        }
 
-    .sidebar img {
-      width: 100%;
-      border-radius: 10px;
-      margin-bottom: 20px;
-    }
+        .sidebar img {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
 
-    .sidebar h2 {
-      font-weight: 500;
-      margin-bottom: 20px;
-    }
+        .sidebar h2 {
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
 
-    .sidebar a {
-      display: block;
-      color: #fff;
-      padding: 10px 15px;
-      margin: 10px 0;
-      text-decoration: none;
-      border-radius: 5px;
-      transition: background-color 0.3s ease;
-    }
+        .sidebar a {
+            display: block;
+            color: #fff;
+            padding: 10px 15px;
+            margin: 10px 0;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
 
-    .sidebar a:hover {
-      background-color: #16a085;
-    }
+        .sidebar a:hover {
+            background-color: #16a085;
+        }
 
-    .sidebar .close-sidebar {
-      font-size: 24px;
-      color: #fff;
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      cursor: pointer;
-    }
+        .sidebar .close-sidebar {
+            font-size: 24px;
+            color: #fff;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+        }
 
-    /* Main Content */
-    .main-content {
-      flex-grow: 1;
-      margin-left: 250px;
-      padding: 20px;
-      transition: margin-left 0.3s ease;
-      width: calc(100% - 250px);
-      overflow-y: auto; /* Allow vertical scrolling if necessary */
-    }
+        /* Main Content */
+        .main-content {
+            flex-grow: 1;
+            margin-left: 250px;
+            padding: 20px;
+            transition: margin-left 0.3s ease;
+            width: calc(100% - 250px);
+            overflow-y: auto; /* Allow vertical scrolling if necessary */
+        }
 
-    .main-content.expanded {
-      margin-left: 0;
-      width: 100%;
-    }
+        .main-content.expanded {
+            margin-left: 0;
+            width: 100%;
+        }
 
-    .open-sidebar-icon {
-      font-size: 24px;
-      color: #2c3e50;
-      position: absolute;
-      top: 15px;
-      left: 15px;
-      cursor: pointer;
-      z-index: 150;
-      display: none;
-    }
+        .open-sidebar-icon {
+            font-size: 24px;
+            color: #2c3e50;
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            cursor: pointer;
+            z-index: 150;
+            display: none; /* Hidden by default */
+        }
 
-    /* Responsive Styles for smaller screens */
-    @media (max-width: 768px) {
-      .sidebar {
-        width: 100%;
-        transform: translateX(-100%);
-      }
+        /* Responsive Styles for smaller screens */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px; /* Adjusted width for tablets */
+                transform: translateX(0); /* Keep it visible by default */
+            }
 
-      .sidebar.closed {
-        transform: translateX(-100%);
-      }
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
 
-      .main-content {
-        margin-left: 0;
-        width: 100%;
-      }
+            .open-sidebar-icon {
+                display: block; /* Show the open sidebar icon */
+            }
 
-      .open-sidebar-icon {
-        display: block;
-      }
+            .main-content.expanded {
+                width: 100%;
+                margin-left: 0;
+            }
+        }
 
-      .main-content.expanded {
-        width: 100%;
-        margin-left: 0;
-      }
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 150px; /* Further adjusted for extra-small screens */
+            }
+        }
 
-      iframe {
-        height: 70vh; /* Adjust iframe height on smaller screens */
-      }
-    }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
 
-    h1 {
-      font-size: 24px;
-      margin-bottom: 20px;
-      text-align: center;
-    }
+        /* Dashboard Layout */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
 
-    /* Dashboard Layout */
-    .dashboard {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 20px;
-    }
+        .dashboard-item {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.2s ease;
+        }
 
-    .dashboard-item {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      transition: transform 0.2s ease;
-    }
+        .dashboard-item:hover {
+            transform: translateY(-5px);
+        }
 
-    .dashboard-item:hover {
-      transform: translateY(-5px);
-    }
+        .dashboard-item h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #34495e;
+        }
 
-    .dashboard-item h2 {
-      font-size: 18px;
-      margin-bottom: 10px;
-      color: #34495e;
-    }
+        .dashboard-item p {
+            font-size: 16px;
+        }
 
-    .dashboard-item p {
-      font-size: 16px;
-    }
+        /* Scrollable iframe */
+        #iframeContainer {
+            width: 100%;
+            overflow-x: auto; /* Enable horizontal scrolling */
+            overflow-y: hidden; /* Disable vertical scrolling if not needed */
+        }
 
-    /* Scrollable iframe */
-    #iframeContainer {
-      width: 100%;
-      overflow-x: auto; /* Enable horizontal scrolling */
-      overflow-y: hidden; /* Disable vertical scrolling if not needed */
-    }
+        iframe {
+            min-width: 100%; /* Ensures iframe takes full width of container */
+            height: 90vh; /* Ensure iframe height fits within the viewport */
+            border: none;
+        }
 
-    iframe {
-      min-width: 100%; /* Ensures iframe takes full width of container */
-      height: 90vh; /* Ensure iframe height fits within the viewport */
-      border: none;
-    }
+        /* Form Buttons */
+        .form-button {
+            display: inline-block;
+            margin: 10px 0;
+            padding: 10px 20px;
+            background-color: #1abc9c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
 
-    /* Form Buttons */
-    .form-button {
-      display: inline-block;
-      margin: 10px 0;
-      padding: 10px 20px;
-      background-color: #1abc9c;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      text-decoration: none;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background-color 0.3s, transform 0.2s;
-    }
+        .form-button:hover {
+            background-color: #16a085;
+            transform: scale(1.02);
+        }
 
-    .form-button:hover {
-      background-color: #16a085;
-      transform: scale(1.02);
-    }
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 20px;
+            }
 
-    @media (max-width: 480px) {
-      h1 {
-        font-size: 20px;
-      }
+            .dashboard-item h2 {
+                font-size: 16px;
+            }
 
-      .dashboard-item h2 {
-        font-size: 16px;
-      }
+            .dashboard-item p {
+                font-size: 14px;
+            }
 
-      .dashboard-item p {
-        font-size: 14px;
-      }
+            iframe {
+                height: 60vh; /* Reduce iframe height on extra-small screens */
+            }
 
-      iframe {
-        height: 60vh; /* Reduce iframe height on extra-small screens */
-      }
-
-      .form-button {
-        font-size: 14px;
-        padding: 8px 16px;
-      }
-    }
-
-  </style>
+            .form-button {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-  <!-- Sidebar Toggle Button -->
-  <div class="open-sidebar-icon" id="openSidebarIcon" onclick="toggleSidebar()">
-    <i class="fas fa-bars"></i>
-  </div>
+    <!-- Sidebar Toggle Button -->
+    <div class="open-sidebar-icon" id="openSidebarIcon" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </div>
 
   <!-- Sidebar -->
   <div class="sidebar" id="sidebar">
-    <img src="PHAG.png" width="200px" height="200px" alt="Church Logo">
+    <img src="Images/PHAG.png" width="200px" height="200px" alt="Church Logo">
     <h2>Church Database</h2>
     <!-- Close sidebar icon -->
     <i class="fas fa-times close-sidebar" onclick="toggleSidebar()"></i>
@@ -242,103 +242,94 @@
     <a href="#" onclick="loadSheet('https://docs.google.com/spreadsheets/d/1qmNa3xSgbd1bda1TPIBR6bLpM2vEKUdG354t6eNjwn8/edit?gid=726525910#gid=726525910', 'g12')">G12 Leader Sheet</a>
   </div>
 
-  <!-- Main Content -->
-  <div class="main-content" id="mainContent">
-    <h1>Church Dashboard</h1>
-    <div class="dashboard">
-      <div class="dashboard-item">
-        <h2>Total Members</h2>
-        <p id="totalMembers">0</p>
-      </div>
-      <div class="dashboard-item">
-        <h2>Active G12 Members</h2>
-        <p id="activeG12">0</p>
-      </div>
-      <div class="dashboard-item">
-        <h2>New Members This Year</h2>
-        <p id="newMembers">0</p>
-      </div>
-      <div class="dashboard-item">
-        <h2>Sunday School Children</h2>
-        <p id="sundaySchoolChildren">0</p>
-      </div>
-      <div class="dashboard-item">
-        <h2>Care Takers</h2>
-        <p id="careTakers">0</p>
-      </div>
-      <div class="dashboard-item">
-        <h2>G12 Leaders</h2>
-        <p id="g12Leaders">0</p>
-      </div>
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <h1>Dashboard</h1>
+        <div class="dashboard">
+            <div class="dashboard-item">
+                <h2>Total Members</h2>
+                <p>150</p>
+            </div>
+            <div class="dashboard-item">
+                <h2>Active Caretakers</h2>
+                <p>10</p>
+            </div>
+            <div class="dashboard-item">
+                <h2>G12 Leaders</h2>
+                <p>5</p>
+            </div>
+        </div>
+
+        <!-- Form Button for Members -->
+        <div id="formContainer" style="display: none;">
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSd7Bg2kqAAWjB3P0K4ZySp8VeTUpPV6XZT7u6c8hXDS8RZ7Ew/viewform?usp=sf_link" class="form-button" onclick="return showForm()">Click to add Members</a>
+        </div>
+
+        <!-- Form Button for Care Takers -->
+        <div id="careTakersFormContainer" style="display: none;">
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLScP8dUQaR4tu3y7e3l_ePcUkUO8MJ0DqHy5t18vms43kuLhaA/viewform?usp=sf_link" class="form-button" onclick="return showCareTakersForm()">Click to add Care Takers</a>
+        </div>
+
+        <!-- Form Button for G12 Leaders -->
+        <div id="g12FormContainer" style="display: none;">
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSe2ArNUik_Yz6JBEKa6cxu0MfomUnxDIo90B1odJx1aIzXG6Q/viewform?usp=sf_link" class="form-button" onclick="return showG12Form()">Click to add G12 Leaders</a>
+        </div>
+
+        <!-- Iframe for Google Sheets -->
+        <div id="iframeContainer">
+            <iframe id="sheetIframe" src="" frameborder="0"></iframe>
+        </div>
+
     </div>
 
-    <!-- Form Button for Members -->
-    <div id="formContainer" style="display: none;">
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSfQGf6Fyd4vRVhXAfC5KaO9fYB7T4b2Q6uZthFmBwevCQQgrg/viewform?usp=sf_link" class="form-button" onclick="return showForm()">Click to add Members</a>
-    </div>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const openSidebarIcon = document.getElementById('openSidebarIcon');
+            sidebar.classList.toggle('closed');
+            mainContent.classList.toggle('expanded');
 
-    <!-- Form Button for Care Takers -->
-    <div id="careTakersFormContainer" style="display: none;">
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLScP8dUQaR4tu3y7e3l_ePcUkUO8MJ0DqHy5t18vms43kuLhaA/viewform?usp=sf_link" class="form-button" onclick="return showCareTakersForm()">Click to add Care Takers</a>
-    </div>
+            // Change icon visibility based on sidebar state
+            openSidebarIcon.style.display = sidebar.classList.contains('closed') ? 'block' : 'none';
+        }
 
-    <!-- Form Button for G12 Leaders -->
-    <div id="g12FormContainer" style="display: none;">
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSe2ArNUik_Yz6JBEKa6cxu0MfomUnxDIo90B1odJx1aIzXG6Q/viewform?usp=sf_link" class="form-button" onclick="return showG12Form()">Click to add G12 Leaders</a>
-    </div>
+        function loadSheet(url, type) {
+            const iframe = document.getElementById('sheetIframe');
+            iframe.src = url;
 
-    <!-- Iframe for Google Sheets -->
-    <div id="iframeContainer">
-      <iframe id="sheetIframe" src="" frameborder="0"></iframe>
-    </div>
+            const formContainer = document.getElementById('formContainer');
+            const careTakersFormContainer = document.getElementById('careTakersFormContainer');
+            const g12FormContainer = document.getElementById('g12FormContainer');
 
-  </div>
+            // Hide all forms initially
+            formContainer.style.display = "none";
+            careTakersFormContainer.style.display = "none";
+            g12FormContainer.style.display = "none";
 
-  <script>
-    function toggleSidebar() {
-      const sidebar = document.getElementById('sidebar');
-      const mainContent = document.getElementById('mainContent');
-      const openSidebarIcon = document.getElementById('openSidebarIcon');
-      sidebar.classList.toggle('closed');
-      mainContent.classList.toggle('expanded');
-      openSidebarIcon.style.display = sidebar.classList.contains('closed') ? 'block' : 'none';
-    }
+            // Show relevant form based on type
+            if (type === 'member') {
+                formContainer.style.display = "block";
+            } else if (type === 'caretaker') {
+                careTakersFormContainer.style.display = "block";
+            } else if (type === 'g12') {
+                g12FormContainer.style.display = "block";
+            }
+        }
 
-    function loadSheet(url, type) {
-      const iframe = document.getElementById('sheetIframe');
-      iframe.src = url;
+        function showForm() {
+            return true; // Allow the member form link to proceed
+        }
 
-      const formContainer = document.getElementById('formContainer');
-      const careTakersFormContainer = document.getElementById('careTakersFormContainer');
-      const g12FormContainer = document.getElementById('g12FormContainer');
+        function showCareTakersForm() {
+            return true; // Allow the caretaker form link to proceed
+        }
 
-      // Hide all forms initially
-      formContainer.style.display = "none";
-      careTakersFormContainer.style.display = "none";
-      g12FormContainer.style.display = "none";
-
-      // Show relevant form based on type
-      if (type === 'member') {
-        formContainer.style.display = "block";
-      } else if (type === 'caretaker') {
-        careTakersFormContainer.style.display = "block";
-      } else if (type === 'g12') {
-        g12FormContainer.style.display = "block";
-      }
-    }
-
-    function showForm() {
-      return true; // Allow the member form link to proceed
-    }
-
-    function showCareTakersForm() {
-      return true; // Allow the caretaker form link to proceed
-    }
-
-    function showG12Form() {
-      return true; // Allow the G12 leader form link to proceed
-    }
-  </script>
+        function showG12Form() {
+            return true; // Allow the G12 leader form link to proceed
+        }
+    </script>
 
 </body>
+
 </html>
