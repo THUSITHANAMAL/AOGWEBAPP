@@ -233,100 +233,135 @@
 
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
-        <img src="PHAG.png" width="200px" height="200px" alt="Church Logo">
+        <img src="Images/PHAG.png" width="200px" height="200px" alt="Church Logo">
         <h2>Church Database</h2>
         <!-- Close sidebar icon -->
         <i class="fas fa-times close-sidebar" onclick="toggleSidebar()"></i>
-        <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vQxCzz0w50KA348Q0bSBElMplDGN7rj4l6-6KGzul4OF0mAyEpE2tp8z1a5ml2cEsEDf-0paKipauJN/pubhtml" onclick="loadSheet('member')">Member Sheet</a>
-        <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vRXEZ7eXV_8bK4RhnRltIHpAgQctuYasyf4GVcw4euCCZjYVQwMLMaUXA0bKg7juuBcYTI2TrMalKCc/pubhtml" onclick="loadSheet('caretaker')">Care Taker Sheet</a>
-        <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vSVmkQ08eOME4YkAZXFCc2uq5whhND4oGneJ3o2oekcY82aEqvYUds2iB6i2k0C-CD7kl_tR1GEz4HE/pubhtml" onclick="loadSheet('g12')">G12 Leader Sheet</a>
+        <a href="#" onclick="loadSheet('https://docs.google.com/spreadsheets/d/e/2PACX-1vQxCzz0w50KA348Q0bSBElMplDGN7rj4l6-6KGzul4OF0mAyEpE2tp8z1a5ml2cEsEDf-0paKipauJN/pubhtml', 'member')">Members</a>
+        <a href="#" onclick="loadSheet('https://docs.google.com/spreadsheets/d/1a79KcTpgt1FS3AV5aJLYu1nGwdIWe3-qDMyhD-Zhv50/edit#gid=0', 'caretaker')">Caretakers</a>
+        <a href="#" onclick="loadSheet('https://docs.google.com/spreadsheets/d/1LyzzGPciHw9Ro7Qh_XBRRvcbdFjwK6km_4brC6OXfA8/edit?usp=sharing', 'headleader')">Head Leaders</a>
     </div>
 
     <!-- Main Content -->
     <div class="main-content" id="mainContent">
-        <h1>Dashboard</h1>
-        <div class="dashboard">
+        <h1>Church Database Dashboard</h1>
+        <div class="dashboard" id="dashboard">
             <div class="dashboard-item">
                 <h2>Total Members</h2>
-                <p id="totalMembers">150</p>
+                <p id="totalMembers">0</p>
             </div>
             <div class="dashboard-item">
-                <h2>Active Caretakers</h2>
-                <p id="activeCaretakers">10</p>
+                <h2>Total Caretakers</h2>
+                <p id="totalCaretakers">0</p>
             </div>
             <div class="dashboard-item">
-                <h2>G12 Leaders</h2>
-                <p id="g12Leaders">5</p>
+                <h2>Total G12 Leaders</h2>
+                <p id="totalHeadLeaders">0</p>
             </div>
         </div>
-
-        <!-- Form Button for Members -->
-        <div id="formContainer" style="display: none;">
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSftq99yQ9lZ2xc78cCChwcPnOKpF8b150vGKdjunsSK2PAfdg/viewform?usp=sf_link" class="form-button">Click to add Members</a>
+       <br>
+        <!-- Iframe to display Google Sheets -->
+        <div id="iframeContainer">
+            <iframe id="sheetIframe" src="about:blank"></iframe>
         </div>
 
-        <!-- Form Button for Care Takers -->
-        <div id="careTakersFormContainer" style="display: none;">
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfQy2X28Tl9a1lisaKB_s16ZIJEbfsQYZx1YyM4XQS2wo-1Lg/viewform?usp=sf_link" class="form-button">Click to add Care Takers</a>
+        <!-- Form Buttons -->
+        <div>
+            <button class="form-button" onclick="openForm('memberForm')">Add Member</button>
+            <button class="form-button" onclick="openForm('caretakerForm')">Add Caretaker</button>
+            <button class="form-button" onclick="openForm('headleaderForm')">Add Head Leader</button>
         </div>
 
-        <!-- Form Button for G12 Leaders -->
-        <div id="g12FormContainer" style="display: none;">
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSe2ArNUik_Yz6JBEKa6cxu0MfomUnxDIo90B1odJx1aIzXG6Q/viewform?usp=sf_link" class="form-button">Click to add G12 Leaders</a>
-        </div>
-
-        <!-- Iframe for Google Sheets -->
-        <div id="iframeContainer" style="display: none;">
-            <iframe id="iframe" src="" frameborder="0"></iframe>
-        </div>
     </div>
 
     <script>
-        // Function to toggle the sidebar
+        // Toggle Sidebar
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const mainContent = document.getElementById('mainContent');
-            const openSidebarIcon = document.getElementById('openSidebarIcon');
-
             sidebar.classList.toggle('closed');
             mainContent.classList.toggle('expanded');
-            openSidebarIcon.style.display = sidebar.classList.contains('closed') ? 'block' : 'none';
         }
 
-        // Load Google Sheets data
-        async function loadSheet(sheet) {
-            const sheetsData = {
-                member: {
-                    url: "https://docs.google.com/spreadsheets/d/1D2nm7al8nZP5y5Hn1C-Ff5Dmy9bk-gp0xg7F_E7oJUY/edit#gid=0",
-                    totalId: "totalMembers",
-                    formContainerId: "formContainer"
-                },
-                caretaker: {
-                    url: "https://docs.google.com/spreadsheets/d/1D2nm7al8nZP5y5Hn1C-Ff5Dmy9bk-gp0xg7F_E7oJUY/edit#gid=1",
-                    totalId: "activeCaretakers",
-                    formContainerId: "careTakersFormContainer"
-                },
-                g12: {
-                    url: "https://docs.google.com/spreadsheets/d/1D2nm7al8nZP5y5Hn1C-Ff5Dmy9bk-gp0xg7F_E7oJUY/edit#gid=2",
-                    totalId: "g12Leaders",
-                    formContainerId: "g12FormContainer"
-                }
-            };
-
-            const { url, totalId, formContainerId } = sheetsData[sheet];
-
-            // Fetch total members
-            const response = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${url.split('/d/')[1].split('/')[0]}/values/Sheet1!A1?key=YOUR_API_KEY`);
-            const data = await response.json();
-            document.getElementById(totalId).innerText = data.values[0][0]; // Assuming the total is in A1
-
-            // Show appropriate form button
-            document.getElementById(formContainerId).style.display = 'block';
-
-            // Load the Google Sheet in an iframe
-            document.getElementById('iframe').src = url.replace("/edit", "/gviz/tq?tqx=out:html");
-            document.getElementById('iframeContainer').style.display = 'block';
+        // Load a specific Google Sheet
+        function loadSheet(sheetUrl, type) {
+            const iframe = document.getElementById('sheetIframe');
+            iframe.src = sheetUrl;
+            fetchSheetData(type);
         }
+
+        // Fetch data from Google Sheets for Dashboard
+        function fetchSheetData(type) {
+            // Simulating fetch from a Google Sheet. This should be replaced by actual API call.
+            // You would replace this with actual Google Sheets API calls.
+
+            let totalMembers = Math.floor(Math.random() * 100); // Simulate random data
+            let totalCaretakers = Math.floor(Math.random() * 50);
+            let totalHeadLeaders = Math.floor(Math.random() * 20);
+
+            document.getElementById('totalMembers').textContent = totalMembers;
+            document.getElementById('totalCaretakers').textContent = totalCaretakers;
+            document.getElementById('totalHeadLeaders').textContent = totalHeadLeaders;
+        }
+
+        setInterval(fetchSheetData, 30000); // Fetch data every 30 seconds
+
+        // Open Google Forms
+        function openForm(formType) {
+            let formUrl;
+            switch (formType) {
+                case 'memberForm':
+                    formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSftq99yQ9lZ2xc78cCChwcPnOKpF8b150vGKdjunsSK2PAfdg/viewform?usp=sf_link';
+                    break;
+                case 'caretakerForm':
+                    formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSckdbGkR-1hSgK9ipkRm7WbvDfFR1Wo8WJtRLfyg1tu8EGkDQ/viewform?usp=sf_link';
+                    break;
+                case 'headleaderForm':
+                    formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSfMd0ADfQ9_TFUnfuHZnGp7kZuDh1FbRfGECL1XOk3_r1c46Q/viewform?usp=sf_link';
+                    break;
+                default:
+                    return;
+            }
+            window.open(formUrl, '_blank');
+        }
+        // Fetch data from Google Sheets API for Dashboard
+async function fetchSheetData() {
+    const apiKey = 'YOUR_GOOGLE_SHEETS_API_KEY'; // Replace with your API Key
+    const sheetId = 'YOUR_SHEET_ID'; // Replace with your Google Sheet ID
+    const range = 'Sheet1!A2:C'; // Adjust the range according to your sheet structure
+
+    try {
+        const response = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`);
+        const data = await response.json();
+        
+        if (data.values && data.values.length > 0) {
+            // Assuming your sheet has columns in order of Members, Caretakers, Head Leaders
+            let totalMembers = 0;
+            let totalCaretakers = 0;
+            let totalHeadLeaders = 0;
+
+            data.values.forEach(row => {
+                totalMembers += parseInt(row[0] || 0); // Assuming the first column is total members
+                totalCaretakers += parseInt(row[1] || 0); // Second column for caretakers
+                totalHeadLeaders += parseInt(row[2] || 0); // Third column for head leaders
+            });
+
+            document.getElementById('totalMembers').textContent = totalMembers;
+            document.getElementById('totalCaretakers').textContent = totalCaretakers;
+            document.getElementById('totalHeadLeaders').textContent = totalHeadLeaders;
+        }
+    } catch (error) {
+        console.error("Error fetching data from Google Sheets:", error);
+    }
+}
+
+// Call fetchSheetData initially to load data
+fetchSheetData();
+
+// Update every 30 seconds
+setInterval(fetchSheetData, 30000);
+
+
     </script>
 </body>
 
