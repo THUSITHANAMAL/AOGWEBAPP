@@ -238,8 +238,8 @@
         <!-- Close sidebar icon -->
         <i class="fas fa-times close-sidebar" onclick="toggleSidebar()"></i>
         <a href="#" onclick="loadSheet('https://docs.google.com/spreadsheets/d/e/2PACX-1vQxCzz0w50KA348Q0bSBElMplDGN7rj4l6-6KGzul4OF0mAyEpE2tp8z1a5ml2cEsEDf-0paKipauJN/pubhtml', 'member')">Members</a>
-        <a href="#" onclick="loadSheet('https://docs.google.com/spreadsheets/d/1a79KcTpgt1FS3AV5aJLYu1nGwdIWe3-qDMyhD-Zhv50/edit#gid=0', 'caretaker')">Caretakers</a>
-        <a href="#" onclick="loadSheet('https://docs.google.com/spreadsheets/d/1LyzzGPciHw9Ro7Qh_XBRRvcbdFjwK6km_4brC6OXfA8/edit?usp=sharing', 'headleader')">Head Leaders</a>
+        <a href="#" onclick="loadSheet('https://docs.google.com/spreadsheets/d/e/2PACX-1vSVmkQ08eOME4YkAZXFCc2uq5whhND4oGneJ3o2oekcY82aEqvYUds2iB6i2k0C-CD7kl_tR1GEz4HE/pubhtml', 'caretaker')">Caretakers</a>
+        <a href="#" onclick="loadSheet('https://docs.google.com/spreadsheets/d/e/2PACX-1vRXEZ7eXV_8bK4RhnRltIHpAgQctuYasyf4GVcw4euCCZjYVQwMLMaUXA0bKg7juuBcYTI2TrMalKCc/pubhtml', 'headleader')">Head Leaders</a>
     </div>
 
     <!-- Main Content -->
@@ -267,20 +267,18 @@
 
         <!-- Form Buttons -->
         <div>
-            <button class="form-button" onclick="openForm('memberForm')">Add Member</button>
-            <button class="form-button" onclick="openForm('caretakerForm')">Add Caretaker</button>
-            <button class="form-button" onclick="openForm('headleaderForm')">Add Head Leader</button>
+            <button class="form-button" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSe2ArNUik_Yz6JBEKa6cxu0MfomUnxDIo90B1odJx1aIzXG6Q/viewform?usp=sf_link')">Add G12 Leader</button>
+            <button class="form-button" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSfQy2X28Tl9a1lisaKB_s16ZIJEbfsQYZx1YyM4XQS2wo-1Lg/viewform?usp=sf_link')">Add Caretaker</button>
+            <button class="form-button" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSftq99yQ9lZ2xc78cCChwcPnOKpF8b150vGKdjunsSK2PAfdg/viewform?usp=sf_link')">Add Member</button>
         </div>
-
     </div>
 
     <script>
-        // Your Google Sheets API key and sheet ID
-        const apiKey = 'YOUR_API_KEY'; // Replace with your API key
+        const Key = 'AIzaSyDGdY9My5QCWKvVBBmZYrDW3YDknVxgItg'; // Replace with your API key
         const sheetIds = {
-            member: 'YOUR_MEMBER_SHEET_ID',
-            caretaker: 'YOUR_CARETAKER_SHEET_ID',
-            headleader: 'YOUR_HEADLEADER_SHEET_ID'
+            member: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQxCzz0w50KA348Q0bSBElMplDGN7rj4l6-6KGzul4OF0mAyEpE2tp8z1a5ml2cEsEDf-0paKipauJN/pubhtml',
+            caretaker: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSVmkQ08eOME4YkAZXFCc2uq5whhND4oGneJ3o2oekcY82aEqvYUds2iB6i2k0C-CD7kl_tR1GEz4HE/pubhtml',
+            headleader: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRXEZ7eXV_8bK4RhnRltIHpAgQctuYasyf4GVcw4euCCZjYVQwMLMaUXA0bKg7juuBcYTI2TrMalKCc/pubhtml'
         };
 
         // Toggles the sidebar
@@ -300,7 +298,7 @@
             document.getElementById('sheetIframe').src = 'data:text/html;charset=utf-8,' + encodeURIComponent(text);
             const endTime = performance.now();
             console.log(`Data loaded in ${endTime - startTime} ms`);
-            updateDashboard(type);
+            fetchDataDebounced(sheetUrl, type);
         }
 
         // Debounced function to fetch data from Google Sheets
@@ -332,15 +330,9 @@
             }
         }
 
-        // Open the form based on the type
-        function openForm(type) {
-            // Implement your form opening logic here
-            alert(`Opening form for ${type}`);
-        }
-
         // Call this function to load the initial sheet data when the page loads
         window.onload = () => {
-            fetchDataDebounced(sheetIds.member, 'member'); // Change this to the default sheet you want to load
+            loadSheet(sheetIds.member, 'member'); // Load member sheet by default
         };
     </script>
 
