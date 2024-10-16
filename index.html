@@ -259,7 +259,7 @@
                 <p id="totalHeadLeaders">0</p>
             </div>
         </div>
-       <br>
+
         <!-- Iframe to display Google Sheets -->
         <div id="iframeContainer">
             <iframe id="sheetIframe" src="about:blank"></iframe>
@@ -275,7 +275,15 @@
     </div>
 
     <script>
-        // Toggle Sidebar
+        // Your Google Sheets API key and sheet ID
+        const apiKey = 'YOUR_API_KEY'; // Replace with your API key
+        const sheetIds = {
+            member: 'YOUR_MEMBER_SHEET_ID',
+            caretaker: 'YOUR_CARETAKER_SHEET_ID',
+            headleader: 'YOUR_HEADLEADER_SHEET_ID'
+        };
+
+        // Toggles the sidebar
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const mainContent = document.getElementById('mainContent');
@@ -283,86 +291,59 @@
             mainContent.classList.toggle('expanded');
         }
 
-        // Load a specific Google Sheet
-        function loadSheet(sheetUrl, type) {
-            const iframe = document.getElementById('sheetIframe');
-            iframe.src = sheetUrl;
-            fetchSheetData(type);
+        // Load Google Sheets data and update the dashboard
+        async function loadSheet(sheetUrl, type) {
+            console.log(`Loading data for ${type}...`);
+            const startTime = performance.now();
+            const response = await fetch(sheetUrl);
+            const text = await response.text();
+            document.getElementById('sheetIframe').src = 'data:text/html;charset=utf-8,' + encodeURIComponent(text);
+            const endTime = performance.now();
+            console.log(`Data loaded in ${endTime - startTime} ms`);
+            updateDashboard(type);
         }
 
-        // Fetch data from Google Sheets for Dashboard
-        function fetchSheetData(type) {
-            // Simulating fetch from a Google Sheet. This should be replaced by actual API call.
-            // You would replace this with actual Google Sheets API calls.
-
-            let totalMembers = Math.floor(Math.random() * 100); // Simulate random data
-            let totalCaretakers = Math.floor(Math.random() * 50);
-            let totalHeadLeaders = Math.floor(Math.random() * 20);
-
-            document.getElementById('totalMembers').textContent = totalMembers;
-            document.getElementById('totalCaretakers').textContent = totalCaretakers;
-            document.getElementById('totalHeadLeaders').textContent = totalHeadLeaders;
+        // Debounced function to fetch data from Google Sheets
+        let debounceTimer;
+        function fetchDataDebounced(sheetUrl, type) {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                fetchData(sheetUrl, type);
+            }, 300);
         }
 
-        setInterval(fetchSheetData, 30000); // Fetch data every 30 seconds
+        async function fetchData(sheetUrl, type) {
+            console.log(`Fetching data from ${type}...`);
+            const response = await fetch(sheetUrl);
+            const data = await response.json();
+            updateDashboardData(data, type);
+        }
 
-        // Open Google Forms
-        function openForm(formType) {
-            let formUrl;
-            switch (formType) {
-                case 'memberForm':
-                    formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSftq99yQ9lZ2xc78cCChwcPnOKpF8b150vGKdjunsSK2PAfdg/viewform?usp=sf_link';
-                    break;
-                case 'caretakerForm':
-                    formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSckdbGkR-1hSgK9ipkRm7WbvDfFR1Wo8WJtRLfyg1tu8EGkDQ/viewform?usp=sf_link';
-                    break;
-                case 'headleaderForm':
-                    formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSfMd0ADfQ9_TFUnfuHZnGp7kZuDh1FbRfGECL1XOk3_r1c46Q/viewform?usp=sf_link';
-                    break;
-                default:
-                    return;
+        function updateDashboardData(data, type) {
+            // Extract the total count from the fetched data
+            let totalCount = data.values ? data.values.length - 1 : 0; // -1 for header row
+
+            if (type === 'member') {
+                document.getElementById('totalMembers').textContent = totalCount;
+            } else if (type === 'caretaker') {
+                document.getElementById('totalCaretakers').textContent = totalCount;
+            } else if (type === 'headleader') {
+                document.getElementById('totalHeadLeaders').textContent = totalCount;
             }
-            window.open(formUrl, '_blank');
         }
-        // Fetch data from Google Sheets API for Dashboard
-async function fetchSheetData() {
-    const apiKey = 'YOUR_GOOGLE_SHEETS_API_KEY'; // Replace with your API Key
-    const sheetId = 'YOUR_SHEET_ID'; // Replace with your Google Sheet ID
-    const range = 'Sheet1!A2:C'; // Adjust the range according to your sheet structure
 
-    try {
-        const response = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`);
-        const data = await response.json();
-        
-        if (data.values && data.values.length > 0) {
-            // Assuming your sheet has columns in order of Members, Caretakers, Head Leaders
-            let totalMembers = 0;
-            let totalCaretakers = 0;
-            let totalHeadLeaders = 0;
-
-            data.values.forEach(row => {
-                totalMembers += parseInt(row[0] || 0); // Assuming the first column is total members
-                totalCaretakers += parseInt(row[1] || 0); // Second column for caretakers
-                totalHeadLeaders += parseInt(row[2] || 0); // Third column for head leaders
-            });
-
-            document.getElementById('totalMembers').textContent = totalMembers;
-            document.getElementById('totalCaretakers').textContent = totalCaretakers;
-            document.getElementById('totalHeadLeaders').textContent = totalHeadLeaders;
+        // Open the form based on the type
+        function openForm(type) {
+            // Implement your form opening logic here
+            alert(`Opening form for ${type}`);
         }
-    } catch (error) {
-        console.error("Error fetching data from Google Sheets:", error);
-    }
-}
 
-// Call fetchSheetData initially to load data
-fetchSheetData();
-
-// Update every 30 seconds
-setInterval(fetchSheetData, 30000);
-
-
+        // Call this function to load the initial sheet data when the page loads
+        window.onload = () => {
+            fetchDataDebounced(sheetIds.member, 'member'); // Change this to the default sheet you want to load
+        };
     </script>
+
 </body>
 
 </html>
