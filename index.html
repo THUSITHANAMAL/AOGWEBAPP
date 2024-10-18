@@ -253,7 +253,7 @@
         <i class="fas fa-times close-sidebar" onclick="toggleSidebar()"></i>
         <a href="#" onclick="loadSheet(sheetIds.member, 'member')">Members</a>
         <a href="#" onclick="loadSheet(sheetIds.caretaker, 'caretaker')">G12 Leader</a>
-        <a href="#" onclick="loadSheet(sheetIds.headleader, 'headleader')">Care Taker</a>
+        <a href="#" onclick="loadSheet(sheetIds.g12leader, 'g12leader')">Care Taker</a>
     </div>
 
     <!-- Main Content -->
@@ -270,7 +270,7 @@
             </div>
             <div class="dashboard-item">
                 <h2>Total G12 Leaders</h2>
-                <p id="totalHeadLeaders">0</p>
+                <p id="totalg12Leaders">0</p>
             </div>
         </div>
 
@@ -286,7 +286,7 @@
         <div>
             <button class="form-button" onclick="openForm('memberForm')">Add G12 Leader</button>
             <button class="form-button" onclick="openForm('caretakerForm')">Add Caretaker</button>
-            <button class="form-button" onclick="openForm('headleaderForm')">Add Member</button>
+            <button class="form-button" onclick="openForm('g12leaderForm')">Add Member</button>
         </div>
 
     </div>
@@ -296,7 +296,7 @@
         const sheetIds = {
             member: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQxCzz0w50KA348Q0bSBElMplDGN7rj4l6-6KGzul4OF0mAyEpE2tp8z1a5ml2cEsEDf-0paKipauJN/pubhtml',
             caretaker: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSVmkQ08eOME4YkAZXFCc2uq5whhND4oGneJ3o2oekcY82aEqvYUds2iB6i2k0C-CD7kl_tR1GEz4HE/pubhtml',
-            headleader: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRXEZ7eXV_8bK4RhnRltIHpAgQctuYasyf4GVcw4euCCZjYVQwMLMaUXA0bKg7juuBcYTI2TrMalKCc/pubhtml'
+            g12leader: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRXEZ7eXV_8bK4RhnRltIHpAgQctuYasyf4GVcw4euCCZjYVQwMLMaUXA0bKg7juuBcYTI2TrMalKCc/pubhtml'
         };
 
         // Toggle loading spinner visibility
@@ -340,7 +340,7 @@
                 case 'caretaker':
                     document.getElementById('totalCaretakers').textContent = totalCount;
                     break;
-                case 'headleader':
+                case 'G12leader':
                     document.getElementById('totalHeadLeaders').textContent = totalCount;
                     break;
             }
@@ -391,7 +391,7 @@
             const formLinks = {
                 memberForm: 'https://docs.google.com/forms/d/e/1FAIpQLSe2ArNUik_Yz6JBEKa6cxu0MfomUnxDIo90B1odJx1aIzXG6Q/viewform?usp=sf_link',
                 caretakerForm: 'https://docs.google.com/forms/d/e/1FAIpQLSfQy2X28Tl9a1lisaKB_s16ZIJEbfsQYZx1YyM4XQS2wo-1Lg/viewform?usp=sf_link',
-                headleaderForm: 'https://docs.google.com/forms/d/e/1FAIpQLSftq99yQ9lZ2xc78cCChwcPnOKpF8b150vGKdjunsSK2PAfdg/viewform?usp=sf_link'
+                G12leaderForm: 'https://docs.google.com/forms/d/e/1FAIpQLSftq99yQ9lZ2xc78cCChwcPnOKpF8b150vGKdjunsSK2PAfdg/viewform?usp=sf_link'
             };
             window.open(formLinks[formType], '_blank');
         }
