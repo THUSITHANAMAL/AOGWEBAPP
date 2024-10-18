@@ -291,93 +291,111 @@
 
     </div>
 
-   <script>
-    const Key = 'AIzaSyDGdY9My5QCWKvVBBmZYrDW3YDknVxgItg'; // Your Google API Key
-    const sheetIds = {
-        member: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQxCzz0w50KA348Q0bSBElMplDGN7rj4l6-6KGzul4OF0mAyEpE2tp8z1a5ml2cEsEDf-0paKipauJN/pubhtml',
-        caretaker: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSVmkQ08eOME4YkAZXFCc2uq5whhND4oGneJ3o2oekcY82aEqvYUds2iB6i2k0C-CD7kl_tR1GEz4HE/pubhtml',
-        g12leader: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRXEZ7eXV_8bK4RhnRltIHpAgQctuYasyf4GVcw4euCCZjYVQwMLMaUXA0bKg7juuBcYTI2TrMalKCc/pubhtml'
-    };
-
-    // Toggle loading spinner visibility
-    function toggleLoading(show) {
-        const loadingIndicator = document.getElementById('loading');
-        if (show) {
-            loadingIndicator.classList.add('show');
-        } else {
-            loadingIndicator.classList.remove('show');
-        }
-    }
-
-    // Load Google Sheets data and update the dashboard
-    async function loadSheet(sheetUrl, type) {
-        toggleLoading(true); // Show loading indicator
-
-        try {
-            const response = await fetch(sheetUrl);
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            const text = await response.text();
-            document.getElementById('sheetIframe').src = 'data:text/html;charset=utf-8,' + encodeURIComponent(text);
-
-            // Extracting data (modify according to your actual data format)
-            const data = await response.json(); // Assuming your sheets return JSON
-            updateDashboardData(data, type);
-        } catch (error) {
-            console.error("Error loading sheet:", error);
-        } finally {
-            toggleLoading(false); // Hide loading indicator
-        }
-    }
-
-    function updateDashboardData(data, type) {
-        let totalCount = data.values ? data.values.length - 1 : 0; // -1 for header row
-        switch (type) {
-            case 'member':
-                document.getElementById('totalMembers').textContent = totalCount;
-                break;
-            case 'caretaker':
-                document.getElementById('totalCaretakers').textContent = totalCount;
-                break;
-            case 'g12leader': // Corrected case for G12 leaders
-                document.getElementById('totalg12Leaders').textContent = totalCount;
-                break;
-        }
-    }
-
-    // Call this function to load the initial sheet data when the page loads
-    window.onload = () => {
-        loadSheet(sheetIds.member, 'member'); // Load member sheet by default
-    };
-
-    // Sidebar Toggle
-    function toggleSidebar() {
-        const sidebar = document.getElementById('sidebar');
-        const mainContent = document.getElementById('mainContent');
-        sidebar.classList.toggle('closed');
-        mainContent.classList.toggle('expanded');
-    }
-
-    // Open Form
-    function openForm(formType) {
-        const formLinks = {
-            memberForm: 'https://docs.google.com/forms/d/e/1FAIpQLSftq99yQ9lZ2xc78cCChwcPnOKpF8b150vGKdjunsSK2PAfdg/viewform?usp=sf_link',
-            caretakerForm: 'https://docs.google.com/forms/d/e/1FAIpQLSfQy2X28Tl9a1lisaKB_s16ZIJEbfsQYZx1YyM4XQS2wo-1Lg/viewform?usp=sf_link',
-            g12leaderForm: 'https://docs.google.com/forms/d/e/1FAIpQLSe2ArNUik_Yz6JBEKa6cxu0MfomUnxDIo90B1odJx1aIzXG6Q/viewform?usp=sf_link' // Corrected link casing
+    <script>
+        const Key = 'AIzaSyDGdY9My5QCWKvVBBmZYrDW3YDknVxgItg'; // Your Google API Key
+        const sheetIds = {
+            member: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQxCzz0w50KA348Q0bSBElMplDGN7rj4l6-6KGzul4OF0mAyEpE2tp8z1a5ml2cEsEDf-0paKipauJN/pubhtml',
+            caretaker: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSVmkQ08eOME4YkAZXFCc2uq5whhND4oGneJ3o2oekcY82aEqvYUds2iB6i2k0C-CD7kl_tR1GEz4HE/pubhtml',
+            g12leader: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRXEZ7eXV_8bK4RhnRltIHpAgQctuYasyf4GVcw4euCCZjYVQwMLMaUXA0bKg7juuBcYTI2TrMalKCc/pubhtml'
         };
-        window.open(formLinks[formType], '_blank');
-    }
 
-    // Real-time auto-refresh
-    setInterval(() => {
-        loadSheet(sheetIds.member, 'member');
-        loadSheet(sheetIds.caretaker, 'caretaker');
-        loadSheet(sheetIds.g12leader, 'g12leader');
-    }, 10000); // Auto-refresh every 10 seconds for all sheets
+        // Toggle loading spinner visibility
+        function toggleLoading(show) {
+            const loadingIndicator = document.getElementById('loading');
+            if (show) {
+                loadingIndicator.classList.add('show');
+            } else {
+                loadingIndicator.classList.remove('show');
+            }
+        }
 
-</script>
+        // Load Google Sheets data and update the dashboard
+        async function loadSheet(sheetUrl, type) {
+            toggleLoading(true); // Show loading indicator
 
+            try {
+                const response = await fetch(sheetUrl);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const text = await response.text();
+                document.getElementById('sheetIframe').src = 'data:text/html;charset=utf-8,' + encodeURIComponent(text);
+
+                // Extracting data (modify according to your actual data format)
+                const data = await response.json(); // Assuming your sheets return JSON
+                updateDashboardData(data, type);
+            } catch (error) {
+                console.error("Error loading sheet:", error);
+            } finally {
+                toggleLoading(false); // Hide loading indicator
+            }
+        }
+
+        function updateDashboardData(data, type) {
+            let totalCount = data.values ? data.values.length - 1 : 0; // -1 for header row
+            switch (type) {
+                case 'member':
+                    document.getElementById('totalMembers').textContent = totalCount;
+                    break;
+                case 'caretaker':
+                    document.getElementById('totalCaretakers').textContent = totalCount;
+                    break;
+                case 'G12leader':
+                    document.getElementById('totalHeadLeaders').textContent = totalCount;
+                    break;
+            }
+        }
+
+        // Form submission function
+        async function submitForm(formData, sheetUrl) {
+            toggleLoading(true); // Show loading indicator
+
+            try {
+                const response = await fetch(sheetUrl, {
+                    method: 'POST',
+                    body: JSON.stringify(formData), // Ensure formData is in the correct format
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${Key}` // Add your API Key if needed
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log("Data submitted successfully:", result);
+            } catch (error) {
+                console.error("Error submitting form:", error);
+            } finally {
+                toggleLoading(false); // Hide loading indicator
+            }
+        }
+
+        // Call this function to load the initial sheet data when the page loads
+        window.onload = () => {
+            loadSheet(sheetIds.member, 'member'); // Load member sheet by default
+        };
+
+        // Sidebar Toggle
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            sidebar.classList.toggle('closed');
+            mainContent.classList.toggle('expanded');
+        }
+
+        // Open Form
+        function openForm(formType) {
+            const formLinks = {
+                memberForm: 'https://docs.google.com/forms/d/e/1FAIpQLSe2ArNUik_Yz6JBEKa6cxu0MfomUnxDIo90B1odJx1aIzXG6Q/viewform?usp=sf_link',
+                caretakerForm: 'https://docs.google.com/forms/d/e/1FAIpQLSfQy2X28Tl9a1lisaKB_s16ZIJEbfsQYZx1YyM4XQS2wo-1Lg/viewform?usp=sf_link',
+                G12leaderForm: 'https://docs.google.com/forms/d/e/1FAIpQLSftq99yQ9lZ2xc78cCChwcPnOKpF8b150vGKdjunsSK2PAfdg/viewform?usp=sf_link'
+            };
+            window.open(formLinks[formType], '_blank');
+        }
+    </script>
 </body>
 
 </html>
