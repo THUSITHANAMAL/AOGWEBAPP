@@ -252,8 +252,8 @@
         <h2>Church Database</h2>
         <i class="fas fa-times close-sidebar" onclick="toggleSidebar()"></i>
         <a href="#" onclick="loadSheet(sheetIds.member, 'member')">Members</a>
-        <a href="#" onclick="loadSheet(sheetIds.caretaker, 'caretaker')">G12 Leader</a>
-        <a href="#" onclick="loadSheet(sheetIds.g12leader, 'g12leader')">Care Taker</a>
+        <a href="#" onclick="loadSheet(sheetIds.caretaker, 'caretaker')">Care Taker</a>
+        <a href="#" onclick="loadSheet(sheetIds.g12leader, 'g12leader')">G12 Leader</a>
     </div>
 
     <!-- Main Content -->
@@ -295,8 +295,8 @@
         const Key = 'AIzaSyDGdY9My5QCWKvVBBmZYrDW3YDknVxgItg'; // Your Google API Key
         const sheetIds = {
             member: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQxCzz0w50KA348Q0bSBElMplDGN7rj4l6-6KGzul4OF0mAyEpE2tp8z1a5ml2cEsEDf-0paKipauJN/pubhtml',
-            caretaker: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSVmkQ08eOME4YkAZXFCc2uq5whhND4oGneJ3o2oekcY82aEqvYUds2iB6i2k0C-CD7kl_tR1GEz4HE/pubhtml',
-            g12leader: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRXEZ7eXV_8bK4RhnRltIHpAgQctuYasyf4GVcw4euCCZjYVQwMLMaUXA0bKg7juuBcYTI2TrMalKCc/pubhtml'
+            caretaker: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRXEZ7eXV_8bK4RhnRltIHpAgQctuYasyf4GVcw4euCCZjYVQwMLMaUXA0bKg7juuBcYTI2TrMalKCc/pubhtml',
+            g12leader: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSVmkQ08eOME4YkAZXFCc2uq5whhND4oGneJ3o2oekcY82aEqvYUds2iB6i2k0C-CD7kl_tR1GEz4HE/pubhtml'
         };
 
         // Toggle loading spinner visibility
@@ -341,7 +341,7 @@
                     document.getElementById('totalCaretakers').textContent = totalCount;
                     break;
                 case 'G12leader':
-                    document.getElementById('totalHeadLeaders').textContent = totalCount;
+                    document.getElementById('totalg12Leaders').textContent = totalCount;
                     break;
             }
         }
