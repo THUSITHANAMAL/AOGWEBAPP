@@ -284,84 +284,28 @@
 
         <!-- Form Buttons -->
         <div>
-            <button class="form-button" onclick="openForm('memberForm')">Add Member</button>
-            <button class="form-button" onclick="openForm('caretakerForm')">Add Caretaker</button>
-            <button class="form-button" onclick="openForm('g12leaderForm')">Add G12 Leader</button>
+            <button class="form-button" onclick="openForm('https://docs.google.com/forms/d/e/1FAIpQLSfQy2X28Tl9a1lisaKB_s16ZIJEbfsQYZx1YyM4XQS2wo-1Lg/viewform?usp=sf_link')">Add Caretaker</button>
+            <button class="form-button" onclick="openForm('https://docs.google.com/forms/d/e/1FAIpQLSftq99yQ9lZ2xc78cCChwcPnOKpF8b150vGKdjunsSK2PAfdg/viewform?usp=sf_link')">Add Member</button>
+            <button class="form-button" onclick="openForm('https://docs.google.com/forms/d/e/1FAIpQLSe2ArNUik_Yz6JBEKa6cxu0MfomUnxDIo90B1odJx1aIzXG6Q/viewform?usp=sf_link')">Add G12 Leader</button>
         </div>
 
     </div>
 
     <script>
-        const Key = 'AIzaSyDGdY9My5QCWKvVBBmZYrDW3YDknVxgItg'; // Your Google API Key
         const sheetIds = {
-            member: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQxCzz0w50KA348Q0bSBElMplDGN7rj4l6-6KGzul4OF0mAyEpE2tp8z1a5ml2cEsEDf-0paKipauJN/pubhtml',
-            caretaker: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSVmkQ08eOME4YkAZXFCc2uq5whhND4oGneJ3o2oekcY82aEqvYUds2iB6i2k0C-CD7kl_tR1GEz4HE/pubhtml',
-            g12leader: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRXEZ7eXV_8bK4RhnRltIHpAgQctuYasyf4GVcw4euCCZjYVQwMLMaUXA0bKg7juuBcYTI2TrMalKCc/pubhtml'
+            member: 'https://docs.google.com/spreadsheets/d/1clswYNQLjBmbaPdx81Zk_eXWXDD4cSu-AmvXZD5wzFs/edit?rm=minimal&headers=false',
+            caretaker: 'https://docs.google.com/spreadsheets/d/1KXsEmYhnLZyKd-QkXoFfXtiAhDkmGRdz5MTpVj1bTSk/edit?rm=minimal&headers=false',
+            g12leader: 'https://docs.google.com/spreadsheets/d/1qmNa3xSgbd1bda1TPIBR6bLpM2vEKUdG354t6eNjwn8/edit?rm=minimal&headers=false'
         };
 
-        // Toggle loading spinner visibility
-        function toggleLoading(show) {
-            const loadingIndicator = document.getElementById('loading');
-            if (show) {
-                loadingIndicator.classList.add('show');
-            } else {
-                loadingIndicator.classList.remove('show');
-            }
+        // Load Google Sheet based on the selected category
+        function loadSheet(sheetUrl, sheetType) {
+            toggleLoading(true);
+            document.getElementById('sheetIframe').src = sheetUrl;
+            toggleLoading(false);
         }
 
-        // Load Google Sheets data and update the dashboard
-        async function loadSheet(sheetUrl, type) {
-            toggleLoading(true); // Show loading indicator
-
-            try {
-                const response = await fetch(sheetUrl);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const text = await response.text();
-                document.getElementById('sheetIframe').src = 'data:text/html;charset=utf-8,' + encodeURIComponent(text);
-
-                // Extracting data (modify according to your actual data format)
-                const data = await response.json(); // Assuming your sheets return JSON
-                updateDashboardData(data, type);
-            } catch (error) {
-                console.error("Error loading sheet:", error);
-            } finally {
-                toggleLoading(false); // Hide loading indicator
-            }
-        }
-
-        function updateDashboardData(data, type) {
-            let totalCount = data.values ? data.values.length - 1 : 0; // -1 for header row
-            switch (type) {
-                case 'member':
-                    document.getElementById('totalMembers').textContent = totalCount;
-                    break;
-                case 'caretaker':
-                    document.getElementById('totalCaretakers').textContent = totalCount;
-                    break;
-                case 'g12leader':
-                    document.getElementById('totalg12Leaders').textContent = totalCount;
-                    break;
-            }
-        }
-
-        // Open Form
-        function openForm(formType) {
-            const formLinks = {
-                memberForm: 'https://docs.google.com/forms/d/e/1FAIpQLSftq99yQ9lZ2xc78cCChwcPnOKpF8b150vGKdjunsSK2PAfdg/viewform?usp=sf_link',
-                caretakerForm: 'https://docs.google.com/forms/d/e/1FAIpQLSfQy2X28Tl9a1lisaKB_s16ZIJEbfsQYZx1YyM4XQS2wo-1Lg/viewform?usp=sf_link',
-                g12leaderForm: 'https://docs.google.com/forms/d/e/1FAIpQLSe2ArNUik_Yz6JBEKa6cxu0MfomUnxDIo90B1odJx1aIzXG6Q/viewform?usp=sf_link'
-            };
-
-            if (formLinks[formType]) {
-                window.open(formLinks[formType], '_blank');
-            } else {
-                console.error("Invalid form type:", formType);
-            }
-        }
-
-        // Sidebar Toggle
+        // Function to toggle sidebar
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const mainContent = document.getElementById('mainContent');
@@ -369,11 +313,25 @@
             mainContent.classList.toggle('expanded');
         }
 
-        // Call this function to load the initial sheet data when the page loads
-        window.onload = () => {
-            loadSheet(sheetIds.member, 'member'); // Load member sheet by default
-        };
+        // Toggle loading indicator
+        function toggleLoading(isLoading) {
+            const loadingIndicator = document.getElementById('loading');
+            if (isLoading) {
+                loadingIndicator.classList.add('show');
+            } else {
+                loadingIndicator.classList.remove('show');
+            }
+        }
+
+        // Open form for adding new data (redirect to the Google Form)
+        function openForm(url) {
+            window.open(url, '_blank'); // Opens the form in a new tab
+        }
+
+        // Example: load the member sheet on initial load
+        loadSheet(sheetIds.member, 'member');
     </script>
+
 </body>
 
 </html>
