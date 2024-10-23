@@ -36,6 +36,9 @@
             transition: transform 0.3s ease;
             z-index: 100;
             overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .sidebar.closed {
@@ -74,6 +77,24 @@
             top: 20px;
             right: 20px;
             cursor: pointer;
+        }
+
+        /* WhatsApp Section */
+        .sidebar .whatsapp {
+            margin-top: auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .sidebar .whatsapp a {
+            color: #25d366;
+            font-size: 32px;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar .whatsapp a:hover {
+            transform: scale(1.1);
         }
 
         /* Main Content */
@@ -254,6 +275,13 @@
         <a href="#" onclick="loadSheet(sheetIds.member, 'member')">Members</a>
         <a href="#" onclick="loadSheet(sheetIds.caretaker, 'caretaker')">G12 Leader</a>
         <a href="#" onclick="loadSheet(sheetIds.g12leader, 'g12leader')">Care Taker</a>
+
+        <!-- WhatsApp Icon Section -->
+        <div class="whatsapp">
+            <a href="https://wa.me/1234567890" target="_blank" title="Chat with us on WhatsApp">
+                <i class="fab fa-whatsapp"></i>
+            </a>
+        </div>
     </div>
 
     <!-- Main Content -->
