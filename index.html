@@ -21,6 +21,7 @@
             display: flex;
             height: 100vh;
             overflow: hidden;
+            flex-direction: column;
         }
 
         /* Sidebar */
@@ -142,7 +143,6 @@
             transition: margin-left 0.3s;
             background-color: #f8fafc;
             overflow-y: auto;
-            height: 100vh;
             display: flex;
             flex-direction: column;
         }
@@ -258,6 +258,71 @@
             height: 100%;
             border: none;
         }
+
+        /* Footer */
+        .footer {
+            background-color: #e0f2fe;
+            color: #1e3a8a;
+            padding: 15px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            border-radius: 8px;
+            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: auto;
+        }
+
+        .footer i {
+            font-size: 24px;
+            color: #1e3a8a;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .footer i:hover {
+            color: #2563eb;
+        }
+
+        /* YouTube Channel Preview */
+        .youtube-preview {
+            background-color: rgba(224, 242, 254, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            color: #1e3a8a;
+        }
+
+        .youtube-thumbnail {
+            width: 150px;
+            height: 85px;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .youtube-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .youtube-text {
+            font-size: 16px;
+        }
+
+        .youtube-link {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .youtube-link:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 
@@ -284,8 +349,8 @@
                 <a href="#" onclick="loadIframe('1KXsEmYhnLZyKd-QkXoFfXtiAhDkmGRdz5MTpVj1bTSk')">Care Takers</a>
                 <a href="#" onclick="loadIframe('191wkJrEe3gMBRJNkqpUw8e4qMy5KD_Gc6-lK2FCvVB0')">New Members</a>
                 <a href="#" onclick="loadIframe('1-1Xh8pgV3HenXDxogyjemY4cyFQwyXmrXbRqCRjae9Q')">Sunday School Children</a>
-                <a href="#" onclick="loadIframe('1lRFoVQiccwq9XiWlHkepUSAzaG2RneqkJ-eROZ1MR0I')">Ministry and Department</a>
-                <a href="#" onclick="loadIframe('SeyIQB_DCBESCDREl7UoyJ1iAaFUh1rBNo9yotzgDUTfSjCjQ')">Nutrition Programs</a>
+                <a href="#" onclick="loadIframe('11dV8TY-u4Ciicb20f6G0BTuo8PwyGS1AjzVFm4hM-l0')">Ministry and Department</a>
+                <a href="#" onclick="loadIframe('1lRFoVQiccwq9XiWlHkepUSAzaG2RneqkJ-eROZ1MR0I')">Nutrition Programs</a>
             </div>
         </div>
 
@@ -373,12 +438,32 @@
                     Join our last Monday prayer of the month at 7 PM. A time to reflect and seek blessings for the upcoming month.
                 </div>
             </div>
+
+            <!-- YouTube Channel Preview -->
+            <div class="youtube-preview">
+                <div class="youtube-thumbnail">
+                    <a href="https://www.youtube.com/@pottershouseaogkurunegala725" target="_blank">
+                        <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg" alt="YouTube Thumbnail">
+                    </a>
+                </div>
+                <div class="youtube-text">
+                    <p>Watch the latest sermon on our YouTube channel!</p>
+                    <a href="https://www.youtube.com/@pottershouseaogkurunegala725" class="youtube-link" target="_blank">Visit Potter's House AOG Kurunegala</a>
+                </div>
+            </div>
         </div>
 
         <!-- Google Sheets and Forms Preview Container -->
         <div class="iframe-container" id="iframeContainer">
             <iframe id="sheetIframe" src=""></iframe>
         </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+        <a href="https://wa.me" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        <a href="https://youtube.com" target="_blank"><i class="fab fa-youtube"></i></a>
     </div>
 
     <script>
@@ -399,12 +484,10 @@
             }
         }
 
-        function loadIframe(url) {
-            const isGoogleSheetId = url.length === 44 && !url.startsWith("http");
-            const iframeUrl = isGoogleSheetId 
-                ? `https://docs.google.com/spreadsheets/d/${url}/preview`
-                : url;
-                
+        function loadIframe(sheetId) {
+            const iframeUrl = sheetId.startsWith("http") 
+                ? sheetId 
+                : `https://docs.google.com/spreadsheets/d/${sheetId}/edit?rm=minimal`;
             document.getElementById("sheetIframe").src = iframeUrl;
             document.getElementById("dashboardContainer").style.display = "none";
             document.getElementById("iframeContainer").style.display = "block";
