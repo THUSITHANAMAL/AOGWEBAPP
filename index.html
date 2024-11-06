@@ -242,7 +242,7 @@
             margin-top: 5px;
         }
 
-        /* Google Sheets Preview */
+        /* Google Sheets and Forms Preview */
         .iframe-container {
             display: none;
             width: 100%;
@@ -273,18 +273,19 @@
             <span class="menu-text">Home</span>
         </div>
 
+        <!-- Dropdown for Member Information -->
         <div class="menu-item dropdown" onclick="toggleDropdown(this)">
             <i class="fas fa-users menu-icon"></i>
             <span class="menu-text">Member Information</span>
             <i class="fas fa-chevron-down" style="margin-left:auto;"></i>
             <div class="dropdown-content">
-                <a href="#" onclick="loadSheet('1clswYNQLjBmbaPdx81Zk_eXWXDD4cSu-AmvXZD5wzFs')">Member Form</a>
-                <a href="#" onclick="loadSheet('1qmNa3xSgbd1bda1TPIBR6bLpM2vEKUdG354t6eNjwn8')">G12 Leaders</a>
-                <a href="#" onclick="loadSheet('1KXsEmYhnLZyKd-QkXoFfXtiAhDkmGRdz5MTpVj1bTSk')">Care Takers</a>
-                <a href="#" onclick="loadSheet('191wkJrEe3gMBRJNkqpUw8e4qMy5KD_Gc6-lK2FCvVB0')">New Members</a>
-                <a href="#" onclick="loadSheet('1-1Xh8pgV3HenXDxogyjemY4cyFQwyXmrXbRqCRjae9Q')">Sunday School Children</a>
-                <a href="#" onclick="loadSheet('1lRFoVQiccwq9XiWlHkepUSAzaG2RneqkJ-eROZ1MR0I')">Ministry and Department</a>
-                <a href="#" onclick="loadSheet('SeyIQB_DCBESCDREl7UoyJ1iAaFUh1rBNo9yotzgDUTfSjCjQ')">Nutrition Programs</a>
+                <a href="#" onclick="loadIframe('1clswYNQLjBmbaPdx81Zk_eXWXDD4cSu-AmvXZD5wzFs')">Member Form</a>
+                <a href="#" onclick="loadIframe('1qmNa3xSgbd1bda1TPIBR6bLpM2vEKUdG354t6eNjwn8')">G12 Leaders</a>
+                <a href="#" onclick="loadIframe('1KXsEmYhnLZyKd-QkXoFfXtiAhDkmGRdz5MTpVj1bTSk')">Care Takers</a>
+                <a href="#" onclick="loadIframe('191wkJrEe3gMBRJNkqpUw8e4qMy5KD_Gc6-lK2FCvVB0')">New Members</a>
+                <a href="#" onclick="loadIframe('1-1Xh8pgV3HenXDxogyjemY4cyFQwyXmrXbRqCRjae9Q')">Sunday School Children</a>
+                <a href="#" onclick="loadIframe('1lRFoVQiccwq9XiWlHkepUSAzaG2RneqkJ-eROZ1MR0I')">Ministry and Department</a>
+                <a href="#" onclick="loadIframe('SeyIQB_DCBESCDREl7UoyJ1iAaFUh1rBNo9yotzgDUTfSjCjQ')">Nutrition Programs</a>
             </div>
         </div>
 
@@ -294,13 +295,13 @@
             <span class="menu-text">Member Forms</span>
             <i class="fas fa-chevron-down" style="margin-left:auto;"></i>
             <div class="dropdown-content">
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSe2ArNUik_Yz6JBEKa6cxu0MfomUnxDIo90B1odJx1aIzXG6Q/viewform?usp=sf_link" target="_blank">G12 Leader</a>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSfQy2X28Tl9a1lisaKB_s16ZIJEbfsQYZx1YyM4XQS2wo-1Lg/viewform?usp=sf_link" target="_blank">Care Taker</a>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSftq99yQ9lZ2xc78cCChwcPnOKpF8b150vGKdjunsSK2PAfdg/viewform?usp=sf_link" target="_blank">Member</a>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSfDQX4sSQmrkPmh0EvgDo12_YDvTIaAuIjMksRKEOjRMFQQsA/viewform?usp=sf_link" target="_blank">New Member</a>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSc07aL387LEiyr3-3grlT98NjZmnXnppqHfNZfJYlsATO22tA/viewform?usp=sf_link" target="_blank">Sunday School Children</a>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSfZVcJSPOOsEfsN3tgfeIzZk7794eO4hNyj2kcMoc4hNw3uOA/viewform?usp=sf_link" target="_blank">Ministry and Department</a>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSeyIQB_DCBESCDREl7UoyJ1iAaFUh1rBNo9yotzgDUTfSjCjQ/viewform?usp=sf_link" target="_blank">Nutrition Programs</a>
+                <a href="#" onclick="loadIframe('https://docs.google.com/forms/d/e/1FAIpQLSe2ArNUik_Yz6JBEKa6cxu0MfomUnxDIo90B1odJx1aIzXG6Q/viewform?usp=sf_link')">G12 Leader</a>
+                <a href="#" onclick="loadIframe('https://docs.google.com/forms/d/e/1FAIpQLSfQy2X28Tl9a1lisaKB_s16ZIJEbfsQYZx1YyM4XQS2wo-1Lg/viewform?usp=sf_link')">Care Taker</a>
+                <a href="#" onclick="loadIframe('https://docs.google.com/forms/d/e/1FAIpQLSftq99yQ9lZ2xc78cCChwcPnOKpF8b150vGKdjunsSK2PAfdg/viewform?usp=sf_link')">Member</a>
+                <a href="#" onclick="loadIframe('https://docs.google.com/forms/d/e/1FAIpQLSfDQX4sSQmrkPmh0EvgDo12_YDvTIaAuIjMksRKEOjRMFQQsA/viewform?usp=sf_link')">New Member</a>
+                <a href="#" onclick="loadIframe('https://docs.google.com/forms/d/e/1FAIpQLSc07aL387LEiyr3-3grlT98NjZmnXnppqHfNZfJYlsATO22tA/viewform?usp=sf_link')">Sunday School Children</a>
+                <a href="#" onclick="loadIframe('https://docs.google.com/forms/d/e/1FAIpQLSfZVcJSPOOsEfsN3tgfeIzZk7794eO4hNyj2kcMoc4hNw3uOA/viewform?usp=sf_link')">Ministry and Department</a>
+                <a href="#" onclick="loadIframe('https://docs.google.com/forms/d/e/1FAIpQLSeyIQB_DCBESCDREl7UoyJ1iAaFUh1rBNo9yotzgDUTfSjCjQ/viewform?usp=sf_link')">Nutrition Programs</a>
             </div>
         </div>
 
@@ -374,7 +375,7 @@
             </div>
         </div>
 
-        <!-- Google Sheets Preview Container -->
+        <!-- Google Sheets and Forms Preview Container -->
         <div class="iframe-container" id="iframeContainer">
             <iframe id="sheetIframe" src=""></iframe>
         </div>
@@ -398,8 +399,13 @@
             }
         }
 
-        function loadSheet(sheetId) {
-            document.getElementById("sheetIframe").src = `https://docs.google.com/spreadsheets/d/${sheetId}/preview`;
+        function loadIframe(url) {
+            const isGoogleSheetId = url.length === 44 && !url.startsWith("http");
+            const iframeUrl = isGoogleSheetId 
+                ? `https://docs.google.com/spreadsheets/d/${url}/preview`
+                : url;
+                
+            document.getElementById("sheetIframe").src = iframeUrl;
             document.getElementById("dashboardContainer").style.display = "none";
             document.getElementById("iframeContainer").style.display = "block";
         }
