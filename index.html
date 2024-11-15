@@ -323,6 +323,58 @@
         .youtube-link:hover {
             text-decoration: underline;
         }
+       
+/* Centering and Positioning for Top Middle Placement */
+.search-wrapper {
+    position: absolute;
+    top: 10px; /* Adjust as needed */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%; /* Adjust width as needed */
+    max-width: 600px;
+    text-align: center;
+    padding: 10px;
+    background-color: #f0f4f8;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000; /* Ensures it stays on top */
+}
+
+.search-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.search-select, .search-input, .search-button {
+    padding: 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+}
+
+.search-button {
+    background-color: #1e3a8a;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+}
+
+.search-button:hover {
+    background-color: #2563eb;
+}
+
+/* Styling for Search Results */
+.search-results {
+    margin-top: 10px;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+    text-align: left;
+}
+
     </style>
 </head>
 
@@ -381,6 +433,26 @@
     </div>
 
     <!-- Main Content -->
+   <!-- Search Wrapper at the Top Middle -->
+<div class="search-wrapper">
+    <div class="search-container">
+        <select id="sheetSelector" class="search-select">
+            <option value="1clswYNQLjBmbaPdx81Zk_eXWXDD4cSu-AmvXZD5wzFs|Form responses 2">Members</option>
+            <option value="1qmNa3xSgbd1bda1TPIBR6bLpM2vEKUdG354t6eNjwn8|Form responses 1">G12 Leaders</option>
+            <option value="1KXsEmYhnLZyKd-QkXoFfXtiAhDkmGRdz5MTpVj1bTSk|Form responses 1">Care Takers</option>
+            <option value="1-1Xh8pgV3HenXDxogyjemY4cyFQwyXmrXbRqCRjae9Q|Form responses 1">Sunday School Children</option>
+            <option value="1lRFoVQiccwq9XiWlHkepUSAzaG2RneqkJ-eROZ1MR0I|Form responses 1">Nutrition Programs</option>
+            <option value="11dV8TY-u4Ciicb20f6G0BTuo8PwyGS1AjzVFm4hM-l0|Form responses 1">Ministry and Department</option>
+            <option value="1uZ4OObFNjPcIWtoN2y0aFxWI_M6pMWQcYk2ScHtmVhI|Form responses 1">New Members</option>
+        </select>
+        <input type="text" id="searchInput" class="search-input" placeholder="Enter a name to search..." />
+        <button onclick="performSearch()" class="search-button">Search</button>
+    </div>
+    <!-- Search Results directly below the search bar -->
+    <div id="searchResults" class="search-results">
+    </div>
+</div>
+
     <div class="main-content" id="mainContent">
         <div class="dashboard-container" id="dashboardContainer">
             <div class="welcome">Welcome to the Church Database Dashboard!</div>
@@ -467,80 +539,139 @@
     </div>
 
     <script>
-        function toggleDropdown(element) {
-            element.classList.toggle("active");
-        }
-
-        function toggleSidebar(event) {
-            event.stopPropagation();
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('collapsed');
-            
-            // Close all dropdowns if sidebar is collapsed
-            if (sidebar.classList.contains('collapsed')) {
-                document.querySelectorAll('.dropdown').forEach(dropdown => {
-                    dropdown.classList.remove("active");
-                });
-            }
-        }
-
-        function loadIframe(sheetId) {
-            const iframeUrl = sheetId.startsWith("http") 
-                ? sheetId 
-                : `https://docs.google.com/spreadsheets/d/${sheetId}/edit?rm=minimal`;
-            document.getElementById("sheetIframe").src = iframeUrl;
-            document.getElementById("dashboardContainer").style.display = "none";
-            document.getElementById("iframeContainer").style.display = "block";
-        }
-
-        function showDashboard() {
-            document.getElementById("dashboardContainer").style.display = "block";
-            document.getElementById("iframeContainer").style.display = "none";
-        }
-
-        // Countdown Timer
-        function startCountdown(eventDate) {
-            function updateCountdown() {
-                const now = new Date().getTime();
-                const timeRemaining = eventDate - now;
-
-                const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-
-                document.getElementById("days").textContent = days;
-                document.getElementById("hours").textContent = hours;
-                document.getElementById("minutes").textContent = minutes;
-                document.getElementById("seconds").textContent = seconds;
-
-                if (timeRemaining < 0) {
-                    clearInterval(timer);
-                    document.getElementById("countdown").innerHTML = "<div>Event Started</div>";
-                }
-            }
-
-            updateCountdown();
-            const timer = setInterval(updateCountdown, 1000);
-        }
-
-        const eventDate = new Date("November 10, 2024 8:00:00").getTime();
-        startCountdown(eventDate);
-
-        function toggleDetails(button, detailsId) {
-            const details = document.getElementById(detailsId);
-            const isVisible = details.style.display === "block";
-
-            document.querySelectorAll('.event-details').forEach(detail => {
-                detail.style.display = 'none';
-            });
-
-            details.style.display = isVisible ? "none" : "block";
-            button.textContent = isVisible ? "View More" : "View Less";
-        }
-
-        showDashboard(); // Initialize with the dashboard view
-    </script>
+        const API_KEY = 'AIzaSyAN__grGh5cmthJLKJST_NLz7kZWUJ0h1k';
+ 
+ async function performSearch() {
+     const sheetSelector = document.getElementById('sheetSelector').value.split('|');
+     const sheetId = sheetSelector[0];
+     const sheetName = sheetSelector[1];
+     const query = document.getElementById('searchInput').value.toLowerCase();
+     const searchResultsContainer = document.getElementById('searchResults');
+     searchResultsContainer.innerHTML = "";
+ 
+     if (!query) {
+         searchResultsContainer.innerHTML = "<div class='no-results'>Please enter a name to search.</div>";
+         return;
+     }
+ 
+     const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}?key=${API_KEY}`;
+     try {
+         const response = await fetch(url);
+         const data = await response.json();
+ 
+         if (data.error) {
+             searchResultsContainer.innerHTML = `<div class='no-results'>Error: ${data.error.message}</div>`;
+             console.error('API Error:', data.error);
+             return;
+         }
+ 
+         if (!data.values || data.values.length === 0) {
+             searchResultsContainer.innerHTML = "<div class='no-results'>No data found in the sheet.</div>";
+             return;
+         }
+ 
+         const headers = data.values[0]; // Header row
+         const rows = data.values.slice(1); // Data rows
+ 
+         const filteredResults = rows.filter(row => row.some(cell => cell.toLowerCase().includes(query)));
+ 
+         if (filteredResults.length === 0) {
+             searchResultsContainer.innerHTML = `<div class='no-results'>No results found for '${query}'.</div>`;
+             return;
+         }
+ 
+         filteredResults.forEach(row => {
+             const resultDiv = document.createElement('div');
+             row.forEach((cell, index) => {
+                 const cellDiv = document.createElement('div');
+                 cellDiv.innerHTML = `<strong>${headers[index]}:</strong> ${cell}`;
+                 resultDiv.appendChild(cellDiv);
+             });
+             resultDiv.style.marginBottom = '20px';
+             resultDiv.style.borderBottom = '1px solid #e0e0e0';
+             resultDiv.style.paddingBottom = '10px';
+             searchResultsContainer.appendChild(resultDiv);
+         });
+ 
+     } catch (error) {
+         console.error('Error fetching Google Sheets data:', error);
+         searchResultsContainer.innerHTML = "<div class='no-results'>An error occurred while fetching the data. Please try again later.</div>";
+     }
+ }
+ 
+         function toggleDropdown(element) {
+             element.classList.toggle("active");
+         }
+ 
+         function toggleSidebar(event) {
+             event.stopPropagation();
+             const sidebar = document.getElementById('sidebar');
+             sidebar.classList.toggle('collapsed');
+             
+             // Close all dropdowns if sidebar is collapsed
+             if (sidebar.classList.contains('collapsed')) {
+                 document.querySelectorAll('.dropdown').forEach(dropdown => {
+                     dropdown.classList.remove("active");
+                 });
+             }
+         }
+ 
+         function loadIframe(sheetId) {
+             const iframeUrl = sheetId.startsWith("http") 
+                 ? sheetId 
+                 : `https://docs.google.com/spreadsheets/d/${sheetId}/edit?rm=minimal`;
+             document.getElementById("sheetIframe").src = iframeUrl;
+             document.getElementById("dashboardContainer").style.display = "none";
+             document.getElementById("iframeContainer").style.display = "block";
+         }
+ 
+         function showDashboard() {
+             document.getElementById("dashboardContainer").style.display = "block";
+             document.getElementById("iframeContainer").style.display = "none";
+         }
+ 
+         // Countdown Timer
+         function startCountdown(eventDate) {
+             function updateCountdown() {
+                 const now = new Date().getTime();
+                 const timeRemaining = eventDate - now;
+ 
+                 const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+                 const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                 const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+                 const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+ 
+                 document.getElementById("days").textContent = days;
+                 document.getElementById("hours").textContent = hours;
+                 document.getElementById("minutes").textContent = minutes;
+                 document.getElementById("seconds").textContent = seconds;
+ 
+                 if (timeRemaining < 0) {
+                     clearInterval(timer);
+                     document.getElementById("countdown").innerHTML = "<div>Event Started</div>";
+                 }
+             }
+ 
+             updateCountdown();
+             const timer = setInterval(updateCountdown, 1000);
+         }
+ 
+         const eventDate = new Date("November 10, 2024 8:00:00").getTime();
+         startCountdown(eventDate);
+ 
+         function toggleDetails(button, detailsId) {
+             const details = document.getElementById(detailsId);
+             const isVisible = details.style.display === "block";
+ 
+             document.querySelectorAll('.event-details').forEach(detail => {
+                 detail.style.display = 'none';
+             });
+ 
+             details.style.display = isVisible ? "none" : "block";
+             button.textContent = isVisible ? "View More" : "View Less";
+         }
+     showDashboard(); // Initialize with the dashboard view
+     </script>
 </body>
 
 </html>
