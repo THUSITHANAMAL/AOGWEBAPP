@@ -8,8 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* General Styles */
-        * {
+           /* General Styles */
+           * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
@@ -323,283 +323,306 @@
         .youtube-link:hover {
             text-decoration: underline;
         }
-       
-/* Centering and Positioning for Top Middle Placement */
-.search-wrapper {
-    position: absolute;
-    top: 10px; /* Adjust as needed */
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80%; /* Adjust width as needed */
-    max-width: 600px;
-    text-align: center;
-    padding: 10px;
-    background-color: #f0f4f8;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 1000; /* Ensures it stays on top */
-}
 
-.search-container {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-}
+        /* Search Bar at the Top Center */
+        .search-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            background-color: #f0f4f8;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
 
-.search-select, .search-input, .search-button {
-    padding: 8px;
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
-}
+        .search-select,
+        .search-input,
+        .search-button {
+            padding: 8px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+        }
 
-.search-button {
-    background-color: #1e3a8a;
-    color: #ffffff;
-    border: none;
-    cursor: pointer;
-}
+        .search-button {
+            background-color: #1e3a8a;
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+        }
 
-.search-button:hover {
-    background-color: #2563eb;
-}
+        .search-button:hover {
+            background-color: #2563eb;
+        }
 
-/* Styling for Search Results */
-.search-results {
-    margin-top: 10px;
-    background-color: #ffffff;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 10px;
-    max-height: 200px;
-    overflow-y: auto;
-    text-align: left;
-}
+        /* Search Results in Dashboard */
+        .dashboard-search-results {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: none;
+            flex-direction: column;
+        }
 
+        .result-item {
+            padding: 10px;
+            border-bottom: 1px solid #e0e0e0;
+            margin-bottom: 10px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100px;
+            }
+
+            .main-content {
+                margin-left: 100px;
+            }
+
+            .sidebar.collapsed + .main-content {
+                margin-left: 0;
+            }
+
+            .search-wrapper {
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            .menu-text {
+                display: none;
+            }
+        }
     </style>
 </head>
 
 <body>
 
-    <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
-        <i class="fas fa-angle-double-left sidebar-toggle-icon" onclick="toggleSidebar(event)"></i>
-        <h2>Church Database</h2>
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <i class="fas fa-angle-double-left sidebar-toggle-icon" onclick="toggleSidebar(event)"></i>
+    <h2>Church Database</h2>
 
-        <div class="menu-item" onclick="showDashboard()">
-            <i class="fas fa-home menu-icon"></i>
-            <span class="menu-text">Home</span>
-        </div>
+    <div class="menu-item" onclick="showDashboard()">
+        <i class="fas fa-home menu-icon"></i>
+        <span class="menu-text">Home</span>
+    </div>
 
-        <!-- Dropdown for Member Information -->
-        <div class="menu-item dropdown" onclick="toggleDropdown(this)">
-            <i class="fas fa-users menu-icon"></i>
-            <span class="menu-text">Member Information</span>
-            <i class="fas fa-chevron-down" style="margin-left:auto;"></i>
-            <div class="dropdown-content">
-                <a href="#" onclick="loadIframe('1clswYNQLjBmbaPdx81Zk_eXWXDD4cSu-AmvXZD5wzFs')">Member Form</a>
-                <a href="#" onclick="loadIframe('1qmNa3xSgbd1bda1TPIBR6bLpM2vEKUdG354t6eNjwn8')">G12 Leaders</a>
-                <a href="#" onclick="loadIframe('1KXsEmYhnLZyKd-QkXoFfXtiAhDkmGRdz5MTpVj1bTSk')">Care Takers</a>
-                <a href="#" onclick="loadIframe('191wkJrEe3gMBRJNkqpUw8e4qMy5KD_Gc6-lK2FCvVB0')">New Members</a>
-                <a href="#" onclick="loadIframe('1-1Xh8pgV3HenXDxogyjemY4cyFQwyXmrXbRqCRjae9Q')">Sunday School Children</a>
-                <a href="#" onclick="loadIframe('11dV8TY-u4Ciicb20f6G0BTuo8PwyGS1AjzVFm4hM-l0')">Ministry and Department</a>
-                <a href="#" onclick="loadIframe('1lRFoVQiccwq9XiWlHkepUSAzaG2RneqkJ-eROZ1MR0I')">Nutrition Programs</a>
-            </div>
-        </div>
-
-        <!-- Dropdown for Member Forms -->
-        <div class="menu-item dropdown" onclick="toggleDropdown(this)">
-            <i class="fas fa-file-alt menu-icon"></i>
-            <span class="menu-text">Member Forms</span>
-            <i class="fas fa-chevron-down" style="margin-left:auto;"></i>
-            <div class="dropdown-content">
-                <a href="#" onclick="loadIframe('https://docs.google.com/forms/d/e/1FAIpQLSe2ArNUik_Yz6JBEKa6cxu0MfomUnxDIo90B1odJx1aIzXG6Q/viewform?usp=sf_link')">G12 Leader</a>
-                <a href="#" onclick="loadIframe('https://docs.google.com/forms/d/e/1FAIpQLSfQy2X28Tl9a1lisaKB_s16ZIJEbfsQYZx1YyM4XQS2wo-1Lg/viewform?usp=sf_link')">Care Taker</a>
-                <a href="#" onclick="loadIframe('https://docs.google.com/forms/d/e/1FAIpQLSftq99yQ9lZ2xc78cCChwcPnOKpF8b150vGKdjunsSK2PAfdg/viewform?usp=sf_link')">Member</a>
-                <a href="#" onclick="loadIframe('https://docs.google.com/forms/d/e/1FAIpQLSfDQX4sSQmrkPmh0EvgDo12_YDvTIaAuIjMksRKEOjRMFQQsA/viewform?usp=sf_link')">New Member</a>
-                <a href="#" onclick="loadIframe('https://docs.google.com/forms/d/e/1FAIpQLSc07aL387LEiyr3-3grlT98NjZmnXnppqHfNZfJYlsATO22tA/viewform?usp=sf_link')">Sunday School Children</a>
-                <a href="#" onclick="loadIframe('https://docs.google.com/forms/d/e/1FAIpQLSfZVcJSPOOsEfsN3tgfeIzZk7794eO4hNyj2kcMoc4hNw3uOA/viewform?usp=sf_link')">Ministry and Department</a>
-                <a href="#" onclick="loadIframe('https://docs.google.com/forms/d/e/1FAIpQLSeyIQB_DCBESCDREl7UoyJ1iAaFUh1rBNo9yotzgDUTfSjCjQ/viewform?usp=sf_link')">Nutrition Programs</a>
-            </div>
-        </div>
-
-        <div class="menu-item" onclick="window.location.href='#'">
-            <i class="fas fa-info-circle menu-icon"></i>
-            <span class="menu-text">About</span>
-        </div>
-        <div class="menu-item" onclick="window.location.href='#'">
-            <i class="fas fa-phone menu-icon"></i>
-            <span class="menu-text">Contact Us</span>
+    <!-- Dropdown for Member Information -->
+    <div class="menu-item dropdown" onclick="toggleDropdown(this)">
+        <i class="fas fa-users menu-icon"></i>
+        <span class="menu-text">Member Information</span>
+        <i class="fas fa-chevron-down" style="margin-left:auto;"></i>
+        <div class="dropdown-content">
+            <a href="#" onclick="loadIframe('1clswYNQLjBmbaPdx81Zk_eXWXDD4cSu-AmvXZD5wzFs')">Member Form</a>
+            <a href="#" onclick="loadIframe('1qmNa3xSgbd1bda1TPIBR6bLpM2vEKUdG354t6eNjwn8')">G12 Leaders</a>
+            <a href="#" onclick="loadIframe('1KXsEmYhnLZyKd-QkXoFfXtiAhDkmGRdz5MTpVj1bTSk')">Care Takers</a>
+            <a href="#" onclick="loadIframe('191wkJrEe3gMBRJNkqpUw8e4qMy5KD_Gc6-lK2FCvVB0')">New Members</a>
+            <a href="#" onclick="loadIframe('1-1Xh8pgV3HenXDxogyjemY4cyFQwyXmrXbRqCRjae9Q')">Sunday School Children</a>
+            <a href="#" onclick="loadIframe('11dV8TY-u4Ciicb20f6G0BTuo8PwyGS1AjzVFm4hM-l0')">Ministry and Department</a>
+            <a href="#" onclick="loadIframe('1lRFoVQiccwq9XiWlHkepUSAzaG2RneqkJ-eROZ1MR0I')">Nutrition Programs</a>
         </div>
     </div>
 
-    <!-- Main Content -->
-   <!-- Search Wrapper at the Top Middle -->
-<div class="search-wrapper">
-    <div class="search-container">
-        <select id="sheetSelector" class="search-select">
-            <option value="1clswYNQLjBmbaPdx81Zk_eXWXDD4cSu-AmvXZD5wzFs|Form responses 2">Members</option>
-            <option value="1qmNa3xSgbd1bda1TPIBR6bLpM2vEKUdG354t6eNjwn8|Form responses 1">G12 Leaders</option>
-            <option value="1KXsEmYhnLZyKd-QkXoFfXtiAhDkmGRdz5MTpVj1bTSk|Form responses 1">Care Takers</option>
-            <option value="1-1Xh8pgV3HenXDxogyjemY4cyFQwyXmrXbRqCRjae9Q|Form responses 1">Sunday School Children</option>
-            <option value="1lRFoVQiccwq9XiWlHkepUSAzaG2RneqkJ-eROZ1MR0I|Form responses 1">Nutrition Programs</option>
-            <option value="11dV8TY-u4Ciicb20f6G0BTuo8PwyGS1AjzVFm4hM-l0|Form responses 1">Ministry and Department</option>
-            <option value="1uZ4OObFNjPcIWtoN2y0aFxWI_M6pMWQcYk2ScHtmVhI|Form responses 1">New Members</option>
-        </select>
-        <input type="text" id="searchInput" class="search-input" placeholder="Enter a name to search..." />
-        <button onclick="performSearch()" class="search-button">Search</button>
+    <!-- Dropdown for Member Forms -->
+    <div class="menu-item dropdown" onclick="toggleDropdown(this)">
+        <i class="fas fa-file-alt menu-icon"></i>
+        <span class="menu-text">Member Forms</span>
+        <i class="fas fa-chevron-down" style="margin-left:auto;"></i>
+        <div class="dropdown-content">
+            <a href="#" onclick="loadIframe('https://docs.google.com/forms/d/e/1FAIpQLSe2ArNUik_Yz6JBEKa6cxu0MfomUnxDIo90B1odJx1aIzXG6Q/viewform?usp=sf_link')">G12 Leader</a>
+            <a href="#" onclick="loadIframe('https://docs.google.com/forms/d/e/1FAIpQLSfQy2X28Tl9a1lisaKB_s16ZIJEbfsQYZx1YyM4XQS2wo-1Lg/viewform?usp=sf_link')">Care Taker</a>
+            <a href="#" onclick="loadIframe('https://docs.google.com/forms/d/e/1FAIpQLSftq99yQ9lZ2xc78cCChwcPnOKpF8b150vGKdjunsSK2PAfdg/viewform?usp=sf_link')">Member</a>
+            <a href="#" onclick="loadIframe('https://docs.google.com/forms/d/e/1FAIpQLSfDQX4sSQmrkPmh0EvgDo12_YDvTIaAuIjMksRKEOjRMFQQsA/viewform?usp=sf_link')">New Member</a>
+            <a href="#" onclick="loadIframe('https://docs.google.com/forms/d/e/1FAIpQLSc07aL387LEiyr3-3grlT98NjZmnXnppqHfNZfJYlsATO22tA/viewform?usp=sf_link')">Sunday School Children</a>
+            <a href="#" onclick="loadIframe('https://docs.google.com/forms/d/e/1FAIpQLSfZVcJSPOOsEfsN3tgfeIzZk7794eO4hNyj2kcMoc4hNw3uOA/viewform?usp=sf_link')">Ministry and Department</a>
+            <a href="#" onclick="loadIframe('https://docs.google.com/forms/d/e/1FAIpQLSeyIQB_DCBESCDREl7UoyJ1iAaFUh1rBNo9yotzgDUTfSjCjQ/viewform?usp=sf_link')">Nutrition Programs</a>
+        </div>
     </div>
-    <!-- Search Results directly below the search bar -->
-    <div id="searchResults" class="search-results">
+
+    <div class="menu-item" onclick="window.location.href='#'">
+        <i class="fas fa-info-circle menu-icon"></i>
+        <span class="menu-text">About</span>
+    </div>
+    <div class="menu-item" onclick="window.location.href='#'">
+        <i class="fas fa-phone menu-icon"></i>
+        <span class="menu-text">Contact Us</span>
     </div>
 </div>
 
+
+    <!-- Main Content -->
     <div class="main-content" id="mainContent">
-        <div class="dashboard-container" id="dashboardContainer">
-            <div class="welcome">Welcome to the Church Database Dashboard!</div>
-            <div class="countdown-container">
-                <div class="countdown-title">Upcoming Event: Sunday Sabbath service</div>
-                <div class="countdown" id="countdown">
-                    <div>
-                        <span id="days">0</span>
-                        <div class="countdown-label">Days</div>
-                    </div>
-                    <div>
-                        <span id="hours">0</span>
-                        <div class="countdown-label">Hours</div>
-                    </div>
-                    <div>
-                        <span id="minutes">0</span>
-                        <div class="countdown-label">Minutes</div>
-                    </div>
-                    <div>
-                        <span id="seconds">0</span>
-                        <div class="countdown-label">Seconds</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- More Coming Events -->
-            <div class="events-container">
-                <h3>More Coming Events</h3>
-                <div class="event-item">
-                    <span>08 Nov - Evening Prayer</span>
-                    <button class="view-more-btn" onclick="toggleDetails(this, 'details1')">View More</button>
-                </div>
-                <div id="details1" class="event-details">
-                    Join us for an evening prayer session at 6 PM. This is a time for quiet reflection and spiritual connection.
-                </div>
-                <div class="event-item">
-                    <span>11 Nov - Monday Prayer</span>
-                    <button class="view-more-btn" onclick="toggleDetails(this, 'details2')">View More</button>
-                </div>
-                <div id="details2" class="event-details">
-                    Our weekly Monday prayer service, starting at 7 PM. Join us to strengthen your faith with community support.
-                </div>
-                <div class="event-item">
-                    <span>18 Nov - Monday Prayer</span>
-                    <button class="view-more-btn" onclick="toggleDetails(this, 'details3')">View More</button>
-                </div>
-                <div id="details3" class="event-details">
-                    Another Monday prayer session focusing on gratitude and peace. It begins at 7 PM in the main hall.
-                </div>
-                <div class="event-item">
-                    <span>25 Nov - Monday Prayer</span>
-                    <button class="view-more-btn" onclick="toggleDetails(this, 'details4')">View More</button>
-                </div>
-                <div id="details4" class="event-details">
-                    Join our last Monday prayer of the month at 7 PM. A time to reflect and seek blessings for the upcoming month.
-                </div>
-            </div>
-
-            <!-- YouTube Channel Preview -->
-            <div class="youtube-preview">
-                <div class="youtube-thumbnail">
-                    <a href="https://www.youtube.com/@pottershouseaogkurunegala725" target="_blank">
-                        <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg" alt="YouTube Thumbnail">
-                    </a>
-                </div>
-                <div class="youtube-text">
-                    <p>Watch the latest sermon on our YouTube channel!</p>
-                    <a href="https://www.youtube.com/@pottershouseaogkurunegala725" class="youtube-link" target="_blank">Visit Potter's House AOG Kurunegala</a>
-                </div>
-            </div>
+        
+        <!-- Search Wrapper at the Top Middle of Dashboard -->
+        <div class="search-wrapper">
+            <select id="sheetSelector" class="search-select">
+                <option value="1clswYNQLjBmbaPdx81Zk_eXWXDD4cSu-AmvXZD5wzFs|Form responses 2">Members</option>
+                <option value="1qmNa3xSgbd1bda1TPIBR6bLpM2vEKUdG354t6eNjwn8|Form responses 1">G12 Leaders</option>
+                <option value="1KXsEmYhnLZyKd-QkXoFfXtiAhDkmGRdz5MTpVj1bTSk|Form responses 1">Care Takers</option>
+                <option value="1-1Xh8pgV3HenXDxogyjemY4cyFQwyXmrXbRqCRjae9Q|Form responses 1">Sunday School Children</option>
+                <option value="1lRFoVQiccwq9XiWlHkepUSAzaG2RneqkJ-eROZ1MR0I|Form responses 1">Nutrition Programs</option>
+                <option value="11dV8TY-u4Ciicb20f6G0BTuo8PwyGS1AjzVFm4hM-l0|Form responses 1">Ministry and Department</option>
+                <option value="1uZ4OObFNjPcIWtoN2y0aFxWI_M6pMWQcYk2ScHtmVhI|Form responses 1">New Members</option>
+            </select>
+            <input type="text" id="searchInput" class="search-input" placeholder="Enter a name to search..." />
+            <button onclick="performSearch()" class="search-button">Search</button>
         </div>
 
-        <!-- Google Sheets and Forms Preview Container -->
-        <div class="iframe-container" id="iframeContainer">
-            <iframe id="sheetIframe" src=""></iframe>
+        <!-- Search Results Area in Dashboard -->
+        <div id="dashboardSearchResults" class="dashboard-search-results">
+            <h2>Search Results</h2>
+            <div id="searchResultsContainer"></div>
         </div>
-    </div>
 
-    <!-- Footer -->
-    <div class="footer">
-        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
-        <a href="https://wa.me" target="_blank"><i class="fab fa-whatsapp"></i></a>
-        <a href="https://youtube.com" target="_blank"><i class="fab fa-youtube"></i></a>
-    </div>
-
+        <!-- Other Dashboard Content -->
+        <div class="main-content" id="mainContent">
+            <div class="dashboard-container" id="dashboardContainer">
+                <div class="welcome">Welcome to the Church Database Dashboard!</div>
+                <div class="countdown-container">
+                    <div class="countdown-title">Upcoming Event: Sunday Sabbath service</div>
+                    <div class="countdown" id="countdown">
+                        <div>
+                            <span id="days">0</span>
+                            <div class="countdown-label">Days</div>
+                        </div>
+                        <div>
+                            <span id="hours">0</span>
+                            <div class="countdown-label">Hours</div>
+                        </div>
+                        <div>
+                            <span id="minutes">0</span>
+                            <div class="countdown-label">Minutes</div>
+                        </div>
+                        <div>
+                            <span id="seconds">0</span>
+                            <div class="countdown-label">Seconds</div>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- More Coming Events -->
+                <div class="events-container">
+                    <h3>More Coming Events</h3>
+                    <div class="event-item">
+                        <span>08 Nov - Evening Prayer</span>
+                        <button class="view-more-btn" onclick="toggleDetails(this, 'details1')">View More</button>
+                    </div>
+                    <div id="details1" class="event-details">
+                        Join us for an evening prayer session at 6 PM. This is a time for quiet reflection and spiritual connection.
+                    </div>
+                    <div class="event-item">
+                        <span>11 Nov - Monday Prayer</span>
+                        <button class="view-more-btn" onclick="toggleDetails(this, 'details2')">View More</button>
+                    </div>
+                    <div id="details2" class="event-details">
+                        Our weekly Monday prayer service, starting at 7 PM. Join us to strengthen your faith with community support.
+                    </div>
+                    <div class="event-item">
+                        <span>18 Nov - Monday Prayer</span>
+                        <button class="view-more-btn" onclick="toggleDetails(this, 'details3')">View More</button>
+                    </div>
+                    <div id="details3" class="event-details">
+                        Another Monday prayer session focusing on gratitude and peace. It begins at 7 PM in the main hall.
+                    </div>
+                    <div class="event-item">
+                        <span>25 Nov - Monday Prayer</span>
+                        <button class="view-more-btn" onclick="toggleDetails(this, 'details4')">View More</button>
+                    </div>
+                    <div id="details4" class="event-details">
+                        Join our last Monday prayer of the month at 7 PM. A time to reflect and seek blessings for the upcoming month.
+                    </div>
+                </div>
+    
+                <!-- YouTube Channel Preview -->
+                <div class="youtube-preview">
+                    <div class="youtube-thumbnail">
+                        <a href="https://www.youtube.com/@pottershouseaogkurunegala725" target="_blank">
+                            <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg" alt="YouTube Thumbnail">
+                        </a>
+                    </div>
+                    <div class="youtube-text">
+                        <p>Watch the latest sermon on our YouTube channel!</p>
+                        <a href="https://www.youtube.com/@pottershouseaogkurunegala725" class="youtube-link" target="_blank">Visit Potter's House AOG Kurunegala</a>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Google Sheets and Forms Preview Container -->
+            <div class="iframe-container" id="iframeContainer">
+                <iframe id="sheetIframe" src=""></iframe>
+            </div>
+        </div>
+    
+        <!-- Footer -->
+        <div class="footer">
+            <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+            <a href="https://wa.me" target="_blank"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://youtube.com" target="_blank"><i class="fab fa-youtube"></i></a>
+        </div>
     <script>
         const API_KEY = 'AIzaSyAN__grGh5cmthJLKJST_NLz7kZWUJ0h1k';
- 
- async function performSearch() {
-     const sheetSelector = document.getElementById('sheetSelector').value.split('|');
-     const sheetId = sheetSelector[0];
-     const sheetName = sheetSelector[1];
-     const query = document.getElementById('searchInput').value.toLowerCase();
-     const searchResultsContainer = document.getElementById('searchResults');
-     searchResultsContainer.innerHTML = "";
- 
-     if (!query) {
-         searchResultsContainer.innerHTML = "<div class='no-results'>Please enter a name to search.</div>";
-         return;
-     }
- 
-     const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}?key=${API_KEY}`;
-     try {
-         const response = await fetch(url);
-         const data = await response.json();
- 
-         if (data.error) {
-             searchResultsContainer.innerHTML = `<div class='no-results'>Error: ${data.error.message}</div>`;
-             console.error('API Error:', data.error);
-             return;
-         }
- 
-         if (!data.values || data.values.length === 0) {
-             searchResultsContainer.innerHTML = "<div class='no-results'>No data found in the sheet.</div>";
-             return;
-         }
- 
-         const headers = data.values[0]; // Header row
-         const rows = data.values.slice(1); // Data rows
- 
-         const filteredResults = rows.filter(row => row.some(cell => cell.toLowerCase().includes(query)));
- 
-         if (filteredResults.length === 0) {
-             searchResultsContainer.innerHTML = `<div class='no-results'>No results found for '${query}'.</div>`;
-             return;
-         }
- 
-         filteredResults.forEach(row => {
-             const resultDiv = document.createElement('div');
-             row.forEach((cell, index) => {
-                 const cellDiv = document.createElement('div');
-                 cellDiv.innerHTML = `<strong>${headers[index]}:</strong> ${cell}`;
-                 resultDiv.appendChild(cellDiv);
-             });
-             resultDiv.style.marginBottom = '20px';
-             resultDiv.style.borderBottom = '1px solid #e0e0e0';
-             resultDiv.style.paddingBottom = '10px';
-             searchResultsContainer.appendChild(resultDiv);
-         });
- 
-     } catch (error) {
-         console.error('Error fetching Google Sheets data:', error);
-         searchResultsContainer.innerHTML = "<div class='no-results'>An error occurred while fetching the data. Please try again later.</div>";
-     }
- }
- 
-         function toggleDropdown(element) {
+        async function performSearch() {
+            const sheetSelector = document.getElementById('sheetSelector').value.split('|');
+            const sheetId = sheetSelector[0];
+            const sheetName = sheetSelector[1];
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const dashboardSearchResults = document.getElementById('dashboardSearchResults');
+            const searchResultsContainer = document.getElementById('searchResultsContainer');
+
+            // Clear previous search results
+            searchResultsContainer.innerHTML = '';
+
+            if (!query) {
+                dashboardSearchResults.style.display = "none";
+                return;
+            }
+
+            // Fetch data from Google Sheets
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}?key=${API_KEY}`;
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.error) {
+                    searchResultsContainer.innerHTML = `<div class='no-results'>Error: ${data.error.message}</div>`;
+                    dashboardSearchResults.style.display = "block";
+                    return;
+                }
+
+                const headers = data.values[0]; // Header row
+                const rows = data.values.slice(1); // Data rows
+                const filteredResults = rows.filter(row => row.some(cell => cell.toLowerCase().includes(query)));
+
+                if (filteredResults.length === 0) {
+                    searchResultsContainer.innerHTML = `<div class='no-results'>No results found for '${query}'.</div>`;
+                } else {
+                    filteredResults.forEach(row => {
+                        const resultDiv = document.createElement('div');
+                        resultDiv.classList.add('result-item');
+                        row.forEach((cell, index) => {
+                            const cellDiv = document.createElement('div');
+                            cellDiv.innerHTML = `<strong>${headers[index]}:</strong> ${cell}`;
+                            resultDiv.appendChild(cellDiv);
+                        });
+                        searchResultsContainer.appendChild(resultDiv);
+                    });
+                }
+                dashboardSearchResults.style.display = "block"; // Show results section
+            } catch (error) {
+                console.error('Error fetching Google Sheets data:', error);
+                searchResultsContainer.innerHTML = "<div class='no-results'>An error occurred. Please try again.</div>";
+                dashboardSearchResults.style.display = "block";
+            }
+        }
+
+        function toggleDropdown(element) {
              element.classList.toggle("active");
          }
  
@@ -671,7 +694,7 @@
              button.textContent = isVisible ? "View More" : "View Less";
          }
      showDashboard(); // Initialize with the dashboard view
-     </script>
+    </script>
 </body>
 
 </html>
