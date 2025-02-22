@@ -557,180 +557,184 @@ iframe {
         <iframe id="sheetIframe" src=""></iframe>
     </div>
 
-   <div class="about-content">
-    <h2>About Church Database</h2>
-    <p>This is the Church Database Dashboard, designed to help manage and organize church-related information efficiently. It includes features for managing member information, forms, and upcoming events.</p>
-
-    <h3>Church Details</h3>
-    <p><strong>Church Name:</strong> Potter's House AOG - Kurunegala</p>
-    <p><strong>Senior Pastor's Name:</strong> Rev. Anura Dharmakirti</p>
-    <p><strong>Address:</strong> Welangolle Watta, Yanthamplve, Kurunegala</p>
-    <p><strong>Tele No:</strong> 077 303 1335</p>
-
-    <div class="church-image">
-        <img src="WhatsApp Image 2025-02-22 at 9.54.41 AM.jpeg" alt="Potter's House AOG Kurunegala" style="max-width: 100%; height: auto; border-radius: 8px; margin-top: 20px;">
-        <p style="text-align: center; font-style: italic; margin-top: 10px;"></p>
+    <!--!> Updated Section: About Page Container -->
+    <div class="about-content" id="aboutPageContainer" style="display: none;">
+        <h2>About Church Database</h2>
+        <p>This is the Church Database Dashboard, designed to help manage and organize church-related information efficiently. It includes features for managing member information, forms, and upcoming events.</p>
+    
+        <h3>Church Details</h3>
+        <p><strong>Church Name:</strong> Potter's House AOG - Kurunegala</p>
+        <p><strong>Senior Pastor's Name:</strong> Rev. Anura Dharmakirti</p>
+        <p><strong>Address:</strong> Welangolle Watta, Yanthamplve, Kurunegala</p>
+        <p><strong>Tele No:</strong> 077 303 1335</p>
+    
+        <div class="church-image">
+            <img src="WhatsApp Image 2025-02-22 at 9.54.41 AM.jpeg" alt="Potter's House AOG Kurunegala" style="max-width: 100%; height: auto; border-radius: 8px; margin-top: 20px;">
+            <p style="text-align: center; font-style: italic; margin-top: 10px;">Christmas Celebration at Potter's House AOG Kurunegala</p>
+        </div>
+    
+        <p>For more information, please contact us at <a href="mailto:info@churchdatabase.com">info@churchdatabase.com</a>.</p>
     </div>
 
-    <p>For more information, please contact us at</p>
+    <!-- Footer -->
+    <div class="footer">
+        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+        <a href="https://wa.me" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        <a href="https://youtube.com" target="_blank"><i class="fab fa-youtube"></i></a>
+    </div>
 </div>
-        <!-- Footer -->
-        <div class="footer">
-            <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
-            <a href="https://wa.me" target="_blank"><i class="fab fa-whatsapp"></i></a>
-            <a href="https://youtube.com" target="_blank"><i class="fab fa-youtube"></i></a>
-        </div>
-    <script>
-        const API_KEY = 'AIzaSyAN__grGh5cmthJLKJST_NLz7kZWUJ0h1k';
-        const SHEET_IDS = [
-            '1SJbYa_hXpk13CB2_LPpqqkFvLpmnsqmcdqTRdxRx-pM', // Members
-            '1qmNa3xSgbd1bda1TPIBR6bLpM2vEKUdG354t6eNjwn8', // G12 Leaders
-            '1KXsEmYhnLZyKd-QkXoFfXtiAhDkmGRdz5MTpVj1bTSk', // Care Takers
-            '1uZ4OObFNjPcIWtoN2y0aFxWI_M6pMWQcYk2ScHtmVhI', // New Members
-            '1-1Xh8pgV3HenXDxogyjemY4cyFQwyXmrXbRqCRjae9Q', // Sunday School Children
-            '11dV8TY-u4Ciicb20f6G0BTuo8PwyGS1AjzVFm4hM-l0', // Ministry and Department
-            '15X9hDFlPWqHThNPRSyo3BUM4Xas9aDDQWhjS28uIvwc', // Jeewanayatamaga lesson Teachers
-            '16bkO0efSHKMjzmomtXgVxcubAQyNLvGfn6qXOm1H8Gs'  // New Sunday School Children
-        ];
 
-        async function performSearch() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const dashboardSearchResults = document.getElementById('dashboardSearchResults');
-            const searchResultsContainer = document.getElementById('searchResultsContainer');
+<script>
+    const API_KEY = 'AIzaSyAN__grGh5cmthJLKJST_NLz7kZWUJ0h1k';
+    const SHEET_IDS = [
+        '1SJbYa_hXpk13CB2_LPpqqkFvLpmnsqmcdqTRdxRx-pM', // Members
+        '1qmNa3xSgbd1bda1TPIBR6bLpM2vEKUdG354t6eNjwn8', // G12 Leaders
+        '1KXsEmYhnLZyKd-QkXoFfXtiAhDkmGRdz5MTpVj1bTSk', // Care Takers
+        '1uZ4OObFNjPcIWtoN2y0aFxWI_M6pMWQcYk2ScHtmVhI', // New Members
+        '1-1Xh8pgV3HenXDxogyjemY4cyFQwyXmrXbRqCRjae9Q', // Sunday School Children
+        '11dV8TY-u4Ciicb20f6G0BTuo8PwyGS1AjzVFm4hM-l0', // Ministry and Department
+        '15X9hDFlPWqHThNPRSyo3BUM4Xas9aDDQWhjS28uIvwc', // Jeewanayatamaga lesson Teachers
+        '16bkO0efSHKMjzmomtXgVxcubAQyNLvGfn6qXOm1H8Gs'  // New Sunday School Children
+    ];
 
-            // Clear previous search results
-            searchResultsContainer.innerHTML = '';
+    async function performSearch() {
+        const query = document.getElementById('searchInput').value.toLowerCase();
+        const dashboardSearchResults = document.getElementById('dashboardSearchResults');
+        const searchResultsContainer = document.getElementById('searchResultsContainer');
 
-            if (!query) {
-                dashboardSearchResults.style.display = "none";
-                return;
-            }
+        // Clear previous search results
+        searchResultsContainer.innerHTML = '';
 
-            let allResults = [];
-
-            // Fetch data from all Google Sheets
-            for (const sheetId of SHEET_IDS) {
-                const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/Form responses 1?key=${API_KEY}`;
-                try {
-                    const response = await fetch(url);
-                    const data = await response.json();
-
-                    if (data.error) {
-                        console.error(`Error fetching data from sheet ${sheetId}:`, data.error.message);
-                        continue;
-                    }
-
-                    const headers = data.values[0]; // Header row
-                    const rows = data.values.slice(1); // Data rows
-                    const filteredResults = rows.filter(row => row.some(cell => cell.toLowerCase().includes(query)));
-
-                    if (filteredResults.length > 0) {
-                        filteredResults.forEach(row => {
-                            const resultDiv = document.createElement('div');
-                            resultDiv.classList.add('result-item');
-                            row.forEach((cell, index) => {
-                                const cellDiv = document.createElement('div');
-                                cellDiv.innerHTML = `<strong>${headers[index]}:</strong> ${cell}`;
-                                resultDiv.appendChild(cellDiv);
-                            });
-                            allResults.push(resultDiv);
-                        });
-                    }
-                } catch (error) {
-                    console.error(`Error fetching data from sheet ${sheetId}:`, error);
-                }
-            }
-
-            if (allResults.length === 0) {
-                searchResultsContainer.innerHTML = `<div class='no-results'>No results found for '${query}'.</div>`;
-            } else {
-                allResults.forEach(result => searchResultsContainer.appendChild(result));
-            }
-            dashboardSearchResults.style.display = "block"; // Show results section
+        if (!query) {
+            dashboardSearchResults.style.display = "none";
+            return;
         }
 
-        function toggleDropdown(element) {
-             element.classList.toggle("active");
-         }
- 
-         function toggleSidebar(event) {
-             event.stopPropagation();
-             const sidebar = document.getElementById('sidebar');
-             sidebar.classList.toggle('collapsed');
-             
-             // Close all dropdowns if sidebar is collapsed
-             if (sidebar.classList.contains('collapsed')) {
-                 document.querySelectorAll('.dropdown').forEach(dropdown => {
-                     dropdown.classList.remove("active");
-                 });
-             }
-         }
- 
-         function loadIframe(sheetId) {
-             const iframeUrl = sheetId.startsWith("http") 
-                 ? sheetId 
-                 : `https://docs.google.com/spreadsheets/d/${sheetId}/edit?rm=minimal`;
-             document.getElementById("sheetIframe").src = iframeUrl;
-             document.getElementById("dashboardContainer").style.display = "none";
-             document.getElementById("iframeContainer").style.display = "block";
-             document.getElementById("aboutPageContainer").style.display = "none"; //!> Hide About Page
-         }
- 
-         function showDashboard() {
-             document.getElementById("dashboardContainer").style.display = "block";
-             document.getElementById("iframeContainer").style.display = "none";
-             document.getElementById("aboutPageContainer").style.display = "none"; //!> Hide About Page
-         }
+        let allResults = [];
 
-         //!> Function to load About Page
-         function loadAboutPage() {
-             document.getElementById("dashboardContainer").style.display = "none";
-             document.getElementById("iframeContainer").style.display = "none";
-             document.getElementById("aboutPageContainer").style.display = "block"; //!> Show About Page
-         }
+        // Fetch data from all Google Sheets
+        for (const sheetId of SHEET_IDS) {
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/Form responses 1?key=${API_KEY}`;
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.error) {
+                    console.error(`Error fetching data from sheet ${sheetId}:`, data.error.message);
+                    continue;
+                }
+
+                const headers = data.values[0]; // Header row
+                const rows = data.values.slice(1); // Data rows
+                const filteredResults = rows.filter(row => row.some(cell => cell.toLowerCase().includes(query)));
+
+                if (filteredResults.length > 0) {
+                    filteredResults.forEach(row => {
+                        const resultDiv = document.createElement('div');
+                        resultDiv.classList.add('result-item');
+                        row.forEach((cell, index) => {
+                            const cellDiv = document.createElement('div');
+                            cellDiv.innerHTML = `<strong>${headers[index]}:</strong> ${cell}`;
+                            resultDiv.appendChild(cellDiv);
+                        });
+                        allResults.push(resultDiv);
+                    });
+                }
+            } catch (error) {
+                console.error(`Error fetching data from sheet ${sheetId}:`, error);
+            }
+        }
+
+        if (allResults.length === 0) {
+            searchResultsContainer.innerHTML = `<div class='no-results'>No results found for '${query}'.</div>`;
+        } else {
+            allResults.forEach(result => searchResultsContainer.appendChild(result));
+        }
+        dashboardSearchResults.style.display = "block"; // Show results section
+    }
+
+    function toggleDropdown(element) {
+         element.classList.toggle("active");
+     }
  
-         // Countdown Timer
-         function startCountdown(eventDate) {
-             function updateCountdown() {
-                 const now = new Date().getTime();
-                 const timeRemaining = eventDate - now;
- 
-                 const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-                 const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                 const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-                 const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
- 
-                 document.getElementById("days").textContent = days;
-                 document.getElementById("hours").textContent = hours;
-                 document.getElementById("minutes").textContent = minutes;
-                 document.getElementById("seconds").textContent = seconds;
- 
-                 if (timeRemaining < 0) {
-                     clearInterval(timer);
-                     document.getElementById("countdown").innerHTML = "<div>Event Started</div>";
-                 }
-             }
- 
-             updateCountdown();
-             const timer = setInterval(updateCountdown, 1000);
-         }
- 
-         const eventDate = new Date("November 10, 2024 8:00:00").getTime();
-         startCountdown(eventDate);
- 
-         function toggleDetails(button, detailsId) {
-             const details = document.getElementById(detailsId);
-             const isVisible = details.style.display === "block";
- 
-             document.querySelectorAll('.event-details').forEach(detail => {
-                 detail.style.display = 'none';
+     function toggleSidebar(event) {
+         event.stopPropagation();
+         const sidebar = document.getElementById('sidebar');
+         sidebar.classList.toggle('collapsed');
+         
+         // Close all dropdowns if sidebar is collapsed
+         if (sidebar.classList.contains('collapsed')) {
+             document.querySelectorAll('.dropdown').forEach(dropdown => {
+                 dropdown.classList.remove("active");
              });
- 
-             details.style.display = isVisible ? "none" : "block";
-             button.textContent = isVisible ? "View More" : "View Less";
          }
+     }
+ 
+     function loadIframe(sheetId) {
+         const iframeUrl = sheetId.startsWith("http") 
+             ? sheetId 
+             : `https://docs.google.com/spreadsheets/d/${sheetId}/edit?rm=minimal`;
+         document.getElementById("sheetIframe").src = iframeUrl;
+         document.getElementById("dashboardContainer").style.display = "none";
+         document.getElementById("iframeContainer").style.display = "block";
+         document.getElementById("aboutPageContainer").style.display = "none"; //!> Hide About Page
+     }
+ 
+     function showDashboard() {
+         document.getElementById("dashboardContainer").style.display = "block";
+         document.getElementById("iframeContainer").style.display = "none";
+         document.getElementById("aboutPageContainer").style.display = "none"; //!> Hide About Page
+     }
+
+     //!> Updated Section: Function to load About Page
+     function loadAboutPage() {
+         document.getElementById("dashboardContainer").style.display = "none";
+         document.getElementById("iframeContainer").style.display = "none";
+         document.getElementById("aboutPageContainer").style.display = "block"; //!> Show About Page
+     }
+ 
+     // Countdown Timer
+     function startCountdown(eventDate) {
+         function updateCountdown() {
+             const now = new Date().getTime();
+             const timeRemaining = eventDate - now;
+ 
+             const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+             const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+             const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+             const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+ 
+             document.getElementById("days").textContent = days;
+             document.getElementById("hours").textContent = hours;
+             document.getElementById("minutes").textContent = minutes;
+             document.getElementById("seconds").textContent = seconds;
+ 
+             if (timeRemaining < 0) {
+                 clearInterval(timer);
+                 document.getElementById("countdown").innerHTML = "<div>Event Started</div>";
+             }
+         }
+ 
+         updateCountdown();
+         const timer = setInterval(updateCountdown, 1000);
+     }
+ 
+     const eventDate = new Date("November 10, 2024 8:00:00").getTime();
+     startCountdown(eventDate);
+ 
+     function toggleDetails(button, detailsId) {
+         const details = document.getElementById(detailsId);
+         const isVisible = details.style.display === "block";
+ 
+         document.querySelectorAll('.event-details').forEach(detail => {
+             detail.style.display = 'none';
+         });
+ 
+         details.style.display = isVisible ? "none" : "block";
+         button.textContent = isVisible ? "View More" : "View Less";
+     }
      showDashboard(); // Initialize with the dashboard view
-    </script>
+</script>
 </body>
 
 </html>
