@@ -8,404 +8,411 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-           /* General Styles */
-           * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+       /* General Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: #f0f4f8;
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-            flex-direction: column;
-        }
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f0f4f8;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    flex-direction: column;
+}
 
-        /* Sidebar */
-        .sidebar {
-            width: 250px;
-            background: linear-gradient(180deg, #1e3a8a, #3b82f6);
-            color: #ffffff;
-            position: fixed;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            padding: 20px 0;
-            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.2);
-            transition: width 0.3s ease;
-            overflow: hidden;
-        }
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background: linear-gradient(180deg, #1e3a8a, #3b82f6);
+    color: #ffffff;
+    position: fixed;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+    box-shadow: 2px 0 15px rgba(0, 0, 0, 0.2);
+    transition: width 0.3s ease;
+    overflow: hidden;
+}
 
-        .sidebar.collapsed {
-            width: 70px;
-        }
+.sidebar.collapsed {
+    width: 70px;
+}
 
-        .sidebar-toggle-icon {
-            font-size: 24px;
-            color: #ffffff;
-            cursor: pointer;
-            margin: 0 20px 20px;
-            align-self: flex-end;
-            transition: transform 0.3s;
-        }
+.sidebar-toggle-icon {
+    font-size: 24px;
+    color: #ffffff;
+    cursor: pointer;
+    margin: 0 20px 20px;
+    align-self: flex-end;
+    transition: transform 0.3s;
+}
 
-        .sidebar.collapsed .sidebar-toggle-icon {
-            transform: rotate(180deg);
-        }
+.sidebar.collapsed .sidebar-toggle-icon {
+    transform: rotate(180deg);
+}
 
-        .sidebar h2 {
-            font-size: 24px;
-            font-weight: 500;
-            text-align: center;
-            margin-bottom: 20px;
-            color: #ffffff;
-            transition: opacity 0.3s, transform 0.3s;
-        }
+.sidebar h2 {
+    font-size: 24px;
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #ffffff;
+    transition: opacity 0.3s, transform 0.3s;
+}
 
-        .sidebar.collapsed h2 {
-            opacity: 0;
-            transform: translateX(-20px);
-        }
+.sidebar.collapsed h2 {
+    opacity: 0;
+    transform: translateX(-20px);
+}
 
-        .menu-item {
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            font-size: 16px;
-            cursor: pointer;
-            color: #ffffff;
-            transition: background 0.3s, color 0.3s;
-            border-radius: 8px;
-            position: relative;
-        }
+.menu-item {
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 16px;
+    cursor: pointer;
+    color: #ffffff;
+    transition: background 0.3s, color 0.3s;
+    border-radius: 8px;
+    position: relative;
+}
 
-        .menu-item:hover {
-            background-color: #2563eb;
-            color: #ffffff;
-        }
+.menu-item:hover {
+    background-color: #2563eb;
+    color: #ffffff;
+}
 
-        .menu-icon {
-            font-size: 20px;
-        }
+.menu-icon {
+    font-size: 20px;
+}
 
-        .menu-text {
-            transition: opacity 0.3s, transform 0.3s;
-        }
+.menu-text {
+    transition: opacity 0.3s, transform 0.3s;
+}
 
-        .sidebar.collapsed .menu-text {
-            opacity: 0;
-            transform: translateX(-20px);
-        }
+.sidebar.collapsed .menu-text {
+    opacity: 0;
+    transform: translateX(-20px);
+}
 
-        /* Dropdown styling */
-        .dropdown-content {
-            display: none;
-            flex-direction: column;
-            padding: 10px 20px;
-            background-color: rgba(59, 130, 246, 0.8);
-            border-radius: 8px;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            width: 100%;
-            z-index: 10;
-            margin-top: 5px;
-        }
+/* Dropdown styling */
+.dropdown-content {
+    display: none;
+    flex-direction: column;
+    padding: 10px 20px;
+    background-color: rgba(59, 130, 246, 0.8);
+    border-radius: 8px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+    margin-top: 5px;
+}
 
-        .dropdown.active .dropdown-content {
-            display: flex;
-            transition: transform 0.3s ease;
-        }
+.dropdown.active .dropdown-content {
+    display: flex;
+    transition: transform 0.3s ease;
+}
 
-        .dropdown-content a {
-            padding: 8px 15px;
-            font-size: 14px;
-            color: #ffffff;
-            text-decoration: none;
-            transition: color 0.3s;
-            border-radius: 4px;
-        }
+.dropdown-content a {
+    padding: 8px 15px;
+    font-size: 14px;
+    color: #ffffff;
+    text-decoration: none;
+    transition: color 0.3s;
+    border-radius: 4px;
+}
 
-        .dropdown-content a:hover {
-            color: #2563eb;
-            background-color: #1e3a8a;
-        }
+.dropdown-content a:hover {
+    color: #2563eb;
+    background-color: #1e3a8a;
+}
 
-        /* Main Content */
-        .main-content {
-            margin-left: 250px;
-            padding: 30px;
-            flex: 1;
-            transition: margin-left 0.3s;
-            background-color: #f8fafc;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-        }
+/* Main Content */
+.main-content {
+    margin-left: 250px;
+    padding: 30px;
+    flex: 1;
+    transition: margin-left 0.3s;
+    background-color: #f8fafc;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 250px); /* Ensure it takes up the remaining width */
+}
 
-        .sidebar.collapsed + .main-content {
-            margin-left: 70px;
-        }
+.sidebar.collapsed + .main-content {
+    margin-left: 70px;
+    width: calc(100% - 70px); /* Adjust width when sidebar is collapsed */
+}
 
-        /* Countdown Timer Styling */
-        .countdown-container {
-            background-color: rgba(224, 242, 254, 0.8);
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            color: #1e3a8a;
-            margin-bottom: 20px;
-        }
 
-        .countdown-title {
-            font-size: 20px;
-            font-weight: 500;
-            margin-bottom: 10px;
-            color: #1e3a8a;
-        }
+/* Countdown Timer Styling */
+.countdown-container {
+    background-color: rgba(224, 242, 254, 0.8);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    color: #1e3a8a;
+    margin-bottom: 20px;
+}
 
-        .countdown {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            font-weight: bold;
-        }
+.countdown-title {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: #1e3a8a;
+}
 
-        .countdown div {
-            background-color: #ffffff;
-            color: #1e3a8a;
-            border-radius: 5px;
-            padding: 10px;
-            width: 60px;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
+.countdown {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    font-weight: bold;
+}
 
-        .countdown span {
-            display: block;
-            font-size: 24px;
-        }
+.countdown div {
+    background-color: #ffffff;
+    color: #1e3a8a;
+    border-radius: 5px;
+    padding: 10px;
+    width: 60px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
-        .countdown-label {
-            font-size: 12px;
-            color: #1e3a8a;
-            font-weight: normal;
-            margin-top: 5px;
-        }
+.countdown span {
+    display: block;
+    font-size: 24px;
+}
 
-        /* Additional Styling */
-        .welcome {
-            font-size: 24px;
-            font-weight: bold;
-            color: #1e3a8a;
-            margin-bottom: 20px;
-        }
+.countdown-label {
+    font-size: 12px;
+    color: #1e3a8a;
+    font-weight: normal;
+    margin-top: 5px;
+}
 
-        .events-container {
-            background-color: rgba(224, 242, 254, 0.8);
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            color: #1e3a8a;
-        }
+/* Additional Styling */
+.welcome {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1e3a8a;
+    margin-bottom: 20px;
+}
 
-        .events-container .event-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 10px;
-        }
+.events-container {
+    background-color: rgba(224, 242, 254, 0.8);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    color: #1e3a8a;
+}
 
-        .events-container .view-more-btn {
-            background-color: #1e3a8a;
-            color: #ffffff;
-            border: none;
-            border-radius: 5px;
-            padding: 5px 10px;
-            font-size: 12px;
-            cursor: pointer;
-        }
+.events-container .event-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
 
-        .events-container .view-more-btn:hover {
-            background-color: #2563eb;
-        }
+.events-container .view-more-btn {
+    background-color: #1e3a8a;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 12px;
+    cursor: pointer;
+}
 
-        .event-details {
-            display: none;
-            color: #1e3a8a;
-            font-size: 14px;
-            margin-top: 5px;
-        }
+.events-container .view-more-btn:hover {
+    background-color: #2563eb;
+}
 
-        /* Google Sheets and Forms Preview */
-        .iframe-container {
-            display: none;
-            width: 100%;
-            height: 500px;
-            margin-top: 20px;
-            background-color: #ffffff;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-        }
+.event-details {
+    display: none;
+    color: #1e3a8a;
+    font-size: 14px;
+    margin-top: 5px;
+}
 
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
+/* Google Sheets and Forms Preview */
+.iframe-container {
+    display: none;
+    width: 100%;
+    height: 800px; /* Adjust as needed */
+    margin: 0; /* Ensure no margin */
+    padding: 0; /* Ensure no padding */
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden; /* Ensure no overflow */
+}
 
-        /* Footer */
-        .footer {
-            background-color: #e0f2fe;
-            color: #1e3a8a;
-            padding: 15px;
-            text-align: center;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            border-radius: 8px;
-            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
-            margin-top: auto;
-        }
+iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    margin: 0; /* Ensure no margin */
+    padding: 0; /* Ensure no padding */
+}
 
-        .footer i {
-            font-size: 24px;
-            color: #1e3a8a;
-            cursor: pointer;
-            transition: color 0.3s;
-        }
+/* Footer */
+.footer {
+    background-color: #e0f2fe;
+    color: #1e3a8a;
+    padding: 15px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    border-radius: 8px;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: auto;
+}
 
-        .footer i:hover {
-            color: #2563eb;
-        }
+.footer i {
+    font-size: 24px;
+    color: #1e3a8a;
+    cursor: pointer;
+    transition: color 0.3s;
+}
 
-        /* YouTube Channel Preview */
-        .youtube-preview {
-            background-color: rgba(224, 242, 254, 0.8);
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            color: #1e3a8a;
-        }
+.footer i:hover {
+    color: #2563eb;
+}
 
-        .youtube-thumbnail {
-            width: 150px;
-            height: 85px;
-            border-radius: 5px;
-            overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
+/* YouTube Channel Preview */
+.youtube-preview {
+    background-color: rgba(224, 242, 254, 0.8);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    color: #1e3a8a;
+}
 
-        .youtube-thumbnail img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+.youtube-thumbnail {
+    width: 150px;
+    height: 85px;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
-        .youtube-text {
-            font-size: 16px;
-        }
+.youtube-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 
-        .youtube-link {
-            color: #2563eb;
-            text-decoration: none;
-            font-weight: bold;
-        }
+.youtube-text {
+    font-size: 16px;
+}
 
-        .youtube-link:hover {
-            text-decoration: underline;
-        }
+.youtube-link {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: bold;
+}
 
-        /* Search Bar at the Top Center */
-        .search-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            padding: 15px;
-            background-color: #f0f4f8;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
+.youtube-link:hover {
+    text-decoration: underline;
+}
 
-        .search-select,
-        .search-input,
-        .search-button {
-            padding: 8px;
-            border: 1px solid #e0e0e0;
-            border-radius: 4px;
-        }
+/* Search Bar at the Top Center */
+.search-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 15px;
+    background-color: #f0f4f8;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
 
-        .search-button {
-            background-color: #1e3a8a;
-            color: #ffffff;
-            border: none;
-            cursor: pointer;
-        }
+.search-select,
+.search-input,
+.search-button {
+    padding: 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+}
 
-        .search-button:hover {
-            background-color: #2563eb;
-        }
+.search-button {
+    background-color: #1e3a8a;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+}
 
-        /* Search Results in Dashboard */
-        .dashboard-search-results {
-            background-color: #ffffff;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            display: none;
-            flex-direction: column;
-        }
+.search-button:hover {
+    background-color: #2563eb;
+}
 
-        .result-item {
-            padding: 10px;
-            border-bottom: 1px solid #e0e0e0;
-            margin-bottom: 10px;
-        }
+/* Search Results in Dashboard */
+.dashboard-search-results {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: none;
+    flex-direction: column;
+}
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 100px;
-            }
+.result-item {
+    padding: 10px;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 10px;
+}
 
-            .main-content {
-                margin-left: 100px;
-            }
+/* Responsive Design */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100px;
+    }
 
-            .sidebar.collapsed + .main-content {
-                margin-left: 0;
-            }
+    .main-content {
+        margin-left: 100px;
+    }
 
-            .search-wrapper {
-                flex-direction: column;
-                padding: 10px;
-            }
+    .sidebar.collapsed + .main-content {
+        margin-left: 0;
+    }
 
-            .menu-text {
-                display: none;
-            }
-        }
-    </style>
+    .search-wrapper {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .menu-text {
+        display: none;
+    }
+}
+</style>
 </head>
 
 <body>
 
   <!-- Sidebar -->
-  <div class="sidebar" id="sidebar">
+<div class="sidebar" id="sidebar">
     <i class="fas fa-angle-double-left sidebar-toggle-icon" onclick="toggleSidebar(event)"></i>
     <h2>Church Database</h2>
 
@@ -448,120 +455,118 @@
         </div>
     </div>
 
-    <div class="menu-item" onclick="window.location.href='#'">
+    <div class="menu-item" onclick="loadAboutPage()">
         <i class="fas fa-info-circle menu-icon"></i>
         <span class="menu-text">About</span>
     </div>
+
     <div class="menu-item" onclick="window.location.href='#'">
         <i class="fas fa-phone menu-icon"></i>
         <span class="menu-text">Contact Us</span>
     </div>
 </div>
 
+<!-- Main Content -->
+<div class="main-content" id="mainContent">
+    <!-- Search Wrapper at the Top Middle of Dashboard -->
+    <div class="search-wrapper">
+        <input type="text" id="searchInput" class="search-input" placeholder="Enter a name to search..." />
+        <button onclick="performSearch()" class="search-button">Search</button>
+    </div>
 
-    <!-- Main Content -->
-    <div class="main-content" id="mainContent">
-        
-        <!-- Search Wrapper at the Top Middle of Dashboard -->
-        <div class="search-wrapper">
-            <select id="sheetSelector" class="search-select">
-                <option value="1SJbYa_hXpk13CB2_LPpqqkFvLpmnsqmcdqTRdxRx-pM|Form responses 1">Members</option>
-                <option value="1qmNa3xSgbd1bda1TPIBR6bLpM2vEKUdG354t6eNjwn8|Form responses 1">G12 Leaders</option>
-                <option value="1KXsEmYhnLZyKd-QkXoFfXtiAhDkmGRdz5MTpVj1bTSk|Form responses 1">Care Takers</option>
-                <option value="1-1Xh8pgV3HenXDxogyjemY4cyFQwyXmrXbRqCRjae9Q|Form responses 1">Sunday School Children</option>
-                <option value="16bkO0efSHKMjzmomtXgVxcubAQyNLvGfn6qXOm1H8Gs|Form responses 1">New Sunday School Childern </option>
-                <option value="11dV8TY-u4Ciicb20f6G0BTuo8PwyGS1AjzVFm4hM-l0|Form responses 1">Ministry and Department</option>
-                <option value="1uZ4OObFNjPcIWtoN2y0aFxWI_M6pMWQcYk2ScHtmVhI|Form responses 1">New Members</option>
-            </select>
-            <input type="text" id="searchInput" class="search-input" placeholder="Enter a name to search..." />
-            <button onclick="performSearch()" class="search-button">Search</button>
-        </div>
+    <!-- Search Results Area in Dashboard -->
+    <div id="dashboardSearchResults" class="dashboard-search-results">
+        <h2>Search Results</h2>
+        <div id="searchResultsContainer"></div>
+    </div>
 
-        <!-- Search Results Area in Dashboard -->
-        <div id="dashboardSearchResults" class="dashboard-search-results">
-            <h2>Search Results</h2>
-            <div id="searchResultsContainer"></div>
-        </div>
-
-        <!-- Other Dashboard Content -->
-        <div class="main-content" id="mainContent">
-            <div class="dashboard-container" id="dashboardContainer">
-                <div class="welcome">Welcome to the Church Database Dashboard!</div>
-                <div class="countdown-container">
-                    <div class="countdown-title">Upcoming Event: Sunday Sabbath service</div>
-                    <div class="countdown" id="countdown">
-                        <div>
-                            <span id="days">0</span>
-                            <div class="countdown-label">Days</div>
-                        </div>
-                        <div>
-                            <span id="hours">0</span>
-                            <div class="countdown-label">Hours</div>
-                        </div>
-                        <div>
-                            <span id="minutes">0</span>
-                            <div class="countdown-label">Minutes</div>
-                        </div>
-                        <div>
-                            <span id="seconds">0</span>
-                            <div class="countdown-label">Seconds</div>
-                        </div>
-                    </div>
+    <!-- Other Dashboard Content -->
+    <div class="dashboard-container" id="dashboardContainer">
+        <div class="welcome">Welcome to the Church Database Dashboard!</div>
+        <div class="countdown-container">
+            <div class="countdown-title">Upcoming Event: Sunday Sabbath service</div>
+            <div class="countdown" id="countdown">
+                <div>
+                    <span id="days">0</span>
+                    <div class="countdown-label">Days</div>
                 </div>
-    
-                <!-- More Coming Events -->
-                <div class="events-container">
-                    <h3>More Coming Events</h3>
-                    <div class="event-item">
-                        <span>08 Nov - Evening Prayer</span>
-                        <button class="view-more-btn" onclick="toggleDetails(this, 'details1')">View More</button>
-                    </div>
-                    <div id="details1" class="event-details">
-                        Join us for an evening prayer session at 6 PM. This is a time for quiet reflection and spiritual connection.
-                    </div>
-                    <div class="event-item">
-                        <span>11 Nov - Monday Prayer</span>
-                        <button class="view-more-btn" onclick="toggleDetails(this, 'details2')">View More</button>
-                    </div>
-                    <div id="details2" class="event-details">
-                        Our weekly Monday prayer service, starting at 7 PM. Join us to strengthen your faith with community support.
-                    </div>
-                    <div class="event-item">
-                        <span>18 Nov - Monday Prayer</span>
-                        <button class="view-more-btn" onclick="toggleDetails(this, 'details3')">View More</button>
-                    </div>
-                    <div id="details3" class="event-details">
-                        Another Monday prayer session focusing on gratitude and peace. It begins at 7 PM in the main hall.
-                    </div>
-                    <div class="event-item">
-                        <span>25 Nov - Monday Prayer</span>
-                        <button class="view-more-btn" onclick="toggleDetails(this, 'details4')">View More</button>
-                    </div>
-                    <div id="details4" class="event-details">
-                        Join our last Monday prayer of the month at 7 PM. A time to reflect and seek blessings for the upcoming month.
-                    </div>
+                <div>
+                    <span id="hours">0</span>
+                    <div class="countdown-label">Hours</div>
                 </div>
-    
-                <!-- YouTube Channel Preview -->
-                <div class="youtube-preview">
-                    <div class="youtube-thumbnail">
-                        <a href="https://www.youtube.com/@pottershouseaogkurunegala725" target="_blank">
-                            <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg" alt="YouTube Thumbnail">
-                        </a>
-                    </div>
-                    <div class="youtube-text">
-                        <p>Watch the latest sermon on our YouTube channel!</p>
-                        <a href="https://www.youtube.com/@pottershouseaogkurunegala725" class="youtube-link" target="_blank">Visit Potter's House AOG Kurunegala</a>
-                    </div>
+                <div>
+                    <span id="minutes">0</span>
+                    <div class="countdown-label">Minutes</div>
+                </div>
+                <div>
+                    <span id="seconds">0</span>
+                    <div class="countdown-label">Seconds</div>
                 </div>
             </div>
-    
-            <!-- Google Sheets and Forms Preview Container -->
-            <div class="iframe-container" id="iframeContainer">
-                <iframe id="sheetIframe" src=""></iframe>
+        </div>
+
+        <!-- More Coming Events -->
+        <div class="events-container">
+            <h3>More Coming Events</h3>
+            <div class="event-item">
+                <span>08 Nov - Evening Prayer</span>
+                <button class="view-more-btn" onclick="toggleDetails(this, 'details1')">View More</button>
+            </div>
+            <div id="details1" class="event-details">
+                Join us for an evening prayer session at 6 PM. This is a time for quiet reflection and spiritual connection.
+            </div>
+            <div class="event-item">
+                <span>11 Nov - Monday Prayer</span>
+                <button class="view-more-btn" onclick="toggleDetails(this, 'details2')">View More</button>
+            </div>
+            <div id="details2" class="event-details">
+                Our weekly Monday prayer service, starting at 7 PM. Join us to strengthen your faith with community support.
+            </div>
+            <div class="event-item">
+                <span>18 Nov - Monday Prayer</span>
+                <button class="view-more-btn" onclick="toggleDetails(this, 'details3')">View More</button>
+            </div>
+            <div id="details3" class="event-details">
+                Another Monday prayer session focusing on gratitude and peace. It begins at 7 PM in the main hall.
+            </div>
+            <div class="event-item">
+                <span>25 Nov - Monday Prayer</span>
+                <button class="view-more-btn" onclick="toggleDetails(this, 'details4')">View More</button>
+            </div>
+            <div id="details4" class="event-details">
+                Join our last Monday prayer of the month at 7 PM. A time to reflect and seek blessings for the upcoming month.
             </div>
         </div>
-    
+
+        <!-- YouTube Channel Preview -->
+        <div class="youtube-preview">
+            <div class="youtube-thumbnail">
+                <a href="https://www.youtube.com/@pottershouseaogkurunegala725" target="_blank">
+                    <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg" alt="YouTube Thumbnail">
+                </a>
+            </div>
+            <div class="youtube-text">
+                <p>Watch the latest sermon on our YouTube channel!</p>
+                <a href="https://www.youtube.com/@pottershouseaogkurunegala725" class="youtube-link" target="_blank">Visit Potter's House AOG Kurunegala</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Google Sheets and Forms Preview Container -->
+    <div class="iframe-container" id="iframeContainer">
+        <iframe id="sheetIframe" src=""></iframe>
+    </div>
+
+    <!--!> About Page Content -->
+    <div class="iframe-container" id="aboutPageContainer" style="display: none;">
+        <div class="about-content">
+            <h2>About Church Database</h2>
+            <p>This is the Church Database Dashboard, designed to help manage and organize church-related information efficiently. It includes features for managing member information, forms, and upcoming events.</p>
+            <p>For more information, please contact us at <a href="mailto:info@churchdatabase.com">info@churchdatabase.com</a>.</p>
+        </div>
+    </div>
+</div>
+
         <!-- Footer -->
         <div class="footer">
             <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
@@ -570,10 +575,18 @@
         </div>
     <script>
         const API_KEY = 'AIzaSyAN__grGh5cmthJLKJST_NLz7kZWUJ0h1k';
+        const SHEET_IDS = [
+            '1SJbYa_hXpk13CB2_LPpqqkFvLpmnsqmcdqTRdxRx-pM', // Members
+            '1qmNa3xSgbd1bda1TPIBR6bLpM2vEKUdG354t6eNjwn8', // G12 Leaders
+            '1KXsEmYhnLZyKd-QkXoFfXtiAhDkmGRdz5MTpVj1bTSk', // Care Takers
+            '1uZ4OObFNjPcIWtoN2y0aFxWI_M6pMWQcYk2ScHtmVhI', // New Members
+            '1-1Xh8pgV3HenXDxogyjemY4cyFQwyXmrXbRqCRjae9Q', // Sunday School Children
+            '11dV8TY-u4Ciicb20f6G0BTuo8PwyGS1AjzVFm4hM-l0', // Ministry and Department
+            '15X9hDFlPWqHThNPRSyo3BUM4Xas9aDDQWhjS28uIvwc', // Jeewanayatamaga lesson Teachers
+            '16bkO0efSHKMjzmomtXgVxcubAQyNLvGfn6qXOm1H8Gs'  // New Sunday School Children
+        ];
+
         async function performSearch() {
-            const sheetSelector = document.getElementById('sheetSelector').value.split('|');
-            const sheetId = sheetSelector[0];
-            const sheetName = sheetSelector[1];
             const query = document.getElementById('searchInput').value.toLowerCase();
             const dashboardSearchResults = document.getElementById('dashboardSearchResults');
             const searchResultsContainer = document.getElementById('searchResultsContainer');
@@ -586,42 +599,47 @@
                 return;
             }
 
-            // Fetch data from Google Sheets
-            const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}?key=${API_KEY}`;
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
+            let allResults = [];
 
-                if (data.error) {
-                    searchResultsContainer.innerHTML = `<div class='no-results'>Error: ${data.error.message}</div>`;
-                    dashboardSearchResults.style.display = "block";
-                    return;
-                }
+            // Fetch data from all Google Sheets
+            for (const sheetId of SHEET_IDS) {
+                const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/Form responses 1?key=${API_KEY}`;
+                try {
+                    const response = await fetch(url);
+                    const data = await response.json();
 
-                const headers = data.values[0]; // Header row
-                const rows = data.values.slice(1); // Data rows
-                const filteredResults = rows.filter(row => row.some(cell => cell.toLowerCase().includes(query)));
+                    if (data.error) {
+                        console.error(`Error fetching data from sheet ${sheetId}:`, data.error.message);
+                        continue;
+                    }
 
-                if (filteredResults.length === 0) {
-                    searchResultsContainer.innerHTML = `<div class='no-results'>No results found for '${query}'.</div>`;
-                } else {
-                    filteredResults.forEach(row => {
-                        const resultDiv = document.createElement('div');
-                        resultDiv.classList.add('result-item');
-                        row.forEach((cell, index) => {
-                            const cellDiv = document.createElement('div');
-                            cellDiv.innerHTML = `<strong>${headers[index]}:</strong> ${cell}`;
-                            resultDiv.appendChild(cellDiv);
+                    const headers = data.values[0]; // Header row
+                    const rows = data.values.slice(1); // Data rows
+                    const filteredResults = rows.filter(row => row.some(cell => cell.toLowerCase().includes(query)));
+
+                    if (filteredResults.length > 0) {
+                        filteredResults.forEach(row => {
+                            const resultDiv = document.createElement('div');
+                            resultDiv.classList.add('result-item');
+                            row.forEach((cell, index) => {
+                                const cellDiv = document.createElement('div');
+                                cellDiv.innerHTML = `<strong>${headers[index]}:</strong> ${cell}`;
+                                resultDiv.appendChild(cellDiv);
+                            });
+                            allResults.push(resultDiv);
                         });
-                        searchResultsContainer.appendChild(resultDiv);
-                    });
+                    }
+                } catch (error) {
+                    console.error(`Error fetching data from sheet ${sheetId}:`, error);
                 }
-                dashboardSearchResults.style.display = "block"; // Show results section
-            } catch (error) {
-                console.error('Error fetching Google Sheets data:', error);
-                searchResultsContainer.innerHTML = "<div class='no-results'>An error occurred. Please try again.</div>";
-                dashboardSearchResults.style.display = "block";
             }
+
+            if (allResults.length === 0) {
+                searchResultsContainer.innerHTML = `<div class='no-results'>No results found for '${query}'.</div>`;
+            } else {
+                allResults.forEach(result => searchResultsContainer.appendChild(result));
+            }
+            dashboardSearchResults.style.display = "block"; // Show results section
         }
 
         function toggleDropdown(element) {
@@ -648,11 +666,20 @@
              document.getElementById("sheetIframe").src = iframeUrl;
              document.getElementById("dashboardContainer").style.display = "none";
              document.getElementById("iframeContainer").style.display = "block";
+             document.getElementById("aboutPageContainer").style.display = "none"; //!> Hide About Page
          }
  
          function showDashboard() {
              document.getElementById("dashboardContainer").style.display = "block";
              document.getElementById("iframeContainer").style.display = "none";
+             document.getElementById("aboutPageContainer").style.display = "none"; //!> Hide About Page
+         }
+
+         //!> Function to load About Page
+         function loadAboutPage() {
+             document.getElementById("dashboardContainer").style.display = "none";
+             document.getElementById("iframeContainer").style.display = "none";
+             document.getElementById("aboutPageContainer").style.display = "block"; //!> Show About Page
          }
  
          // Countdown Timer
