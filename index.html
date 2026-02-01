@@ -1,788 +1,751 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Church Database Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Church Management System</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- PDF Engine -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
     <style>
-       /* General Styles */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+        :root {
+            --primary: #4f46e5;       /* Modern Indigo */
+            --primary-dark: #4338ca;
+            --secondary: #0ea5e9;     /* Sky Blue */
+            --bg-body: #f1f5f9;
+            --text-main: #0f172a;
+            --text-light: #64748b;
+            --sidebar-width: 280px;
+            --sidebar-collapsed: 80px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+        }
 
-body {
-    font-family: 'Montserrat', sans-serif;
-    background-color: #f0f4f8;
-    display: flex;
-    height: 100vh;
-    overflow: hidden;
-    flex-direction: column;
-}
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* Sidebar */
-.sidebar {
-    width: 250px;
-    background: linear-gradient(180deg, #1e3a8a, #3b82f6);
-    color: #ffffff;
-    position: fixed;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    padding: 20px 0;
-    box-shadow: 2px 0 15px rgba(0, 0, 0, 0.2);
-    transition: width 0.3s ease;
-    overflow: hidden;
-}
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-body);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            overflow: hidden; 
+        }
 
-.sidebar.collapsed {
-    width: 70px;
-}
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: #ffffff;
+            border-right: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 50;
+            position: relative;
+        }
 
-.sidebar-toggle-icon {
-    font-size: 24px;
-    color: #ffffff;
-    cursor: pointer;
-    margin: 0 20px 20px;
-    align-self: flex-end;
-    transition: transform 0.3s;
-}
+        .sidebar.collapsed { width: var(--sidebar-collapsed); }
 
-.sidebar.collapsed .sidebar-toggle-icon {
-    transform: rotate(180deg);
-}
+        .logo-area {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            border-bottom: 1px solid #f1f5f9;
+            white-space: nowrap;
+            overflow: hidden;
+        }
 
-.sidebar h2 {
-    font-size: 24px;
-    font-weight: 500;
-    text-align: center;
-    margin-bottom: 20px;
-    color: #ffffff;
-    transition: opacity 0.3s, transform 0.3s;
-}
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-left: 12px;
+            opacity: 1;
+            transition: 0.3s;
+        }
+        .sidebar.collapsed .logo-text { opacity: 0; width: 0; }
 
-.sidebar.collapsed h2 {
-    opacity: 0;
-    transform: translateX(-20px);
-}
+        .menu-items { flex: 1; padding: 20px 0; overflow-y: auto; }
 
-.menu-item {
-    padding: 15px 20px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    font-size: 16px;
-    cursor: pointer;
-    color: #ffffff;
-    transition: background 0.3s, color 0.3s;
-    border-radius: 8px;
-    position: relative;
-}
+        .menu-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #94a3b8;
+            padding: 0 24px;
+            margin-bottom: 10px;
+            margin-top: 20px;
+            white-space: nowrap;
+        }
+        .sidebar.collapsed .menu-label { display: none; }
 
-.menu-item:hover {
-    background-color: #2563eb;
-    color: #ffffff;
-}
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 24px;
+            color: var(--text-light);
+            text-decoration: none;
+            cursor: pointer;
+            transition: 0.2s;
+            position: relative;
+            white-space: nowrap;
+            border-left: 3px solid transparent;
+        }
 
-.menu-icon {
-    font-size: 20px;
-}
+        .nav-item:hover { background: #f8fafc; color: var(--primary); }
+        .nav-item.active { background: #eef2ff; color: var(--primary); border-left-color: var(--primary); }
+        
+        .nav-icon { width: 24px; font-size: 18px; text-align: center; margin-right: 12px; }
+        .sidebar.collapsed .nav-item { padding: 14px 0; justify-content: center; }
+        .sidebar.collapsed .nav-icon { margin: 0; }
+        .sidebar.collapsed .nav-text { display: none; }
 
-.menu-text {
-    transition: opacity 0.3s, transform 0.3s;
-}
+        /* Toggle Button */
+        .toggle-btn {
+            position: absolute; top: 24px; right: -12px;
+            width: 24px; height: 24px; background: white;
+            border: 1px solid #e2e8f0; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; box-shadow: var(--shadow-sm); z-index: 60;
+            color: var(--text-light); transition: 0.3s;
+        }
+        .toggle-btn:hover { color: var(--primary); transform: scale(1.1); }
 
-.sidebar.collapsed .menu-text {
-    opacity: 0;
-    transform: translateX(-20px);
-}
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #f1f5f9;
+            position: relative;
+            overflow: hidden;
+        }
 
-/* Dropdown styling */
-.dropdown-content {
-    display: none;
-    flex-direction: column;
-    padding: 10px 20px;
-    background-color: rgba(59, 130, 246, 0.8);
-    border-radius: 8px;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    z-index: 10;
-    margin-top: 5px;
-}
+        /* TOP HEADER */
+        .header {
+            height: 90px;
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            z-index: 40;
+        }
 
-.dropdown.active .dropdown-content {
-    display: flex;
-    transition: transform 0.3s ease;
-}
+        /* Search Bar Area */
+        .header-left {
+            display: flex; flex-direction: column; justify-content: center; width: 100%; max-width: 600px;
+        }
+        
+        .search-wrapper { position: relative; width: 100%; }
+        .search-input {
+            width: 100%; padding: 12px 20px 12px 45px;
+            border: 1px solid #cbd5e1; background: white;
+            border-radius: 50px; font-size: 15px; outline: none;
+            transition: 0.3s; font-family: 'Outfit', sans-serif;
+            box-shadow: var(--shadow-sm);
+        }
+        .search-input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); }
+        .search-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
 
-.dropdown-content a {
-    padding: 8px 15px;
-    font-size: 14px;
-    color: #ffffff;
-    text-decoration: none;
-    transition: color 0.3s;
-    border-radius: 4px;
-}
+        /* Tags */
+        .tags-row {
+            display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; height: 28px;
+        }
+        .tag-pill {
+            background: #e0f2fe; color: #0284c7; padding: 4px 10px;
+            border-radius: 20px; font-size: 11px; font-weight: 600;
+            display: flex; align-items: center; gap: 5px;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-.dropdown-content a:hover {
-    color: #2563eb;
-    background-color: #1e3a8a;
-}
+        /* Action Area */
+        .action-area { display: flex; gap: 15px; align-items: center; }
+        .date-badge {
+            background: white; padding: 6px 14px; border-radius: 20px;
+            font-size: 13px; font-weight: 500; color: var(--text-light);
+            border: 1px solid #e2e8f0; display: none; 
+        }
 
-/* Main Content */
-.main-content {
-    margin-left: 250px;
-    padding: 30px;
-    flex: 1;
-    transition: margin-left 0.3s;
-    background-color: #f8fafc;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    width: calc(100% - 250px); /* Ensure it takes up the remaining width */
-}
+        /* SCROLL AREA */
+        .scroll-area { flex: 1; overflow-y: auto; padding: 30px; }
 
-.sidebar.collapsed + .main-content {
-    margin-left: 70px;
-    width: calc(100% - 70px); /* Adjust width when sidebar is collapsed */
-}
+        /* DASHBOARD */
+        .welcome-banner {
+            background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
+            border-radius: 20px; padding: 40px; color: white;
+            margin-bottom: 40px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+        .welcome-banner h1 { font-size: 28px; font-weight: 700; margin-bottom: 10px; }
+        .quick-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+        
+        /* QUICK CARD */
+        .quick-card {
+            background: white; padding: 24px; border-radius: 16px;
+            border: 1px solid #f1f5f9; cursor: pointer; transition: 0.3s;
+            display: flex; flex-direction: column; align-items: center;
+            text-align: center; box-shadow: var(--shadow-sm);
+        }
+        .quick-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .icon-box {
+            width: 50px; height: 50px; border-radius: 50%; background: #eef2ff;
+            color: var(--primary); display: flex; align-items: center; justify-content: center;
+            font-size: 20px; margin-bottom: 15px;
+        }
 
+        /* === SEARCH RESULTS LAYOUT === */
+        
+        /* Stats Bar */
+        .stats-bar {
+            display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 25px;
+        }
+        .stat-badge {
+            background: white; border: 1px solid #e2e8f0; padding: 8px 16px;
+            border-radius: 12px; font-size: 13px; font-weight: 600; color: #334155;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .stat-badge.total { background: #2563eb; color: white; border-color: #2563eb; }
+        .count-bubble { background: #f1f5f9; padding: 2px 6px; border-radius: 6px; font-size: 11px; color: #475569; }
 
-/* Countdown Timer Styling */
-.countdown-container {
-    background-color: rgba(224, 242, 254, 0.8);
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    color: #1e3a8a;
-    margin-bottom: 20px;
-}
+        /* Grid for Cards */
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
 
-.countdown-title {
-    font-size: 20px;
-    font-weight: 500;
-    margin-bottom: 10px;
-    color: #1e3a8a;
-}
+        /* Result Card */
+        .result-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            position: relative;
+            border-top: 4px solid var(--primary);
+            transition: transform 0.2s;
+        }
+        .result-card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
 
-.countdown {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    font-weight: bold;
-}
+        /* Badge Top Right */
+        .match-badge {
+            position: absolute; top: 15px; right: 15px;
+            background: #dcfce7; color: #15803d;
+            padding: 4px 8px; border-radius: 4px;
+            font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+        }
 
-.countdown div {
-    background-color: #ffffff;
-    color: #1e3a8a;
-    border-radius: 5px;
-    padding: 10px;
-    width: 60px;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+        /* Card Header */
+        .card-header {
+            display: flex; align-items: center; gap: 8px;
+            margin-bottom: 15px; padding-bottom: 10px;
+            border-bottom: 1px solid #f1f5f9;
+            color: var(--primary); font-weight: 700; font-size: 12px; text-transform: uppercase;
+        }
 
-.countdown span {
-    display: block;
-    font-size: 24px;
-}
+        /* Data Rows */
+        .data-row {
+            display: flex; margin-bottom: 6px; font-size: 13px; line-height: 1.5;
+        }
+        .data-label {
+            width: 100px; color: #64748b; font-weight: 600; flex-shrink: 0;
+        }
+        .data-val {
+            color: #1e293b; font-weight: 500;
+        }
+        .highlight { background: #fef08a; padding: 0 2px; border-radius: 2px; }
 
-.countdown-label {
-    font-size: 12px;
-    color: #1e3a8a;
-    font-weight: normal;
-    margin-top: 5px;
-}
+        /* Buttons */
+        .btn {
+            background: var(--primary); color: white;
+            padding: 10px 20px; border-radius: 10px;
+            border: none; font-weight: 500; font-size: 14px;
+            cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+            transition: 0.2s;
+            box-shadow: var(--shadow-sm);
+        }
+        .btn:hover { background: var(--primary-dark); }
 
-/* Additional Styling */
-.welcome {
-    font-size: 24px;
-    font-weight: bold;
-    color: #1e3a8a;
-    margin-bottom: 20px;
-}
+        /* Iframe */
+        .iframe-container { width: 100%; height: 100%; display: none; flex-direction: column; }
+        iframe { flex: 1; width: 100%; border: none; border-radius: 12px; background: white; box-shadow: var(--shadow-md); }
 
-.events-container {
-    background-color: rgba(224, 242, 254, 0.8);
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    color: #1e3a8a;
-}
+        /* Mobile */
+        .mobile-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 45; 
+            opacity: 0; pointer-events: none; transition: 0.3s;
+        }
+        .mobile-overlay.active { opacity: 1; pointer-events: auto; }
 
-.events-container .event-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
-}
-
-.events-container .view-more-btn {
-    background-color: #1e3a8a;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    padding: 5px 10px;
-    font-size: 12px;
-    cursor: pointer;
-}
-
-.events-container .view-more-btn:hover {
-    background-color: #2563eb;
-}
-
-.event-details {
-    display: none;
-    color: #1e3a8a;
-    font-size: 14px;
-    margin-top: 5px;
-}
-
-/* Google Sheets and Forms Preview */
-.iframe-container {
-    display: none;
-    width: 100%;
-    height: 800px; /* Adjust as needed */
-    margin: 0; /* Ensure no margin */
-    padding: 0; /* Ensure no padding */
-    background-color: #ffffff;
-    border: 1px solid #e0e0e0;
-    border-radius: 10px;
-    overflow: hidden; /* Ensure no overflow */
-}
-
-iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    margin: 0; /* Ensure no margin */
-    padding: 0; /* Ensure no padding */
-}
-
-/* Footer */
-.footer {
-    background-color: #e0f2fe;
-    color: #1e3a8a;
-    padding: 15px;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    border-radius: 8px;
-    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
-    margin-top: auto;
-}
-
-.footer i {
-    font-size: 24px;
-    color: #1e3a8a;
-    cursor: pointer;
-    transition: color 0.3s;
-}
-
-.footer i:hover {
-    color: #2563eb;
-}
-
-/* YouTube Channel Preview */
-.youtube-preview {
-    background-color: rgba(224, 242, 254, 0.8);
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    color: #1e3a8a;
-}
-
-.youtube-thumbnail {
-    width: 150px;
-    height: 85px;
-    border-radius: 5px;
-    overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.youtube-thumbnail img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.youtube-text {
-    font-size: 16px;
-}
-
-.youtube-link {
-    color: #2563eb;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.youtube-link:hover {
-    text-decoration: underline;
-}
-
-/* Search Bar at the Top Center */
-.search-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    padding: 15px;
-    background-color: #f0f4f8;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
-
-.search-select,
-.search-input,
-.search-button {
-    padding: 8px;
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
-}
-
-.search-button {
-    background-color: #1e3a8a;
-    color: #ffffff;
-    border: none;
-    cursor: pointer;
-}
-
-.search-button:hover {
-    background-color: #2563eb;
-}
-
-/* Search Results in Dashboard */
-.dashboard-search-results {
-    background-color: #ffffff;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    display: none;
-    flex-direction: column;
-}
-
-.result-item {
-    padding: 10px;
-    border-bottom: 1px solid #e0e0e0;
-    margin-bottom: 10px;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .sidebar {
-        width: 100px;
-    }
-
-    .main-content {
-        margin-left: 100px;
-    }
-
-    .sidebar.collapsed + .main-content {
-        margin-left: 0;
-    }
-
-    .search-wrapper {
-        flex-direction: column;
-        padding: 10px;
-    }
-
-    .menu-text {
-        display: none;
-    }
-}
-</style>
+        @media (min-width: 1024px) { .date-badge { display: block; } }
+        @media (max-width: 768px) {
+            .sidebar { position: fixed; transform: translateX(-100%); height: 100%; width: 260px; }
+            .sidebar.mobile-open { transform: translateX(0); }
+            .toggle-btn { display: none; }
+            .header { padding: 0 15px; height: 120px; flex-direction: column; align-items: flex-start; justify-content: center; gap: 10px; }
+            .header-left { max-width: 100%; }
+            .action-area { width: 100%; justify-content: space-between; }
+        }
+    </style>
 </head>
-
 <body>
 
-  <!-- Sidebar -->
-<div class="sidebar" id="sidebar">
-    <i class="fas fa-angle-double-left sidebar-toggle-icon" onclick="toggleSidebar(event)"></i>
-    <h2>Church Database</h2>
+    <!-- Mobile Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay" onclick="closeMobileMenu()"></div>
 
-    <div class="menu-item" onclick="showDashboard()">
-        <i class="fas fa-home menu-icon"></i>
-        <span class="menu-text">Home</span>
-    </div>
-
-    <!-- Dropdown for Member Information -->
-    <div class="menu-item dropdown" onclick="toggleDropdown(this)">
-        <i class="fas fa-users menu-icon"></i>
-        <span class="menu-text">Member Information</span>
-        <i class="fas fa-chevron-down" style="margin-left:auto;"></i>
-        <div class="dropdown-content">
-            <a href="#" onclick="loadIframe('1SJbYa_hXpk13CB2_LPpqqkFvLpmnsqmcdqTRdxRx-pM')">Members</a>
-            <a href="#" onclick="loadIframe('1qmNa3xSgbd1bda1TPIBR6bLpM2vEKUdG354t6eNjwn8')">G12 Leaders</a>
-            <a href="#" onclick="loadIframe('1KXsEmYhnLZyKd-QkXoFfXtiAhDkmGRdz5MTpVj1bTSk')">Care Takers</a>
-            <a href="#" onclick="loadIframe('1uZ4OObFNjPcIWtoN2y0aFxWI_M6pMWQcYk2ScHtmVhI')">New Members</a>
-            <a href="#" onclick="loadIframe('1-1Xh8pgV3HenXDxogyjemY4cyFQwyXmrXbRqCRjae9Q')">Sunday School Children</a>
-            <a href="#" onclick="loadIframe('11dV8TY-u4Ciicb20f6G0BTuo8PwyGS1AjzVFm4hM-l0')">Ministry and Department</a>
-            <a href="#" onclick="loadIframe('15X9hDFlPWqHThNPRSyo3BUM4Xas9aDDQWhjS28uIvwc')">''Jeewanayatamaga''lesson Teachers</a>
-            <a href="#" onclick="loadIframe('16bkO0efSHKMjzmomtXgVxcubAQyNLvGfn6qXOm1H8Gs')">New Sunday School Childern</a>
-            <a href="#" onclick="loadIframe('1eOZPeAZA8Fk_cES7WiIZPWJoZNTyXDB9_zT4ZW6-Vdo')">Summery</a>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="toggle-btn" onclick="toggleSidebar()">
+            <i class="fas fa-chevron-left" id="toggleIcon"></i>
         </div>
-    </div>
 
-    <!-- Dropdown for Member Forms -->
-    <div class="menu-item dropdown" onclick="toggleDropdown(this)">
-        <i class="fas fa-file-alt menu-icon"></i>
-        <span class="menu-text">Member Forms</span>
-        <i class="fas fa-chevron-down" style="margin-left:auto;"></i>
-        <div class="dropdown-content">
-            <a href="#" onclick="loadIframe('https://docs.google.com/forms/d/e/1FAIpQLSe2ArNUik_Yz6JBEKa6cxu0MfomUnxDIo90B1odJx1aIzXG6Q/viewform?usp=sf_link')">G12 Leader</a>
-            <a href="#" onclick="loadIframe('https://docs.google.com/forms/d/e/1FAIpQLSfQy2X28Tl9a1lisaKB_s16ZIJEbfsQYZx1YyM4XQS2wo-1Lg/viewform?usp=sf_link')">Care Taker</a>
-            <a href="#" onclick="loadIframe('https://docs.google.com/forms/d/e/1FAIpQLSdH0LFKpdyt7MEaqv5jhGStwS41r2TzguYsznVuHUKpSO55jQ/viewform?usp=sf_link')">Member</a>
-            <a href="#" onclick="loadIframe('https://docs.google.com/forms/d/e/1FAIpQLSdufVLXLZ6zCeU2whVZJ-a4xJHrQBVxVmayxL4O69G4cRHklA/viewform?usp=sf_link')">New Member</a>
-            <a href="#" onclick="loadIframe('https://docs.google.com/forms/d/e/1FAIpQLSc07aL387LEiyr3-3grlT98NjZmnXnppqHfNZfJYlsATO22tA/viewform?usp=sf_link')">Sunday School Children</a>
-            <a href="#" onclick="loadIframe('https://docs.google.com/forms/d/e/1FAIpQLSfZVcJSPOOsEfsN3tgfeIzZk7794eO4hNyj2kcMoc4hNw3uOA/viewform?usp=sf_link')">Ministry and Department</a>
-             <a href="#" onclick="loadIframe('https://docs.google.com/forms/d/e/1FAIpQLScRWShUPDHXYk5qed7R3uAggYhdTvPXpD69wJ003Z6hlFlfRg/viewform?usp=dialog')">''Jeewanayatamaga''lesson Teachers</a>
-            <a href="#" onclick="loadIframe('https://docs.google.com/forms/d/e/1FAIpQLScFwt36zyTN5W87MXGYFziaTXKqPqfvYfKb5WcZ51JONc99Hw/viewform?usp=sharing')">New Sunday School Childerns</a>
+        <div class="logo-area">
+            <div style="width: 32px; height: 32px; background: var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white;">
+                <i class="fas fa-church"></i>
+            </div>
+            <div class="logo-text">CHURCH DB</div>
         </div>
-    </div>
 
-    <div class="menu-item" onclick="loadAboutPage()">
-        <i class="fas fa-info-circle menu-icon"></i>
-        <span class="menu-text">About</span>
-    </div>
+        <div class="menu-items">
+            <div class="menu-label">Main</div>
+            <div class="nav-item active" onclick="showDashboard()">
+                <div class="nav-icon"><i class="fas fa-th-large"></i></div>
+                <div class="nav-text">Dashboard</div>
+            </div>
 
-    <div class="menu-item" onclick="window.location.href='#'">
-        <i class="fas fa-phone menu-icon"></i>
-        <span class="menu-text">Contact Us</span>
-    </div>
-</div>
+            <!-- REGISTRATION FORMS -->
+            <div class="menu-label">Registration</div>
+            <div id="formsMenuList"></div>
 
-<!-- Main Content -->
-<div class="main-content" id="mainContent">
-    <!-- Search Wrapper at the Top Middle of Dashboard -->
-    <div class="search-wrapper">
-        <input type="text" id="searchInput" class="search-input" placeholder="Enter a name to search..." />
-        <button onclick="performSearch()" class="search-button">Search</button>
-    </div>
+            <!-- DATABASES -->
+            <div class="menu-label">Databases</div>
+            <div id="dbMenuList"></div>
+        </div>
+    </aside>
 
-    <!-- Search Results Area in Dashboard -->
-    <div id="dashboardSearchResults" class="dashboard-search-results">
-        <h2>Search Results</h2>
-        <div id="searchResultsContainer"></div>
-    </div>
-
-    <!-- Other Dashboard Content -->
-    <div class="dashboard-container" id="dashboardContainer">
-        <div class="welcome">Welcome to the Church Database Dashboard!</div>
-        <div class="countdown-container">
-            <div class="countdown-title">Upcoming Event: Sunday Sabbath service</div>
-            <div class="countdown" id="countdown">
-                <div>
-                    <span id="days">0</span>
-                    <div class="countdown-label">Days</div>
+    <!-- Main Layout -->
+    <div class="main-content">
+        <!-- Top Header -->
+        <header class="header">
+            <div class="header-left">
+                <div style="display:flex; align-items:center; gap:15px; width:100%;">
+                    <i class="fas fa-bars" style="font-size:20px; color:#64748b; cursor:pointer; display:none;" id="mobileMenuBtn" onclick="openMobileMenu()"></i>
+                    
+                    <div class="search-wrapper">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" id="searchInput" class="search-input" 
+                               placeholder="Type to search (e.g. 'Male, Dambulla')..." 
+                               onkeyup="handleSearch(event)">
+                    </div>
                 </div>
-                <div>
-                    <span id="hours">0</span>
-                    <div class="countdown-label">Hours</div>
+                <!-- Tags display below search -->
+                <div id="tagDisplay" class="tags-row"></div>
+            </div>
+            
+            <div class="action-area">
+                <div class="date-badge" id="dateDisplay"></div>
+                <button id="downloadBtn" class="btn" style="display:none;" onclick="downloadSummary()">
+                    <i class="fas fa-file-pdf"></i> PDF Report
+                </button>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <div class="scroll-area">
+            
+            <!-- 1. DASHBOARD VIEW -->
+            <div id="dashboardView">
+                <div class="welcome-banner">
+                    <h1>Welcome Back! 👋</h1>
+                    <p>Manage your church community effectively. Search across all 9 databases, view member details, or register new members using the Google Forms.</p>
                 </div>
-                <div>
-                    <span id="minutes">0</span>
-                    <div class="countdown-label">Minutes</div>
-                </div>
-                <div>
-                    <span id="seconds">0</span>
-                    <div class="countdown-label">Seconds</div>
+
+                <h3 style="margin-bottom:20px; font-weight:600; color:var(--text-main);">Quick Actions</h3>
+                <div class="quick-grid" id="quickAccessGrid">
+                    <!-- Populated by JS -->
                 </div>
             </div>
-        </div>
 
-        <!-- More Coming Events -->
-        <div class="events-container">
-            <h3>More Coming Events</h3>
-            <div class="event-item">
-                <span>08 Nov - Evening Prayer</span>
-                <button class="view-more-btn" onclick="toggleDetails(this, 'details1')">View More</button>
-            </div>
-            <div id="details1" class="event-details">
-                Join us for an evening prayer session at 6 PM. This is a time for quiet reflection and spiritual connection.
-            </div>
-            <div class="event-item">
-                <span>11 Nov - Monday Prayer</span>
-                <button class="view-more-btn" onclick="toggleDetails(this, 'details2')">View More</button>
-            </div>
-            <div id="details2" class="event-details">
-                Our weekly Monday prayer service, starting at 7 PM. Join us to strengthen your faith with community support.
-            </div>
-            <div class="event-item">
-                <span>18 Nov - Monday Prayer</span>
-                <button class="view-more-btn" onclick="toggleDetails(this, 'details3')">View More</button>
-            </div>
-            <div id="details3" class="event-details">
-                Another Monday prayer session focusing on gratitude and peace. It begins at 7 PM in the main hall.
-            </div>
-            <div class="event-item">
-                <span>25 Nov - Monday Prayer</span>
-                <button class="view-more-btn" onclick="toggleDetails(this, 'details4')">View More</button>
-            </div>
-            <div id="details4" class="event-details">
-                Join our last Monday prayer of the month at 7 PM. A time to reflect and seek blessings for the upcoming month.
-            </div>
-        </div>
+            <!-- 2. SEARCH RESULTS VIEW -->
+            <div id="searchResultsView" style="display:none;">
+                
+                <!-- Stats Bar -->
+                <div class="stats-bar" id="statsBar"></div>
 
-        <!-- YouTube Channel Preview -->
-        <div class="youtube-preview">
-            <div class="youtube-thumbnail">
-                <a href="https://www.youtube.com/@pottershouseaogkurunegala725" target="_blank">
-                    <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg" alt="YouTube Thumbnail">
-                </a>
-            </div>
-            <div class="youtube-text">
-                <p>Watch the latest sermon on our YouTube channel!</p>
-                <a href="https://www.youtube.com/@pottershouseaogkurunegala725" class="youtube-link" target="_blank">Visit Potter's House AOG Kurunegala</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Google Sheets and Forms Preview Container -->
-    <div class="iframe-container" id="iframeContainer">
-        <iframe id="sheetIframe" src=""></iframe>
-    </div>
-
-    <!--!> Updated Section: About Page Container -->
-   <div class="about-content" id="aboutPageContainer" style="display: none;">
-        <h2>About Church Database</h2>
-        <p>This is the Church Database Dashboard, designed to help manage and organize church-related information efficiently. It includes features for managing member information, forms, and upcoming events.</p>
-    
-        <h3>Church Details</h3>
-        <p><strong>Church Name:</strong> Potter's House AOG - Kurunegala</p>
-        <p><strong>Senior Pastor's Name:</strong> Rev. Anura Dharmakirti</p>
-        <p><strong>Address:</strong> Welangolle Watta, Yanthamplve, Kurunegala</p>
-        <p><strong>Tele No:</strong> 077 303 1335</p>
-    
-        <!-- Pastor and Assistant Pastors Photos -->
-        <div class="pastors-info" style="text-align: center; margin-top: 20px;">
-            <!-- Senior Pastor -->
-            <div class="pastor-info" style="display: inline-block; margin: 0 10px;">
-                <h4 style="background-color: #1e3a8a; color: #ffffff; padding: 10px; border-radius: 8px;">
-                    Senior Pastor: Rev. Anura Dharmakirti
-                </h4>
-                <div class="pastor-image" style="margin-top: 10px;">
-                    <img src="WhatsApp Image 2025-02-22 at 9.54.41 AM.jpeg" alt="Rev. Anura Dharmakirti" style="width: 150px; height: auto; border-radius: 8px; border: 3px solid #1e3a8a;">
+                <div id="loader" style="text-align:center; padding:40px; display:none;">
+                    <i class="fas fa-circle-notch fa-spin" style="font-size:30px; color:var(--primary);"></i>
+                    <p style="margin-top:15px; color:var(--text-light);">Scanning databases...</p>
                 </div>
+
+                <!-- Grid of Cards -->
+                <div id="resultsGrid" class="results-grid"></div>
             </div>
-    
-            <!-- Assistant Pastor 1 -->
-            <div class="pastor-info" style="display: inline-block; margin: 0 10px;">
-                <h4 style="background-color: #1e3a8a; color: #ffffff; padding: 10px; border-radius: 8px;">
-                    Asst. Pastor: Ps. Jeewanthi Wijesinghe
-                </h4>
-                <div class="pastor-image" style="margin-top: 10px;">
-                    <img src="pastor_jeewanthi.jpg" alt="Ps. Jeewanthi Wijesinghe" style="width: 150px; height: auto; border-radius: 8px; border: 3px solid #1e3a8a;">
+
+            <!-- 3. IFRAME VIEW (Sheets & Forms) -->
+            <div id="iframeView" class="iframe-container">
+                <div style="display:flex; justify-content:space-between; margin-bottom:15px; align-items:center;">
+                    <h2 id="sheetTitle" style="font-size:18px; font-weight:700;">Database View</h2>
+                    <a id="extLink" href="#" target="_blank" style="color:var(--primary); font-size:14px; text-decoration:none; font-weight:500; background:white; padding:8px 15px; border-radius:8px; border:1px solid #e2e8f0;">
+                        Open in New Tab <i class="fas fa-external-link-alt" style="margin-left:5px;"></i>
+                    </a>
                 </div>
+                <iframe id="sheetFrame" src=""></iframe>
             </div>
-    
-            <!-- Assistant Pastor 2 -->
-            <div class="pastor-info" style="display: inline-block; margin: 0 10px;">
-                <h4 style="background-color: #1e3a8a; color: #ffffff; padding: 10px; border-radius: 8px;">
-                    Asst. Pastor: Ps. Thilini Wijesinghe
-                </h4>
-                <div class="pastor-image" style="margin-top: 10px;">
-                    <img src="pastor_thilini.jpg" alt="Ps. Thilini Wijesinghe" style="width: 150px; height: auto; border-radius: 8px; border: 3px solid #1e3a8a;">
-                </div>
-            </div>
+
         </div>
-    
-        <h3>Branch Churches Information</h3>
-    
-        <!-- Branch 1 -->
-        <div class="branch-info">
-            <h4>Branch 1</h4>
-            <p><strong>Country:</strong> USA (California)</p>
-            <p><strong>Church Name:</strong> Sri Lankan Church - Covina, USA</p>
-            <p><strong>Senior Pastor's Name:</strong> Pastor Kanthi Wijesinghe</p>
-            <p><strong>Asst. Pastor's Name:</strong> Ps. Jeewanthi Wijesinghe</p>
-            <p><strong>Asst. Pastor's Name:</strong> Ps. Thilini Wijesinghe</p>
-        </div>
-    
-        <!-- Branch 2 -->
-        <div class="branch-info">
-            <h4>Branch 2</h4>
-            <p><strong>Country:</strong> Israel</p>
-            <p><strong>Church Name:</strong> Sri Lankan Church - Nathaniya, Israel</p>
-            <p><strong>Coordinator:</strong> Sis Kumari Herath</p>
-        </div>
-    
-        <p>For more information, please contact us at </p>
     </div>
-    <!-- Footer -->
-    <div class="footer">
-        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
-        <a href="https://wa.me" target="_blank"><i class="fab fa-whatsapp"></i></a>
-        <a href="https://youtube.com" target="_blank"><i class="fab fa-youtube"></i></a>
-    </div>
-</div>
 
-<script>
-    const API_KEY = 'AIzaSyAN__grGh5cmthJLKJST_NLz7kZWUJ0h1k';
-    const SHEET_IDS = [
-        '1SJbYa_hXpk13CB2_LPpqqkFvLpmnsqmcdqTRdxRx-pM', // Members
-        '1qmNa3xSgbd1bda1TPIBR6bLpM2vEKUdG354t6eNjwn8', // G12 Leaders
-        '1KXsEmYhnLZyKd-QkXoFfXtiAhDkmGRdz5MTpVj1bTSk', // Care Takers
-        '1uZ4OObFNjPcIWtoN2y0aFxWI_M6pMWQcYk2ScHtmVhI', // New Members
-        '1-1Xh8pgV3HenXDxogyjemY4cyFQwyXmrXbRqCRjae9Q', // Sunday School Children
-        '11dV8TY-u4Ciicb20f6G0BTuo8PwyGS1AjzVFm4hM-l0', // Ministry and Department
-        '15X9hDFlPWqHThNPRSyo3BUM4Xas9aDDQWhjS28uIvwc', // Jeewanayatamaga lesson Teachers
-        '16bkO0efSHKMjzmomtXgVxcubAQyNLvGfn6qXOm1H8Gs'  // New Sunday School Children
-    ];
+    <script>
+        // CONFIGURATION
+        const API_KEY = 'AIzaSyAN__grGh5cmthJLKJST_NLz7kZWUJ0h1k';
+        
+        const FORMS = [
+            { name: "G12 Leader", url: "https://docs.google.com/forms/d/e/1FAIpQLSe2ArNUik_Yz6JBEKa6cxu0MfomUnxDIo90B1odJx1aIzXG6Q/viewform?embedded=true" },
+            { name: "Care Taker", url: "https://docs.google.com/forms/d/e/1FAIpQLSfQy2X28Tl9a1lisaKB_s16ZIJEbfsQYZx1YyM4XQS2wo-1Lg/viewform?embedded=true" },
+            { name: "Member", url: "https://docs.google.com/forms/d/e/1FAIpQLSdH0LFKpdyt7MEaqv5jhGStwS41r2TzguYsznVuHUKpSO55jQ/viewform?embedded=true" },
+            { name: "New Member", url: "https://docs.google.com/forms/d/e/1FAIpQLSdufVLXLZ6zCeU2whVZJ-a4xJHrQBVxVmayxL4O69G4cRHklA/viewform?embedded=true" },
+            { name: "Sunday School", url: "https://docs.google.com/forms/d/e/1FAIpQLSc07aL387LEiyr3-3grlT98NjZmnXnppqHfNZfJYlsATO22tA/viewform?embedded=true" },
+            { name: "Ministry", url: "https://docs.google.com/forms/d/e/1FAIpQLSfZVcJSPOOsEfsN3tgfeIzZk7794eO4hNyj2kcMoc4hNw3uOA/viewform?embedded=true" }
+        ];
 
-    async function performSearch() {
-        const query = document.getElementById('searchInput').value.toLowerCase();
-        const dashboardSearchResults = document.getElementById('dashboardSearchResults');
-        const searchResultsContainer = document.getElementById('searchResultsContainer');
+        const DATABASES = [
+            { id: '1SJbYa_hXpk13CB2_LPpqqkFvLpmnsqmcdqTRdxRx-pM', name: 'Members', icon: 'fa-users', color: '#4f46e5' },
+            { id: '1qmNa3xSgbd1bda1TPIBR6bLpM2vEKUdG354t6eNjwn8', name: 'G12 Leaders', icon: 'fa-crown', color: '#ea580c' },
+            { id: '1KXsEmYhnLZyKd-QkXoFfXtiAhDkmGRdz5MTpVj1bTSk', name: 'Care Takers', icon: 'fa-hand-holding-heart', color: '#db2777' },
+            { id: '1uZ4OObFNjPcIWtoN2y0aFxWI_M6pMWQcYk2ScHtmVhI', name: 'New Members', icon: 'fa-user-plus', color: '#16a34a' },
+            { id: '1-1Xh8pgV3HenXDxogyjemY4cyFQwyXmrXbRqCRjae9Q', name: 'Sunday School', icon: 'fa-child', color: '#ca8a04' },
+            { id: '11dV8TY-u4Ciicb20f6G0BTuo8PwyGS1AjzVFm4hM-l0', name: 'Ministry Dept', icon: 'fa-building', color: '#0891b2' },
+            { id: '15X9hDFlPWqHThNPRSyo3BUM4Xas9aDDQWhjS28uIvwc', name: 'Teachers', icon: 'fa-chalkboard-teacher', color: '#7c3aed' },
+            { id: '16bkO0efSHKMjzmomtXgVxcubAQyNLvGfn6qXOm1H8Gs', name: 'New Kids', icon: 'fa-baby', color: '#be123c' },
+            { id: '1eOZPeAZA8Fk_cES7WiIZPWJoZNTyXDB9_zT4ZW6-Vdo', name: 'Summary Stats', icon: 'fa-chart-pie', color: '#2563eb' }
+        ];
 
-        // Clear previous search results
-        searchResultsContainer.innerHTML = '';
+        // STATE
+        let searchTimeout;
+        let activeTags = [];
+        let searchResults = [];
+        let statsCounts = {};
+        let totalRecords = 0;
 
-        if (!query) {
-            dashboardSearchResults.style.display = "none";
-            return;
-        }
-
-        let allResults = [];
-
-        // Fetch data from all Google Sheets
-        for (const sheetId of SHEET_IDS) {
-            const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/Form responses 1?key=${API_KEY}`;
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
-
-                if (data.error) {
-                    console.error(`Error fetching data from sheet ${sheetId}:`, data.error.message);
-                    continue;
-                }
-
-                const headers = data.values[0]; // Header row
-                const rows = data.values.slice(1); // Data rows
-                const filteredResults = rows.filter(row => row.some(cell => cell.toLowerCase().includes(query)));
-
-                if (filteredResults.length > 0) {
-                    filteredResults.forEach(row => {
-                        const resultDiv = document.createElement('div');
-                        resultDiv.classList.add('result-item');
-                        row.forEach((cell, index) => {
-                            const cellDiv = document.createElement('div');
-                            cellDiv.innerHTML = `<strong>${headers[index]}:</strong> ${cell}`;
-                            resultDiv.appendChild(cellDiv);
-                        });
-                        allResults.push(resultDiv);
-                    });
-                }
-            } catch (error) {
-                console.error(`Error fetching data from sheet ${sheetId}:`, error);
+        // INIT
+        window.onload = () => {
+            renderSidebar();
+            renderDashboard();
+            updateDate();
+            
+            // Mobile check
+            if(window.innerWidth <= 768) {
+                document.getElementById('mobileMenuBtn').style.display = 'block';
             }
+        };
+
+        function updateDate() {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('dateDisplay').textContent = new Date().toLocaleDateString('en-US', options);
         }
 
-        if (allResults.length === 0) {
-            searchResultsContainer.innerHTML = `<div class='no-results'>No results found for '${query}'.</div>`;
-        } else {
-            allResults.forEach(result => searchResultsContainer.appendChild(result));
+        // RENDERERS
+        function renderSidebar() {
+            // Render Databases
+            const dbContainer = document.getElementById('dbMenuList');
+            dbContainer.innerHTML = DATABASES.map(db => `
+                <div class="nav-item" onclick="loadSheet('${db.id}', '${db.name}')">
+                    <div class="nav-icon"><i class="fas ${db.icon}"></i></div>
+                    <div class="nav-text">${db.name}</div>
+                </div>
+            `).join('');
+
+            // Render Forms
+            const formContainer = document.getElementById('formsMenuList');
+            formContainer.innerHTML = FORMS.map(form => `
+                <div class="nav-item" onclick="loadForm('${form.url}', '${form.name}')">
+                    <div class="nav-icon" style="color:#f43f5e;"><i class="fas fa-file-alt"></i></div>
+                    <div class="nav-text">${form.name} Form</div>
+                </div>
+            `).join('');
         }
-        dashboardSearchResults.style.display = "block"; // Show results section
-    }
 
-    function toggleDropdown(element) {
-         element.classList.toggle("active");
-     }
- 
-     function toggleSidebar(event) {
-         event.stopPropagation();
-         const sidebar = document.getElementById('sidebar');
-         sidebar.classList.toggle('collapsed');
-         
-         // Close all dropdowns if sidebar is collapsed
-         if (sidebar.classList.contains('collapsed')) {
-             document.querySelectorAll('.dropdown').forEach(dropdown => {
-                 dropdown.classList.remove("active");
-             });
-         }
-     }
- 
-     function loadIframe(sheetId) {
-         const iframeUrl = sheetId.startsWith("http") 
-             ? sheetId 
-             : `https://docs.google.com/spreadsheets/d/${sheetId}/edit?rm=minimal`;
-         document.getElementById("sheetIframe").src = iframeUrl;
-         document.getElementById("dashboardContainer").style.display = "none";
-         document.getElementById("iframeContainer").style.display = "block";
-         document.getElementById("aboutPageContainer").style.display = "none"; //!> Hide About Page
-     }
- 
-     function showDashboard() {
-         document.getElementById("dashboardContainer").style.display = "block";
-         document.getElementById("iframeContainer").style.display = "none";
-         document.getElementById("aboutPageContainer").style.display = "none"; //!> Hide About Page
-     }
+        function renderDashboard() {
+            const container = document.getElementById('quickAccessGrid');
+            const dbsHtml = DATABASES.map(db => `
+                <div class="quick-card" onclick="loadSheet('${db.id}', '${db.name}')">
+                    <div class="icon-box" style="color:${db.color}; background:${db.color}15">
+                        <i class="fas ${db.icon}"></i>
+                    </div>
+                    <div class="qc-title">${db.name}</div>
+                    <div class="qc-desc">View Records</div>
+                </div>
+            `).join('');
+            container.innerHTML = dbsHtml;
+        }
 
-     //!> Updated Section: Function to load About Page
-     function loadAboutPage() {
-         document.getElementById("dashboardContainer").style.display = "none";
-         document.getElementById("iframeContainer").style.display = "none";
-         document.getElementById("aboutPageContainer").style.display = "block"; //!> Show About Page
-     }
- 
-     // Countdown Timer
-     function startCountdown(eventDate) {
-         function updateCountdown() {
-             const now = new Date().getTime();
-             const timeRemaining = eventDate - now;
- 
-             const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-             const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-             const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-             const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
- 
-             document.getElementById("days").textContent = days;
-             document.getElementById("hours").textContent = hours;
-             document.getElementById("minutes").textContent = minutes;
-             document.getElementById("seconds").textContent = seconds;
- 
-             if (timeRemaining < 0) {
-                 clearInterval(timer);
-                 document.getElementById("countdown").innerHTML = "<div>Event Started</div>";
-             }
-         }
- 
-         updateCountdown();
-         const timer = setInterval(updateCountdown, 1000);
-     }
- 
-     const eventDate = new Date("November 10, 2024 8:00:00").getTime();
-     startCountdown(eventDate);
- 
-     function toggleDetails(button, detailsId) {
-         const details = document.getElementById(detailsId);
-         const isVisible = details.style.display === "block";
- 
-         document.querySelectorAll('.event-details').forEach(detail => {
-             detail.style.display = 'none';
-         });
- 
-         details.style.display = isVisible ? "none" : "block";
-         button.textContent = isVisible ? "View More" : "View Less";
-     }
-     showDashboard(); // Initialize with the dashboard view
-</script>
+        // LOGIC
+        function toggleSidebar() {
+            const sb = document.getElementById('sidebar');
+            const icon = document.getElementById('toggleIcon');
+            sb.classList.toggle('collapsed');
+            icon.className = sb.classList.contains('collapsed') ? 'fas fa-chevron-right' : 'fas fa-chevron-left';
+        }
+
+        function openMobileMenu() {
+            document.getElementById('sidebar').classList.add('mobile-open');
+            document.getElementById('mobileOverlay').classList.add('active');
+        }
+
+        function closeMobileMenu() {
+            document.getElementById('sidebar').classList.remove('mobile-open');
+            document.getElementById('mobileOverlay').classList.remove('active');
+        }
+
+        function showDashboard() {
+            hideAll();
+            document.getElementById('dashboardView').style.display = 'block';
+            resetNav();
+            document.querySelector('.menu-items .nav-item').classList.add('active');
+        }
+
+        function loadForm(url, name) {
+            hideAll();
+            document.getElementById('iframeView').style.display = 'flex';
+            document.getElementById('sheetTitle').textContent = `Register: ${name}`;
+            document.getElementById('extLink').href = url;
+            document.getElementById('extLink').innerHTML = 'Open Form <i class="fas fa-external-link-alt" style="margin-left:5px;"></i>';
+            document.getElementById('sheetFrame').src = url;
+            closeMobileMenu();
+        }
+
+        function loadSheet(id, name) {
+            hideAll();
+            document.getElementById('iframeView').style.display = 'flex';
+            document.getElementById('sheetTitle').textContent = name;
+            document.getElementById('extLink').href = `https://docs.google.com/spreadsheets/d/${id}/edit`;
+            document.getElementById('extLink').innerHTML = 'Open Sheet <i class="fas fa-external-link-alt" style="margin-left:5px;"></i>';
+            document.getElementById('sheetFrame').src = `https://docs.google.com/spreadsheets/d/${id}/edit?rm=minimal`;
+            closeMobileMenu();
+        }
+
+        function hideAll() {
+            document.getElementById('dashboardView').style.display = 'none';
+            document.getElementById('searchResultsView').style.display = 'none';
+            document.getElementById('iframeView').style.display = 'none';
+            document.getElementById('downloadBtn').style.display = 'none';
+        }
+
+        function resetNav() {
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        }
+
+        // --- SEARCH FUNCTIONALITY (IMPROVED) ---
+        function handleSearch(e) {
+            clearTimeout(searchTimeout);
+            const val = e.target.value;
+            
+            // Render tags
+            activeTags = val.toLowerCase().split(/[ ,]+/).filter(x => x);
+            document.getElementById('tagDisplay').innerHTML = activeTags.map(tag => 
+                `<span class="tag-pill"><i class="fas fa-tag"></i> ${tag}</span>`
+            ).join('');
+
+            if(!val) {
+                showDashboard();
+                return;
+            }
+            searchTimeout = setTimeout(() => performSearch(val), 600);
+        }
+
+        async function performSearch(query) {
+            hideAll();
+            document.getElementById('searchResultsView').style.display = 'block';
+            document.getElementById('loader').style.display = 'block';
+            document.getElementById('resultsGrid').innerHTML = '';
+            document.getElementById('statsBar').innerHTML = '';
+
+            searchResults = [];
+            statsCounts = {};
+            totalRecords = 0;
+
+            const promises = DATABASES.map(async (db) => {
+                try {
+                    let url = `https://sheets.googleapis.com/v4/spreadsheets/${db.id}/values/Form responses 1?key=${API_KEY}`;
+                    let res = await fetch(url);
+                    if(!res.ok) {
+                        url = `https://sheets.googleapis.com/v4/spreadsheets/${db.id}/values/Sheet1?key=${API_KEY}`;
+                        res = await fetch(url);
+                    }
+                    const json = await res.json();
+                    if(!json.values) return;
+
+                    const headers = json.values[0];
+                    const rows = json.values.slice(1);
+
+                    rows.forEach(row => {
+                        const rowStr = row.join(' ').toLowerCase();
+                        let matches = 0;
+                        
+                        // *** EXACT MATCH LOGIC FOR "MALE" ***
+                        activeTags.forEach(tag => {
+                            if (tag === 'male') {
+                                // Use regex boundaries \b to ensure it's a whole word
+                                // This prevents "female" from matching "male"
+                                const regex = new RegExp(`\\b${tag}\\b`, 'i');
+                                if (regex.test(rowStr)) matches++;
+                            } else {
+                                // Default includes check for other words
+                                if (rowStr.includes(tag)) matches++;
+                            }
+                        });
+
+                        if(matches > 0) {
+                            searchResults.push({
+                                dbName: db.name,
+                                icon: db.icon,
+                                data: row,
+                                headers: headers,
+                                score: matches
+                            });
+                            statsCounts[db.name] = (statsCounts[db.name] || 0) + 1;
+                            totalRecords++;
+                        }
+                    });
+
+                } catch(e) { console.error(e); }
+            });
+
+            await Promise.all(promises);
+
+            // Sort & Render
+            searchResults.sort((a,b) => b.score - a.score);
+            renderResults();
+        }
+
+        function renderResults() {
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('downloadBtn').style.display = 'inline-flex';
+
+            // Stats Bar
+            let statsHtml = `<div class="stat-badge total">Total Found <span class="count-bubble">${totalRecords}</span></div>`;
+            for(const [name, count] of Object.entries(statsCounts)) {
+                statsHtml += `<div class="stat-badge">${name} <span class="count-bubble">${count}</span></div>`;
+            }
+            document.getElementById('statsBar').innerHTML = statsHtml;
+
+            if(totalRecords === 0) {
+                document.getElementById('resultsGrid').innerHTML = `
+                    <div style="text-align:center; padding:40px; color:#9ca3af; grid-column:1/-1;">
+                        <i class="fas fa-search" style="font-size:40px; margin-bottom:15px; opacity:0.3;"></i>
+                        <p>No matching records found.</p>
+                    </div>`;
+                return;
+            }
+
+            const html = searchResults.map(item => {
+                const matchPct = Math.round((item.score / activeTags.length) * 100);
+                const badge = matchPct === 100 ? 'PERFECT MATCH' : 'MATCH';
+                
+                let rowsHtml = '';
+                let count = 0;
+                item.data.forEach((cell, i) => {
+                    if(cell && count < 6 && item.headers[i]) {
+                        // Highlight Logic
+                        let val = cell.toString();
+                        activeTags.forEach(tag => {
+                            // Only highlight exact matches for 'male'
+                            let reg;
+                            if(tag === 'male') {
+                                reg = new RegExp(`\\b(${tag})\\b`, 'gi');
+                            } else {
+                                reg = new RegExp(`(${tag})`, 'gi');
+                            }
+                            val = val.replace(reg, `<span class="highlight">$1</span>`);
+                        });
+                        
+                        rowsHtml += `
+                            <div class="data-row">
+                                <div class="data-label">${item.headers[i]}:</div>
+                                <div class="data-val">${val}</div>
+                            </div>
+                        `;
+                        count++;
+                    }
+                });
+
+                return `
+                    <div class="result-card">
+                        <div class="match-badge" style="background:${matchPct===100?'#dcfce7':'#fef9c3'}; color:${matchPct===100?'#15803d':'#a16207'}">${badge}</div>
+                        <div class="card-header">
+                            <i class="fas ${item.icon}"></i> ${item.dbName}
+                        </div>
+                        ${rowsHtml}
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('resultsGrid').innerHTML = html;
+        }
+
+        // PDF GENERATION (SUMMARY ONLY)
+        function downloadSummary() {
+            const timestamp = new Date().toLocaleString();
+            const tags = activeTags.join(', ');
+
+            let html = `
+                <div style="font-family: Arial, sans-serif; padding: 40px; color: #333;">
+                    <div style="text-align: center; margin-bottom: 40px; border-bottom: 2px solid #4f46e5; padding-bottom: 20px;">
+                        <h1 style="color: #4f46e5; margin:0;">SEARCH SUMMARY REPORT</h1>
+                        <p style="color: #666; font-size: 14px; margin-top: 10px;">Generated: ${timestamp}</p>
+                    </div>
+                    
+                    <div style="background: #f3f4f6; padding: 15px; border-radius: 8px; margin-bottom: 30px;">
+                        <strong>Query Keywords:</strong> ${tags}
+                    </div>
+
+                    <h3 style="color: #1f2937; border-bottom: 1px solid #e5e7eb; padding-bottom: 10px;">Results Breakdown</h3>
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+            `;
+
+            for(const [db, count] of Object.entries(statsCounts)) {
+                html += `
+                    <tr>
+                        <td style="padding: 12px 0; border-bottom: 1px solid #f3f4f6; font-size: 16px;">${db}</td>
+                        <td style="padding: 12px 0; border-bottom: 1px solid #f3f4f6; font-weight: bold; text-align: right; color: #4f46e5;">${count}</td>
+                    </tr>
+                `;
+            }
+
+            html += `
+                    <tr style="background: #eef2ff;">
+                        <td style="padding: 15px 10px; font-weight: bold; color: #4f46e5;">TOTAL RECORDS</td>
+                        <td style="padding: 15px 10px; font-weight: bold; text-align: right; font-size: 20px; color: #4f46e5;">${totalRecords}</td>
+                    </tr>
+                </table>
+                <div style="margin-top: 50px; text-align: center; color: #9ca3af; font-size: 12px;">
+                    Generated by Church Management System
+                </div>
+                </div>
+            `;
+
+            const element = document.createElement('div');
+            element.innerHTML = html;
+            
+            const opt = {
+                margin: 10,
+                filename: `Summary_Report_${new Date().toISOString().split('T')[0]}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save();
+        }
+    </script>
 </body>
-
 </html>
